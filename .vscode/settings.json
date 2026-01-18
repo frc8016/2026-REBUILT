@@ -57,5 +57,13 @@
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*",
   ],
-  "java.dependency.enableDependencyCheckup": false
+  "java.dependency.enableDependencyCheckup": false,
+  "[java]": {
+    "editor.defaultFormatter": " richardwillis.vscode-spotless-gradle",
+    "spotlessGradle.format.enable": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.spotlessGradle": "explicit"
+    },
+    "files.trimTrailingWhitespace": false
+  }
 }
