@@ -65,5 +65,13 @@
       "source.fixAll.spotlessGradle": "explicit"
     },
     "files.trimTrailingWhitespace": false
-  }
+  },
+      // The number of spaces a tab is equal to.
+    "editor.tabSize": 4,
+
+    // Insert spaces when pressing Tab. Set to true for spaces, false for tabs.
+    "editor.insertSpaces": true,
+
+    // When opening a file, VS Code will try to detect the indentation based on the file contents. Set to false to use your defined settings consistently.
+    "editor.detectIndentation": false
 }
