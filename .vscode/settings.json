@@ -65,5 +65,13 @@
       "source.fixAll.spotlessGradle": "explicit"
     },
     "files.trimTrailingWhitespace": false
-  }
+  },
+  
+   
+    "editor.tabSize": 4,
+
+    "editor.insertSpaces": true,
+
+    "editor.detectIndentation": false
+
 }
