@@ -1,16 +1,34 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 // import frc.robot.LimelightHelpers;
 
 public class Turret {
-    double Kp = -0.1;
-    double min_command = 0.05;
+    private final SparkMax m_turretmotor = new SparkMax(15, MotorType.kBrushless);
+    private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
+    private final SparkClosedLoopController m_turretmotorClosedLoopController =
+            m_turretmotor.getClosedLoopController();
 
     // program motor
     // private final LimelightHelpers LimelightHelpers = new LimelightHelpers();
+    public Turret() {
+        m_turretmotorconfig
+                .closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .p(ElevatorConstants.P_VALUE, ClosedLoopSlot.kSlot0)
+                .i(ElevatorConstants.I_VALUE, ClosedLoopSlot.kSlot0)
+                .d(ElevatorConstants.D_VALUE, ClosedLoopSlot.kSlot0)
+                .outputRange(
+                        ElevatorConstants.OUTPUTRANGE_MIN_VALUE,
+                        ElevatorConstants.OUTPUTRANGE_MAX_VALUE);
+    }
 
     public Command aimShooter() {
         return Commands.runOnce(() -> {});
