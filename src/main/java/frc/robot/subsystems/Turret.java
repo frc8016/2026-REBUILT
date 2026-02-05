@@ -1,12 +1,14 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.TurretConstants;
 
 // import frc.robot.LimelightHelpers;
 
@@ -22,12 +24,12 @@ public class Turret {
         m_turretmotorconfig
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .p(ElevatorConstants.P_VALUE, ClosedLoopSlot.kSlot0)
-                .i(ElevatorConstants.I_VALUE, ClosedLoopSlot.kSlot0)
-                .d(ElevatorConstants.D_VALUE, ClosedLoopSlot.kSlot0)
+                .p(TurretConstants.P_VALUE, ClosedLoopSlot.kSlot0)
+                .i(TurretConstants.I_VALUE, ClosedLoopSlot.kSlot0)
+                .d(TurretConstants.D_VALUE, ClosedLoopSlot.kSlot0)
                 .outputRange(
-                        ElevatorConstants.OUTPUTRANGE_MIN_VALUE,
-                        ElevatorConstants.OUTPUTRANGE_MAX_VALUE);
+                        TurretConstants.OUTPUTRANGE_MIN_VALUE,
+                        TurretConstants.OUTPUTRANGE_MAX_VALUE);
     }
 
     public Command aimShooter() {
