@@ -12,7 +12,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class PhotonVision {
+public class PhotonVisionManager {
 
     private final PhotonCamera lowerLeftCamera;
     private final PhotonCamera lowerRightCamera;
@@ -23,7 +23,7 @@ public class PhotonVision {
     Field2d field2DLowerRight = new Field2d();
     Field2d field2DRobot = new Field2d();
 
-    public PhotonVision(CommandSwerveDrivetrain swerveDrivetrainIn) {
+    public PhotonVisionManager(CommandSwerveDrivetrain swerveDrivetrainIn) {
         lowerLeftCamera = new PhotonCamera(LOWER_LEFT_CAMERA_NAME);
         lowerRightCamera = new PhotonCamera(LOWER_RIGHT_CAMERA_NAME);
         lowerLeftPoseEstimator =

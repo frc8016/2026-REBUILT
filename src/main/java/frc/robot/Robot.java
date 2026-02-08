@@ -8,11 +8,11 @@ import com.ctre.phoenix6.HootAutoReplay;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.PhotonVision;
+import frc.robot.subsystems.PhotonVisionManager;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
-    private PhotonVision photonVision;
+    private PhotonVisionManager photonVision;
 
     private final RobotContainer m_robotContainer;
 
@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
-        photonVision = new PhotonVision(m_robotContainer.drivetrain);
+        photonVision = new PhotonVisionManager(m_robotContainer.drivetrain);
     }
 
     @Override
