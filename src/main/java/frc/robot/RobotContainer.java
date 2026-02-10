@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Feed;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Spindexer;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -28,6 +31,11 @@ public class RobotContainer {
     private double MaxAngularRate =
             RotationsPerSecond.of(0.75)
                     .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+    // Create instances of subsystems
+    private final Spindexer spindexer = new Spindexer();
+    private final Feed feed = new Feed();
+    private final Flywheel flywheel = new Flywheel();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive =
@@ -95,6 +103,11 @@ public class RobotContainer {
                                                 new Rotation2d(
                                                         -joystick.getLeftY(),
                                                         -joystick.getLeftX()))));
+
+        joystick.rightTrigger().whileTrue(flywheel.spinFlywheel());
+
+        flywheel.isReady.whileTrue(
+                spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
