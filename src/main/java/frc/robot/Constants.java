@@ -20,6 +20,18 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static class SpindexerConstants {
+        public static final double SPINDEXER_SPEED = 1;
+    }
+
+    public static class FeedConstants {
+        public static final double FEED_SPEED = 1;
+    }
+
+    public static class FlyWheelConstants {
+        public static final double IS_READY_DELAY = 0.05;
+    }
+
     public static class VisionConstants {
         public static final boolean USE_VISION =
                 true; // IMPORTANT we set this to true when useing vision and false
