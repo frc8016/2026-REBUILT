@@ -2,17 +2,21 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 
 // import frc.robot.LimelightHelpers;
 
-public class Turret {
+public class Turret extends SubsystemBase {
     private final SparkMax m_turretmotor = new SparkMax(15, MotorType.kBrushless);
     private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_turretmotorClosedLoopController =
@@ -30,6 +34,24 @@ public class Turret {
                 .outputRange(
                         TurretConstants.OUTPUTRANGE_MIN_VALUE,
                         TurretConstants.OUTPUTRANGE_MAX_VALUE);
+        m_turretmotor.configure(
+                m_turretmotorconfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+    }
+
+    public void runTurret(double speed) {
+        m_turretmotor.set(speed);
+    }
+
+    public void setPosition(double position) {
+        System.out.println("POSITION" + position);
+        m_turretmotorClosedLoopController.setSetpoint(
+                position, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    }
+
+    public Command goToSetPointCommand(double position) {
+        return this.runOnce(() -> this.setPosition(position));
     }
 
     public Command aimShooter() {

@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -51,7 +53,8 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
-
+    private final CommandXboxController xboxController = new CommandXboxController(1);
+    private final Turret m_turret = new Turret();
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
@@ -125,6 +128,14 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        xboxController
+                .rightTrigger()
+                .onTrue(
+                        new StartEndCommand(
+                                () -> m_turret.setPosition(1),
+                                () -> m_turret.setPosition(0),
+                                m_turret));
     }
 
     public Command getAutonomousCommand() {
