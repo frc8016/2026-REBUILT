@@ -30,6 +30,15 @@ public final class Constants {
 
     public static class FlyWheelConstants {
         public static final double IS_READY_DELAY = 0.05;
+        public static final double PROPORTIONAL = 0;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+        public static final double OUTPUT_MIN = -1;
+        public static final double OUTPUT_MAX = 1;
+        public static final int MAX_CURRENT = 50;
+        public static final double IDLE_SETPOINT = 0;
+        public static final double SHOOTING_SETPOINT = 1;
+        public static final double READY_TOLERANCE = 0.1;
     }
 
     public static class VisionConstants {

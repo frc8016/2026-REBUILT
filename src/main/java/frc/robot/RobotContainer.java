@@ -106,8 +106,9 @@ public class RobotContainer {
 
         joystick.rightTrigger().whileTrue(flywheel.spinFlywheel());
 
-        flywheel.isReady.whileTrue(
-                spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
+        joystick.rightTrigger()
+                .and(flywheel.isReady)
+                .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
