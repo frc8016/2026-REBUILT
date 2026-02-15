@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -40,8 +38,8 @@ public class Turret extends SubsystemBase {
                         TurretConstants.OUTPUTRANGE_MAX_VALUE);
         m_turretmotor.configure(
                 m_turretmotorconfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters);
+                com.revrobotics.ResetMode.kResetSafeParameters,
+                com.revrobotics.PersistMode.kPersistParameters);
     }
 
     public void runTurret() {
