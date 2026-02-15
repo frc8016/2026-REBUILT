@@ -9,9 +9,11 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 
 // import frc.robot.LimelightHelpers;
@@ -21,10 +23,12 @@ public class Turret extends SubsystemBase {
     private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_turretmotorClosedLoopController =
             m_turretmotor.getClosedLoopController();
+    private final LimelightManager limelightManager;
 
     // program motor
     // private final LimelightHelpers LimelightHelpers = new LimelightHelpers();
-    public Turret() {
+    public Turret(LimelightManager manager) {
+        limelightManager = manager;
         m_turretmotorconfig
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -40,18 +44,18 @@ public class Turret extends SubsystemBase {
                 PersistMode.kPersistParameters);
     }
 
-    public void runTurret(double speed) {
-        m_turretmotor.set(speed);
+    public void runTurret() {
+        double tx = limelightManager.getTX();
+        if (!MathUtil.isNear(tx, 0, Constants.TurretConstants.TX_TOLERANCE)) {
+            m_turretmotorClosedLoopController.setSetpoint(tx, ControlType.kVelocity);
+
+        } else {
+            m_turretmotorClosedLoopController.setSetpoint(0, ControlType.kVelocity);
+        }
     }
 
-    public void setPosition(double position) {
-        System.out.println("POSITION" + position);
-        m_turretmotorClosedLoopController.setSetpoint(
-                position, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-    }
-
-    public Command goToSetPointCommand(double position) {
-        return this.runOnce(() -> this.setPosition(position));
+    public Command Autoaim() {
+        return this.runOnce(() -> this.runTurret());
     }
 
     public Command aimShooter() {

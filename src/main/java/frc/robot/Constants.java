@@ -26,13 +26,14 @@ public final class Constants {
 
     public static class TurretConstants {
 
-        public static final double P_VALUE = 0.35;
+        public static final double P_VALUE = 0.0;
         public static final double I_VALUE = 0.0;
-        public static final double D_VALUE = 0.3;
+        public static final double D_VALUE = 0.0;
         public static final double OUTPUTRANGE_MIN_VALUE = -1.0;
         public static final double OUTPUTRANGE_MAX_VALUE = 1.0;
 
         public static final double MAX_VEL_RPM = 950;
+        public static final double TX_TOLERANCE = 1;
     }
 
     public static class FeedConstants {
