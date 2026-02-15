@@ -9,12 +9,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
-
-// import frc.robot.LimelightHelpers;
 
 public class Turret extends SubsystemBase {
     private final SparkMax m_turretmotor = new SparkMax(1, MotorType.kBrushless);
@@ -23,8 +20,6 @@ public class Turret extends SubsystemBase {
             m_turretmotor.getClosedLoopController();
     private final LimelightManager limelightManager;
 
-    // program motor
-    // private final LimelightHelpers LimelightHelpers = new LimelightHelpers();
     public Turret(LimelightManager manager) {
         limelightManager = manager;
         m_turretmotorconfig
@@ -55,18 +50,4 @@ public class Turret extends SubsystemBase {
     public Command Autoaim() {
         return this.runOnce(() -> this.runTurret());
     }
-
-    public Command aimShooter() {
-        return Commands.runOnce(() -> {});
-    }
-
-    // private Command Turn
-    private void trunMotors() {
-        while (true) {}
-    }
-
-    // set a while loop outside of command that checks up on lime data( treshhold are we aimed or
-    // not
-    // ) - with that data aim motor
-
 }
