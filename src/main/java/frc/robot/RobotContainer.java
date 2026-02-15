@@ -21,7 +21,9 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.LimelightManager;
 import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -36,6 +38,8 @@ public class RobotContainer {
     private final Spindexer spindexer = new Spindexer();
     private final Feed feed = new Feed();
     private final Flywheel flywheel = new Flywheel();
+    private final LimelightManager limelightManager = new LimelightManager();
+    private final Turret m_turret = new Turret(limelightManager);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive =
@@ -51,6 +55,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandXboxController xboxController = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -125,6 +130,8 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        xboxController.rightTrigger().whileTrue(m_turret.Autoaim());
     }
 
     public Command getAutonomousCommand() {
