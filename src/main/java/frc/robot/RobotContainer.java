@@ -109,7 +109,9 @@ public class RobotContainer {
                                                         -joystick.getLeftY(),
                                                         -joystick.getLeftX()))));
 
-        joystick.rightTrigger().whileTrue(flywheel.spinFlywheel());
+        joystick.rightTrigger()
+                .whileTrue(flywheel.spinFlywheel())
+                .whileFalse(flywheel.idleFlywheel());
 
         joystick.rightTrigger()
                 .and(flywheel.isReady)

@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.LinearVelocity;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -48,8 +51,8 @@ public final class Constants {
         public static final double OUTPUT_MIN = -1;
         public static final double OUTPUT_MAX = 1;
         public static final int MAX_CURRENT = 50;
-        public static final double IDLE_SETPOINT = 0;
-        public static final double SHOOTING_SETPOINT = 1;
+        public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
+        public static final LinearVelocity SHOOTING_SETPOINT = MetersPerSecond.of(3);
         public static final double READY_TOLERANCE = 0.1;
     }
 

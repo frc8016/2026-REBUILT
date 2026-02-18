@@ -1,68 +1,108 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.FeedbackSensor;
-import com.revrobotics.spark.SparkBase.ControlType;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FlyWheelConstants;
+import yams.gearing.GearBox;
+import yams.gearing.MechanismGearing;
+import yams.mechanisms.config.FlyWheelConfig;
+import yams.mechanisms.velocity.FlyWheel;
+import yams.motorcontrollers.SmartMotorController;
+import yams.motorcontrollers.SmartMotorControllerConfig;
+import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
+import yams.motorcontrollers.local.SparkWrapper;
 
 public class Flywheel extends SubsystemBase {
 
-    private final SparkMax flywheel = new SparkMax(13, MotorType.kBrushless);
-    private final SparkMaxConfig flywheelConfig = new SparkMaxConfig();
+    private final SparkMax flywheelMotor = new SparkMax(4, MotorType.kBrushless);
+    private final Distance flywheelDiameter = Inches.of(4);
+
+    private final SmartMotorControllerConfig motorConfig =
+            new SmartMotorControllerConfig(this)
+                    .withClosedLoopController(
+                            0.1, 0, 0, RPM.of(5000), RotationsPerSecondPerSecond.of(2500))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                    .withIdleMode(MotorMode.COAST)
+                    .withTelemetry("FlywheelMotor", TelemetryVerbosity.HIGH)
+                    .withStatorCurrentLimit(Amps.of(40))
+                    .withMotorInverted(false)
+                    .withClosedLoopRampRate(Seconds.of(0.25))
+                    .withOpenLoopRampRate(Seconds.of(0.25))
+                    .withFeedforward(new SimpleMotorFeedforward(0.28, 1.52, 0.175))
+                    .withSimFeedforward(new SimpleMotorFeedforward(0, 1.52, 0.175))
+                    .withControlMode(ControlMode.CLOSED_LOOP);
+
+    private final SmartMotorController motor =
+            new SparkWrapper(flywheelMotor, DCMotor.getNEO(1), motorConfig);
+
+    private final FlyWheelConfig flywheelConfig =
+            new FlyWheelConfig(motor)
+                    .withDiameter(Inches.of(4))
+                    .withMass(Pounds.of(1))
+                    .withTelemetry("FlywheelMech", TelemetryVerbosity.HIGH)
+                    .withSoftLimit(RPM.of(-5000), RPM.of(5000))
+                    .withSpeedometerSimulation(RPM.of(7500));
+
+    private final FlyWheel flywheel = new FlyWheel(flywheelConfig);
 
     private boolean isReady() {
         return MathUtil.isNear(
-                FlyWheelConstants.SHOOTING_SETPOINT,
-                flywheel.getEncoder().getVelocity(),
+                FlyWheelConstants.SHOOTING_SETPOINT.in(MetersPerSecond),
+                flywheel.getSpeed().in(RotationsPerSecond)
+                        * flywheelDiameter.times(Math.PI).in(Meters),
                 FlyWheelConstants.READY_TOLERANCE);
     }
 
-    public Flywheel() {
-        flywheelConfig
-                .closedLoop
-                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                .p(FlyWheelConstants.PROPORTIONAL, ClosedLoopSlot.kSlot0)
-                .i(FlyWheelConstants.INTEGRAL, ClosedLoopSlot.kSlot0)
-                .d(FlyWheelConstants.DERIVATIVE, ClosedLoopSlot.kSlot0)
-                .outputRange(FlyWheelConstants.OUTPUT_MAX, FlyWheelConstants.OUTPUT_MIN);
-
-        flywheelConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(FlyWheelConstants.MAX_CURRENT);
-
-        flywheel.configure(
-                flywheelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
+    public Flywheel() {}
 
     public Command spinFlywheel() {
-        return new StartEndCommand(
-                () ->
-                        this.flywheel
-                                .getClosedLoopController()
-                                .setSetpoint(
-                                        FlyWheelConstants.SHOOTING_SETPOINT,
-                                        ControlType.kMAXMotionVelocityControl),
-                () ->
-                        this.flywheel
-                                .getClosedLoopController()
-                                .setSetpoint(
-                                        FlyWheelConstants.IDLE_SETPOINT,
-                                        ControlType.kMAXMotionVelocityControl),
-                this);
+        System.out.println("SHOOT");
+        return this.flywheel.setSpeed(
+                RotationsPerSecond.of(
+                        FlyWheelConstants.SHOOTING_SETPOINT.in(MetersPerSecond)
+                                / flywheelDiameter.times(Math.PI).in(Meters)));
+    }
+
+    public Command idleFlywheel() {
+        System.out.println("IDLE");
+        return this.flywheel.setSpeed(
+                RotationsPerSecond.of(
+                        FlyWheelConstants.IDLE_SETPOINT.in(MetersPerSecond)
+                                / flywheelDiameter.times(Math.PI).in(Meters)));
     }
 
     public final Trigger isReady =
             new Trigger(this::isReady)
                     // Stay ready for short time after to prevent flapping
                     .debounce(FlyWheelConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
+
+    @Override
+    public void periodic() {
+        flywheel.updateTelemetry();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        flywheel.simIterate();
+    }
 }

@@ -14,7 +14,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 
 public class Turret extends SubsystemBase {
-    private final SparkMax m_turretmotor = new SparkMax(1, MotorType.kBrushless);
+    private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
     private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_turretmotorClosedLoopController =
             m_turretmotor.getClosedLoopController();
