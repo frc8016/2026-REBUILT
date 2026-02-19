@@ -48,8 +48,6 @@ public final class Constants {
         public static final double PROPORTIONAL = 0;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
-        public static final double OUTPUT_MIN = -1;
-        public static final double OUTPUT_MAX = 1;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
         public static final LinearVelocity SHOOTING_SETPOINT = MetersPerSecond.of(3);
