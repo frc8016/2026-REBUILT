@@ -7,54 +7,53 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Constants;
+import frc.robot.Constants.TargetConstants;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class TargetSelector {
-    private CommandSwerveDrivetrain drivetrain;
+    private Supplier<Pose2d> swervePoseSupplier;
     private Optional<Alliance> alliance = DriverStation.getAlliance();
-    private Pose2d target = new Pose2d();
+    private Pose2d target =
+            new Pose2d(); // output target updates every time updateTargetSelection() is called
 
-    public TargetSelector(CommandSwerveDrivetrain swerveDrivetrain) {
-        drivetrain = swerveDrivetrain;
+    public TargetSelector(Supplier<Pose2d> poseSupplierIn) {
+        swervePoseSupplier = poseSupplierIn;
     }
 
-    public void updateTargetSelection() {
-        Distance x = Meters.of(drivetrain.getState().Pose.getX());
-        Distance y = Meters.of(drivetrain.getState().Pose.getY());
-        Pose2d hubTarget = Constants.FieldZoneLines.HUB_TARGET_BLUE;
-        Pose2d ferryTargetLower = Constants.FieldZoneLines.FERRY_TARGET_BLUE_LOWER;
+    public void updateTargetSelection() { // updates target Pose2d
+        Distance x = Meters.of(swervePoseSupplier.get().getX()); // distance x of swerve
+        Distance y = Meters.of(swervePoseSupplier.get().getY()); // distance y of swerve
+        Pose2d hubTarget = TargetConstants.HUB_TARGET_BLUE;
+        Pose2d ferryTargetLower = TargetConstants.FERRY_TARGET_BLUE_LOWER;
 
+        // this flips the blue Pose2ds for red side and flips swerve pose
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            x = Constants.FieldZoneLines.FIELD_LENGTH.minus(x);
-            y = Constants.FieldZoneLines.FIELD_HEIGHT.minus(y);
+            x = TargetConstants.FIELD_LENGTH.minus(x);
+            y = TargetConstants.FIELD_HEIGHT.minus(y);
             hubTarget =
                     new Pose2d(
-                            Constants.FieldZoneLines.FIELD_LENGTH.in(Meters) - hubTarget.getX(),
+                            TargetConstants.FIELD_LENGTH.in(Meters) - hubTarget.getX(),
                             hubTarget.getY(),
                             new Rotation2d());
             ferryTargetLower =
                     new Pose2d(
-                            Constants.FieldZoneLines.FIELD_LENGTH.in(Meters)
-                                    - ferryTargetLower.getX(),
-                            Constants.FieldZoneLines.FIELD_HEIGHT.in(Meters)
-                                    - ferryTargetLower.getY(),
+                            TargetConstants.FIELD_LENGTH.in(Meters) - ferryTargetLower.getX(),
+                            TargetConstants.FIELD_HEIGHT.in(Meters) - ferryTargetLower.getY(),
                             new Rotation2d());
         }
 
-        if (alliance.isPresent()) {
-            if (x.lte(Constants.FieldZoneLines.DRIVERSTATION_TO_TRENCH)) {
+        if (alliance.isPresent()) { // safety to make sure there is an alliance
+            if (x.lte(TargetConstants.DRIVERSTATION_TO_TRENCH)) { // if robot is in home area
                 target = hubTarget;
-            } else {
-                if (y.lte(Constants.FieldZoneLines.FIELD_HEIGHT.div(2))) {
+            } else { // if robot is anywhere else
+                if (y.lte(TargetConstants.FIELD_HEIGHT.div(2))) { // if robot is on bottom of field
                     target = ferryTargetLower;
-                } else {
-                    target =
-                            new Pose2d(
-                                    ferryTargetLower.getX(),
-                                    Constants.FieldZoneLines.FIELD_HEIGHT.in(Meters)
-                                            - ferryTargetLower.getY(),
-                                    new Rotation2d());
+                } else { // if robot is on top of field
+                    double yFlip =
+                            TargetConstants.FIELD_HEIGHT.in(Meters) - ferryTargetLower.getY();
+                    // this switches the lower Pose2d for the ferry to be upper
+                    target = new Pose2d(ferryTargetLower.getX(), yFlip, new Rotation2d());
                 }
             }
         }

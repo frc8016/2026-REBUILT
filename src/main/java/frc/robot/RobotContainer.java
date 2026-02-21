@@ -44,7 +44,8 @@ public class RobotContainer {
     private final Turret m_turret = new Turret(limelightManager);
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
-    public final TargetSelector targetSelector = new TargetSelector(drivetrain);
+    public final TargetSelector targetSelector =
+            new TargetSelector(() -> drivetrain.getState().Pose);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive =

@@ -84,7 +84,7 @@ public final class Constants {
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
     }
 
-    public static class FieldZoneLines {
+    public static class TargetConstants {
         public static final Distance FIELD_LENGTH = Meters.of(Units.inchesToMeters(651.22));
         public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
         public static final Distance DRIVERSTATION_TO_TRENCH =
