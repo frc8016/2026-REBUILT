@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
@@ -14,6 +15,8 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -79,6 +82,23 @@ public final class Constants {
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+    }
+
+    public static class FieldZoneLines {
+        public static final Distance FIELD_LENGTH = Meters.of(Units.inchesToMeters(651.22));
+        public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
+        public static final Distance DRIVERSTATION_TO_TRENCH =
+                Meters.of(Units.inchesToMeters(182.11));
+        public static final Pose2d HUB_TARGET_BLUE =
+                new Pose2d(
+                        Units.inchesToMeters(182.11),
+                        Units.inchesToMeters(158.84),
+                        new Rotation2d());
+        public static final Pose2d FERRY_TARGET_BLUE_LOWER =
+                new Pose2d(
+                        Units.inchesToMeters(91.055),
+                        Units.inchesToMeters(79.4225),
+                        new Rotation2d());
     }
 
     public static class VisionConstants {

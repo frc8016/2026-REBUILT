@@ -22,7 +22,9 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.LimelightManager;
+import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
@@ -40,6 +42,9 @@ public class RobotContainer {
     private final Flywheel flywheel = new Flywheel();
     private final LimelightManager limelightManager = new LimelightManager();
     private final Turret m_turret = new Turret(limelightManager);
+    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
+    public final TargetSelector targetSelector = new TargetSelector(drivetrain);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive =
@@ -56,8 +61,6 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final CommandXboxController xboxController = new CommandXboxController(1);
-
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -133,7 +136,7 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        xboxController.rightTrigger().whileTrue(m_turret.Autoaim());
+        // xboxController.rightTrigger().whileTrue(m_turret.Autoaim());
     }
 
     public Command getAutonomousCommand() {

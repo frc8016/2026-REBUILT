@@ -4,14 +4,7 @@ import frc.robot.LimelightHelpers;
 
 public class LimelightManager {
     public LimelightManager() {
-        LimelightHelpers.setPipelineIndex("", 0);
-    }
-
-    public double getTX() {
-        return LimelightHelpers.getTX("");
-    }
-
-    public double getTY() {
-        return LimelightHelpers.getTY("");
+        LimelightHelpers.setPipelineIndex("limelight", 0);
+        LimelightHelpers.SetIMUMode("limelight", 2);
     }
 }
