@@ -137,7 +137,7 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // xboxController.rightTrigger().whileTrue(m_turret.Autoaim());
+        xboxController.rightTrigger().whileTrue(m_turret.Autoaim());
     }
 
     public Command getAutonomousCommand() {
