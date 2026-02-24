@@ -4,12 +4,27 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.units.measure.Time;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -42,15 +57,28 @@ public final class Constants {
 
     public static class FlyWheelConstants {
         public static final double IS_READY_DELAY = 0.05;
-        public static final double PROPORTIONAL = 0;
+        public static final double PROPORTIONAL = 0.1;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
-        public static final double OUTPUT_MIN = -1;
-        public static final double OUTPUT_MAX = 1;
         public static final int MAX_CURRENT = 50;
-        public static final double IDLE_SETPOINT = 0;
-        public static final double SHOOTING_SETPOINT = 1;
+        public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
+        public static final LinearVelocity SHOOTING_SETPOINT = MetersPerSecond.of(3);
         public static final double READY_TOLERANCE = 0.1;
+        public static final double FEED_FORWARD_KS = 0.28;
+        public static final double FEED_FORWARD_KV = 1.52;
+        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0;
+        public static final double SIM_FEED_FORWARD_KV = 1.52;
+        public static final double SIM_FEED_FORWARD_KA = 0.175;
+        public static final Distance FLYWHEEL_DIAMETER = Inches.of(4);
+        public static final Mass FLYWHEEL_MASS = Kilograms.of(1.531);
+        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
+        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
+        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
+                RotationsPerSecondPerSecond.of(2500);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
     }
 
     public static class VisionConstants {
