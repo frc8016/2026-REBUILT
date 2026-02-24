@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
@@ -14,6 +15,7 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -79,6 +81,28 @@ public final class Constants {
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+    }
+
+    public static class TargetConstants {
+        public static final Distance FIELD_LENGTH = Meters.of(Units.inchesToMeters(651.22));
+        public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
+        public static final Distance DRIVERSTATION_TO_TRENCH =
+                Meters.of(Units.inchesToMeters(156.06));
+        public static final Distance ROBOT_WIDTH_WITH_BUMPERS =
+                Meters.of(
+                        Units.inchesToMeters(33)); // TODO: update constant with actual robot width
+        public static final Pose3d HUB_TARGET_BLUE =
+                new Pose3d(
+                        Units.inchesToMeters(182.11),
+                        Units.inchesToMeters(158.84),
+                        Units.inchesToMeters(57),
+                        new Rotation3d());
+        public static final Pose3d FERRY_TARGET_BLUE_LOWER =
+                new Pose3d(
+                        Units.inchesToMeters(91.055),
+                        Units.inchesToMeters(79.4225),
+                        Units.inchesToMeters(0),
+                        new Rotation3d());
     }
 
     public static class VisionConstants {

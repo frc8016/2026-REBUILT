@@ -18,9 +18,9 @@ public class Turret extends SubsystemBase {
     private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_turretmotorClosedLoopController =
             m_turretmotor.getClosedLoopController();
-    private final LimelightManager limelightManager;
+    private final TargetManager limelightManager;
 
-    public Turret(LimelightManager manager) {
+    public Turret(TargetManager manager) {
         limelightManager = manager;
         m_turretmotorconfig
                 .closedLoop
