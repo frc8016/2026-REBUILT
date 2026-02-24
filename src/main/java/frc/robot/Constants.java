@@ -15,8 +15,7 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -89,16 +88,18 @@ public final class Constants {
         public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
         public static final Distance DRIVERSTATION_TO_TRENCH =
                 Meters.of(Units.inchesToMeters(182.11));
-        public static final Pose2d HUB_TARGET_BLUE =
-                new Pose2d(
+        public static final Pose3d HUB_TARGET_BLUE =
+                new Pose3d(
                         Units.inchesToMeters(182.11),
                         Units.inchesToMeters(158.84),
-                        new Rotation2d());
-        public static final Pose2d FERRY_TARGET_BLUE_LOWER =
-                new Pose2d(
+                        Units.inchesToMeters(57),
+                        new Rotation3d());
+        public static final Pose3d FERRY_TARGET_BLUE_LOWER =
+                new Pose3d(
                         Units.inchesToMeters(91.055),
                         Units.inchesToMeters(79.4225),
-                        new Rotation2d());
+                        Units.inchesToMeters(0),
+                        new Rotation3d());
     }
 
     public static class VisionConstants {

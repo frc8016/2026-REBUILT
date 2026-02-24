@@ -3,7 +3,8 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -14,8 +15,8 @@ import java.util.function.Supplier;
 public class TargetSelector {
     private Supplier<Pose2d> swervePoseSupplier;
     private Optional<Alliance> alliance = DriverStation.getAlliance();
-    private Pose2d target =
-            new Pose2d(); // output target updates every time updateTargetSelection() is called
+    private Pose3d target =
+            new Pose3d(); // output target updates every time updateTargetSelection() is called
 
     public TargetSelector(Supplier<Pose2d> poseSupplierIn) {
         swervePoseSupplier = poseSupplierIn;
@@ -24,23 +25,25 @@ public class TargetSelector {
     public void updateTargetSelection() { // updates target Pose2d
         Distance x = Meters.of(swervePoseSupplier.get().getX()); // distance x of swerve
         Distance y = Meters.of(swervePoseSupplier.get().getY()); // distance y of swerve
-        Pose2d hubTarget = TargetConstants.HUB_TARGET_BLUE;
-        Pose2d ferryTargetLower = TargetConstants.FERRY_TARGET_BLUE_LOWER;
+        Pose3d hubTarget = TargetConstants.HUB_TARGET_BLUE;
+        Pose3d ferryTargetLower = TargetConstants.FERRY_TARGET_BLUE_LOWER;
 
         // this flips the blue Pose2ds for red side and flips swerve pose
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             x = TargetConstants.FIELD_LENGTH.minus(x);
             y = TargetConstants.FIELD_HEIGHT.minus(y);
             hubTarget =
-                    new Pose2d(
+                    new Pose3d(
                             TargetConstants.FIELD_LENGTH.in(Meters) - hubTarget.getX(),
                             hubTarget.getY(),
-                            new Rotation2d());
+                            hubTarget.getZ(),
+                            new Rotation3d());
             ferryTargetLower =
-                    new Pose2d(
+                    new Pose3d(
                             TargetConstants.FIELD_LENGTH.in(Meters) - ferryTargetLower.getX(),
                             TargetConstants.FIELD_HEIGHT.in(Meters) - ferryTargetLower.getY(),
-                            new Rotation2d());
+                            ferryTargetLower.getZ(),
+                            new Rotation3d());
         }
 
         if (alliance.isPresent()) { // safety to make sure there is an alliance
@@ -53,13 +56,18 @@ public class TargetSelector {
                     double yFlip =
                             TargetConstants.FIELD_HEIGHT.in(Meters) - ferryTargetLower.getY();
                     // this switches the lower Pose2d for the ferry to be upper
-                    target = new Pose2d(ferryTargetLower.getX(), yFlip, new Rotation2d());
+                    target =
+                            new Pose3d(
+                                    ferryTargetLower.getX(),
+                                    yFlip,
+                                    ferryTargetLower.getZ(),
+                                    new Rotation3d());
                 }
             }
         }
     }
 
-    public Pose2d getCurrentTarget() {
+    public Pose3d getCurrentTarget() {
         return target;
     }
 
