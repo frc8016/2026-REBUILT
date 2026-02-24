@@ -21,9 +21,9 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.LimelightManager;
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.TargetManager;
 import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.Turret;
 
@@ -40,12 +40,13 @@ public class RobotContainer {
     private final Spindexer spindexer = new Spindexer();
     private final Feed feed = new Feed();
     private final Flywheel flywheel = new Flywheel();
-    private final LimelightManager limelightManager = new LimelightManager();
-    private final Turret m_turret = new Turret(limelightManager);
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
     public final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
+    private final TargetManager targetManager =
+            new TargetManager(targetSelector.getCurrentTarget());
+    private final Turret m_turret = new Turret(targetManager);
+    public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive =

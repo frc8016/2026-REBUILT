@@ -87,7 +87,10 @@ public final class Constants {
         public static final Distance FIELD_LENGTH = Meters.of(Units.inchesToMeters(651.22));
         public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
         public static final Distance DRIVERSTATION_TO_TRENCH =
-                Meters.of(Units.inchesToMeters(182.11));
+                Meters.of(Units.inchesToMeters(156.06));
+        public static final Distance ROBOT_WIDTH_WITH_BUMPERS =
+                Meters.of(
+                        Units.inchesToMeters(33)); // TODO: update constant with actual robot width
         public static final Pose3d HUB_TARGET_BLUE =
                 new Pose3d(
                         Units.inchesToMeters(182.11),

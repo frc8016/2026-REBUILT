@@ -47,7 +47,10 @@ public class TargetSelector {
         }
 
         if (alliance.isPresent()) { // safety to make sure there is an alliance
-            if (x.lte(TargetConstants.DRIVERSTATION_TO_TRENCH)) { // if robot is in home area
+            if (x.lte(
+                    TargetConstants.DRIVERSTATION_TO_TRENCH.plus(
+                            TargetConstants.ROBOT_WIDTH_WITH_BUMPERS.div(
+                                    2)))) { // if robot is in home area
                 target = hubTarget;
             } else { // if robot is anywhere else
                 if (y.lte(TargetConstants.FIELD_HEIGHT.div(2))) { // if robot is on bottom of field
@@ -67,8 +70,8 @@ public class TargetSelector {
         }
     }
 
-    public Pose3d getCurrentTarget() {
-        return target;
+    public Supplier<Pose3d> getCurrentTarget() {
+        return () -> target;
     }
 
     public void updateAlliance() {
