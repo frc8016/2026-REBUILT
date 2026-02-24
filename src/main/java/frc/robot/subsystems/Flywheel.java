@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -42,16 +40,28 @@ public class Flywheel extends SubsystemBase {
     private final SmartMotorControllerConfig motorConfig =
             new SmartMotorControllerConfig(this)
                     .withClosedLoopController(
-                            0.1, 0, 0, RPM.of(5000), RotationsPerSecondPerSecond.of(2500))
+                            FlyWheelConstants.PROPORTIONAL,
+                            FlyWheelConstants.INTEGRAL,
+                            FlyWheelConstants.DERIVATIVE,
+                            FlyWheelConstants.TRAPAZOIDAL_MAX_VELOCITY,
+                            FlyWheelConstants.TRAPAZOIDAL_MAX_ACCELERATION)
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1, 1)))
                     .withIdleMode(MotorMode.COAST)
                     .withTelemetry("FlywheelMotor", TelemetryVerbosity.HIGH)
-                    .withStatorCurrentLimit(Amps.of(40))
+                    .withStatorCurrentLimit(FlyWheelConstants.STATOR_CURRENT_LIMIT)
                     .withMotorInverted(false)
-                    .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(Seconds.of(0.25))
-                    .withFeedforward(new SimpleMotorFeedforward(0.28, 1.52, 0.175))
-                    .withSimFeedforward(new SimpleMotorFeedforward(0, 1.52, 0.175))
+                    .withClosedLoopRampRate(FlyWheelConstants.CLOSED_LOOP_RAMP_RATE)
+                    .withOpenLoopRampRate(FlyWheelConstants.OPEN_LOOP_RAMP_RATE)
+                    .withFeedforward(
+                            new SimpleMotorFeedforward(
+                                    FlyWheelConstants.FEED_FORWARD_KS,
+                                    FlyWheelConstants.FEED_FORWARD_KV,
+                                    FlyWheelConstants.FEED_FORWARD_KA))
+                    .withSimFeedforward(
+                            new SimpleMotorFeedforward(
+                                    FlyWheelConstants.SIM_FEED_FORWARD_KS,
+                                    FlyWheelConstants.SIM_FEED_FORWARD_KV,
+                                    FlyWheelConstants.SIM_FEED_FORWARD_KA))
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     .withFollowers(Pair.of(flywheelMotorfollower, true));
 
@@ -60,10 +70,11 @@ public class Flywheel extends SubsystemBase {
 
     private final FlyWheelConfig flywheelConfig =
             new FlyWheelConfig(motor)
-                    .withDiameter(Inches.of(4))
-                    .withMass(Pounds.of(1))
+                    .withDiameter(FlyWheelConstants.FLYWHEEL_DIAMETER)
+                    .withMass(FlyWheelConstants.FLYWHEEL_MASS)
                     .withTelemetry("FlywheelMech", TelemetryVerbosity.HIGH)
-                    .withSoftLimit(RPM.of(-5000), RPM.of(5000));
+                    .withSoftLimit(
+                            FlyWheelConstants.SOFT_LIMIT.negate(), FlyWheelConstants.SOFT_LIMIT);
     // .withSpeedometerSimulation(RPM.of(7500)); // optional to make graph of velocity not position
 
     private final FlyWheel flywheel = new FlyWheel(flywheelConfig);
@@ -107,5 +118,9 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         flywheel.simIterate();
+    }
+
+    public Command sysId() {
+        return flywheel.sysId(Volts.of(10), Volts.of(1).per(Second), Seconds.of(5));
     }
 }
