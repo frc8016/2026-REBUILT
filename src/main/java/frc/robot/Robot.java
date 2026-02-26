@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         m_robotContainer.photonVision.updateVision();
         m_robotContainer.targetSelector.updateTargetSelection();
+        m_robotContainer.targetSelector.updateAlliance();
     }
 
     @Override
@@ -41,7 +42,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_robotContainer.targetSelector.updateAlliance();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         if (m_autonomousCommand != null) {
@@ -60,7 +60,6 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
-        m_robotContainer.targetSelector.updateAlliance();
     }
 
     @Override
@@ -72,7 +71,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
-        m_robotContainer.targetSelector.updateAlliance();
     }
 
     @Override
