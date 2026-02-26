@@ -20,7 +20,7 @@ public class TargetManager {
         return target.relativeTo(turretPose).getTranslation().getAngle().getDegrees();
     }
 
-    public Supplier<Double> getTX() {
+    public Supplier<Double> TX() {
         return this::computeTX;
     }
 }

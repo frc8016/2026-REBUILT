@@ -18,10 +18,10 @@ public class Turret extends SubsystemBase {
     private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_turretmotorClosedLoopController =
             m_turretmotor.getClosedLoopController();
-    private final TargetManager limelightManager;
+    private final TargetManager targetManager;
 
-    public Turret(TargetManager manager) {
-        limelightManager = manager;
+    public Turret(TargetManager targetManager) {
+        this.targetManager = targetManager;
         m_turretmotorconfig
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -38,7 +38,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void runTurret() {
-        double tx = limelightManager.getTX().get().doubleValue();
+        double tx = targetManager.TX().get().doubleValue();
         if (!MathUtil.isNear(tx, 0, Constants.TurretConstants.TX_TOLERANCE)) {
             m_turretmotorClosedLoopController.setSetpoint(tx, ControlType.kVelocity);
 
