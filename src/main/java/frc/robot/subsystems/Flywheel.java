@@ -90,7 +90,6 @@ public class Flywheel extends SubsystemBase {
     public Flywheel() {}
 
     public Command spinFlywheel() {
-        System.out.println("SHOOT");
         return this.flywheel.setSpeed(
                 RotationsPerSecond.of(
                         FlyWheelConstants.SHOOTING_SETPOINT.in(MetersPerSecond)
@@ -98,7 +97,6 @@ public class Flywheel extends SubsystemBase {
     }
 
     public Command idleFlywheel() {
-        System.out.println("IDLE");
         return this.flywheel.setSpeed(
                 RotationsPerSecond.of(
                         FlyWheelConstants.IDLE_SETPOINT.in(MetersPerSecond)

@@ -88,7 +88,6 @@ public class PhotonVisionManager {
                             estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);
                 }
             }
-            ;
         }
     }
 }

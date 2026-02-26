@@ -23,8 +23,9 @@ public class TargetSelector {
     }
 
     public void updateTargetSelection() { // updates target Pose2d
-        Distance x = Meters.of(swervePoseSupplier.get().getX()); // distance x of swerve
-        Distance y = Meters.of(swervePoseSupplier.get().getY()); // distance y of swerve
+        Pose2d swervePose = swervePoseSupplier.get();
+        Distance x = Meters.of(swervePose.getX()); // distance x of swerve
+        Distance y = Meters.of(swervePose.getY()); // distance y of swerve
         Pose3d hubTarget = TargetConstants.HUB_TARGET_BLUE;
         Pose3d ferryTargetLower = TargetConstants.FERRY_TARGET_BLUE_LOWER;
 
