@@ -38,7 +38,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void runTurret() {
-        double tx = limelightManager.getTX();
+        double tx = limelightManager.getTX().get().doubleValue();
         if (!MathUtil.isNear(tx, 0, Constants.TurretConstants.TX_TOLERANCE)) {
             m_turretmotorClosedLoopController.setSetpoint(tx, ControlType.kVelocity);
 
