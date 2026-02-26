@@ -2,10 +2,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import java.util.function.Supplier;
 
-public class TargetManager {
+public class TargetManager extends SubsystemBase {
     private Supplier<Pose3d> targetPose;
 
     public TargetManager(Supplier<Pose3d> targetPose) {
