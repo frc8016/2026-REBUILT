@@ -31,7 +31,6 @@ public final class Constants {
         public static final double D_VALUE = 0.0;
         public static final double OUTPUTRANGE_MIN_VALUE = -1.0;
         public static final double OUTPUTRANGE_MAX_VALUE = 1.0;
-
         public static final double MAX_VEL_RPM = 950;
         public static final double TX_TOLERANCE = 1;
     }
