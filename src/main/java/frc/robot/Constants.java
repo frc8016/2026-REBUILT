@@ -58,6 +58,13 @@ public final class Constants {
         public static final double FEED_SPEED = 1;
     }
 
+    public static class IntakeConstants {}
+
+    public static class ArmConstants {
+        public static final double MassPounds = 1; // TODO Need to be changed
+        public static final double ArmLength = 0.135; // TODO Need to be changed
+    }
+
     public static class BottomFlyWheelConstants {
         public static final double IS_READY_DELAY = 0.05;
         public static final double PROPORTIONAL = 0.1;
