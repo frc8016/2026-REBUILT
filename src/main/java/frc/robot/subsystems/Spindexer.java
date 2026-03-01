@@ -10,7 +10,7 @@ import frc.robot.Constants.SpindexerConstants;
 public class Spindexer extends SubsystemBase {
 
     private final SparkMax spindexer =
-            new SparkMax(1, MotorType.kBrushless); // TODO: motor id must be changed
+            new SparkMax(2, MotorType.kBrushless); // TODO: motor id must be changed
 
     public Command run() {
         return new StartEndCommand(

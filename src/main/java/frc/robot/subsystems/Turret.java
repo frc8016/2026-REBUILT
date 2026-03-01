@@ -26,7 +26,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class Turret extends SubsystemBase {
-    private final SparkMax m_turretmotor = new SparkMax(1, MotorType.kBrushless);
+    private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
     private final SparkMaxConfig m_turretmotorconfig = new SparkMaxConfig();
     private final SparkClosedLoopController m_turretmotorClosedLoopController =
             m_turretmotor.getClosedLoopController();
@@ -49,8 +49,8 @@ public class Turret extends SubsystemBase {
                     .withOpenLoopRampRate(Seconds.of(0.25))
                     .withSoftLimit(Degrees.of(-180), Degrees.of(180));
 
-    public Turret(LimelightManager manager) {
-        limelightManager = manager;
+    public Turret(TargetManager targetManager) {
+        this.targetManager = targetManager;
         m_turretmotorconfig
                 .closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -67,7 +67,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void runTurret() {
-        double tx = limelightManager.getTX();
+        double tx = targetManager.TX().get().doubleValue();
         if (!MathUtil.isNear(tx, 0, Constants.TurretConstants.TX_TOLERANCE)) {
             m_turretmotorClosedLoopController.setSetpoint(tx, ControlType.kVelocity);
 
