@@ -25,7 +25,6 @@ import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetManager;
 import frc.robot.subsystems.TargetSelector;
-import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -45,7 +44,7 @@ public class RobotContainer {
             new TargetSelector(() -> drivetrain.getState().Pose);
     private final TargetManager targetManager =
             new TargetManager(targetSelector.getCurrentTarget());
-    private final Turret m_turret = new Turret(targetManager);
+
     public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
@@ -137,8 +136,6 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
-
-        xboxController.rightTrigger().whileTrue(m_turret.Autoaim());
     }
 
     public Command getAutonomousCommand() {
