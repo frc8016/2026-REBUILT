@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
 import frc.robot.LimelightHelpers;
@@ -11,10 +15,9 @@ import java.util.function.Supplier;
 
 public class BallisticsManager extends SubsystemBase {
     private Supplier<Pose3d> targetPoseSupplier;
-    private double targetDistance;
-    private double flywheelVelocity;
-    private double hoodAngle;
-    private double targetHorizontalAngle;
+    private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
+    private Rotation2d hoodAngle = new Rotation2d();
+    private Rotation2d targetHorizontalAngle = new Rotation2d();
 
     public BallisticsManager(Supplier<Pose3d> targetPose) {
         LimelightHelpers.setPipelineIndex("limelight", 0);
@@ -27,48 +30,48 @@ public class BallisticsManager extends SubsystemBase {
         Pose2d target = targetPoseSupplier.get().toPose2d();
         Translation2d targetTranslation = target.relativeTo(turretPose).getTranslation();
 
-        this.targetDistance = targetTranslation.getNorm();
-        this.flywheelVelocity = computeTargetProjectileVelocity(this.targetDistance);
-        this.hoodAngle =
-                computeHoodAngle(
-                        this.targetDistance,
-                        this.flywheelVelocity,
-                        targetPoseSupplier.get().getZ());
+        double targetDistanceMeters = targetTranslation.getNorm();
+        double flywheelMps = computeTargetProjectileVelocity(targetDistanceMeters);
+        double zMeters = targetPoseSupplier.get().getZ();
+        double hoodRadians = computeHoodAngle(targetDistanceMeters, flywheelMps, zMeters);
+
+        this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
+        this.hoodAngle = new Rotation2d(hoodRadians);
+        this.targetHorizontalAngle = targetTranslation.getAngle();
     }
 
-    public double computeTargetProjectileVelocity(double d) {
+    public double computeTargetProjectileVelocity(double dMeters) {
         double velocity =
-                (d * BallisticsManagerConstants.VELOCITY_SLOPE)
-                        + BallisticsManagerConstants.VELOCITY_INTERCEPT;
+                (dMeters * BallisticsManagerConstants.VELOCITY_SLOPE)
+                        + BallisticsManagerConstants.VELOCITY_INTERCEPT.magnitude();
+
         return MathUtil.clamp(
                 velocity,
-                BallisticsManagerConstants.MIN_PROJECTILE_VELOCITY,
-                BallisticsManagerConstants.MAX_PROJECTILE_VELOCITY);
+                BallisticsManagerConstants.MIN_PROJECTILE_VELOCITY.magnitude(),
+                BallisticsManagerConstants.MAX_PROJECTILE_VELOCITY.magnitude());
     }
 
     private double computeHoodAngle(double d, double v, double z) {
         double v2 = v * v;
         double v4 = v2 * v2;
-        double g = BallisticsManagerConstants.G;
+        double g = BallisticsManagerConstants.G.magnitude();
 
-        double discriminant =
-                v4 - g * (g * (this.targetDistance * this.targetDistance) + 2 * z * v2);
+        double discriminant = v4 - g * (g * (d * d) + 2 * z * v2);
 
         if (discriminant < 0) return 45.0;
 
-        double thetaRadians = Math.atan((v2 - Math.sqrt(discriminant)) / (g * this.targetDistance));
-        return Math.toDegrees(thetaRadians);
+        return Math.atan((v2 + Math.sqrt(discriminant)) / (g * d));
     }
 
-    public Supplier<Double> TX() {
+    public Supplier<Rotation2d> TX() {
         return () -> this.targetHorizontalAngle;
     }
 
-    public Supplier<Double> hoodAngleSupplier() {
+    public Supplier<Rotation2d> hoodAngleSupplier() {
         return () -> this.hoodAngle;
     }
 
-    public Supplier<Double> flywheelVelocitySupplier() {
+    public Supplier<LinearVelocity> flywheelVelocitySupplier() {
         return () -> this.flywheelVelocity;
     }
 }

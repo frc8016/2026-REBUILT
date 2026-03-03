@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -24,6 +25,7 @@ import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.Time;
@@ -105,11 +107,11 @@ public final class Constants {
     }
 
     public static class BallisticsManagerConstants {
-        public static final double G = 9.806;
+        public static final LinearAcceleration G = MetersPerSecondPerSecond.of(9.806);
         public static final double VELOCITY_SLOPE = 0.5;
-        public static final double VELOCITY_INTERCEPT = 7.5;
-        public static final double MAX_PROJECTILE_VELOCITY = 13.0;
-        public static final double MIN_PROJECTILE_VELOCITY = 7.0;
+        public static final LinearVelocity VELOCITY_INTERCEPT = MetersPerSecond.of(7.5);
+        public static final LinearVelocity MAX_PROJECTILE_VELOCITY = MetersPerSecond.of(13.0);
+        public static final LinearVelocity MIN_PROJECTILE_VELOCITY = MetersPerSecond.of(7.0);
     }
 
     public static class VisionConstants {
