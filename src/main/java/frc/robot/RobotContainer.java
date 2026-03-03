@@ -18,12 +18,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
-import frc.robot.subsystems.TargetManager;
 import frc.robot.subsystems.TargetSelector;
 
 public class RobotContainer {
@@ -36,14 +36,14 @@ public class RobotContainer {
                     .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     // Create instances of subsystems
+    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final Spindexer spindexer = new Spindexer();
     private final Feed feed = new Feed();
-    private final Flywheel flywheel = new Flywheel();
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
-    private final TargetManager targetManager =
-            new TargetManager(targetSelector.getCurrentTarget());
+    public final BallisticsManager ballisticsManager =
+            new BallisticsManager(targetSelector.getCurrentTarget());
+    private final Flywheel flywheel = new Flywheel();
 
     public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 

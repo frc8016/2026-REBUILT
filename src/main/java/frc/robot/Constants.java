@@ -104,6 +104,14 @@ public final class Constants {
                         new Rotation3d());
     }
 
+    public static class BallisticsManagerConstants {
+        public static final double G = 9.806;
+        public static final double VELOCITY_SLOPE = 0.5;
+        public static final double VELOCITY_INTERCEPT = 7.5;
+        public static final double MAX_PROJECTILE_VELOCITY = 13.0;
+        public static final double MIN_PROJECTILE_VELOCITY = 7.0;
+    }
+
     public static class VisionConstants {
         public static final boolean USE_VISION =
                 true; // IMPORTANT we set this to true when useing vision and false
