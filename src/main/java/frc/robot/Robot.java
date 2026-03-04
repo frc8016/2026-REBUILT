@@ -26,10 +26,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run();
-        m_robotContainer.photonVision.updateVision();
-        m_robotContainer.targetSelector.updateTargetSelection();
-        m_robotContainer.targetSelector.updateAlliance();
-        m_robotContainer.ballisticsManager.update();
+        m_robotContainer.updateSubsystems();
     }
 
     @Override

@@ -30,13 +30,21 @@ public class BallisticsManager extends SubsystemBase {
                 LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
         if (limelightEstimate == null) return;
-        System.out.println(limelightEstimate.pose);
-
         Pose2d turretPose = limelightEstimate.pose;
+
+        // A (0, 0) pose means the limelight has no valid data — skip this cycle
+        if (Math.abs(turretPose.getX()) < 1E-6 && Math.abs(turretPose.getY()) < 1E-6) {
+            return;
+        }
+
         Pose2d target = targetPoseSupplier.get().toPose2d();
         Translation2d targetTranslation = target.relativeTo(turretPose).getTranslation();
 
         double targetDistanceMeters = targetTranslation.getNorm();
+
+        // Avoid zero-length Translation2d which causes NaN in getAngle()
+        if (targetDistanceMeters < 1E-6) return;
+
         double flywheelMps = computeTargetProjectileVelocity(targetDistanceMeters);
         double zMeters = targetPoseSupplier.get().getZ();
         double hoodRadians = computeHoodAngle(targetDistanceMeters, flywheelMps, zMeters);
@@ -64,7 +72,7 @@ public class BallisticsManager extends SubsystemBase {
 
         double discriminant = v4 - g * (g * (d * d) + 2 * z * v2);
 
-        if (discriminant < 0) return 45.0;
+        if (discriminant < 0) return Math.PI / 4;
 
         return Math.atan((v2 + Math.sqrt(discriminant)) / (g * d));
     }

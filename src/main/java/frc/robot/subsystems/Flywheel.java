@@ -91,11 +91,11 @@ public class Flywheel extends SubsystemBase {
     public Flywheel() {}
 
     public Command spinFlywheel(Supplier<LinearVelocity> velocity) {
-        System.out.println(velocity.get().in(MetersPerSecond));
         return this.flywheel.setSpeed(
-                RotationsPerSecond.of(
-                        velocity.get().in(MetersPerSecond)
-                                / FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
+                () ->
+                        RotationsPerSecond.of(
+                                velocity.get().in(MetersPerSecond)
+                                        / FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
     }
 
     public Command idleFlywheel() {
