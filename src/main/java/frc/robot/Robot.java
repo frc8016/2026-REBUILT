@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
         m_robotContainer.photonVision.updateVision();
         m_robotContainer.targetSelector.updateTargetSelection();
         m_robotContainer.targetSelector.updateAlliance();
+        m_robotContainer.ballisticsManager.update();
     }
 
     @Override

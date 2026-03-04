@@ -8,11 +8,12 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TargetConstants;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TargetSelector {
+public class TargetSelector extends SubsystemBase {
     private Supplier<Pose2d> swervePoseSupplier;
     private Optional<Alliance> alliance = DriverStation.getAlliance();
     private Pose3d target =
