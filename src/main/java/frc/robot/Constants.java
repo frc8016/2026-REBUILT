@@ -65,8 +65,7 @@ public final class Constants {
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final LinearVelocity SHOOTING_SETPOINT = MetersPerSecond.of(3);
-        public static final double READY_TOLERANCE = 0.1;
+        public static final double READY_TOLERANCE = 1;
         public static final double FEED_FORWARD_KS = 0.28;
         public static final double FEED_FORWARD_KV = 1.52;
         public static final double FEED_FORWARD_KA = 0.175;
@@ -74,6 +73,8 @@ public final class Constants {
         public static final double SIM_FEED_FORWARD_KV = 1.52;
         public static final double SIM_FEED_FORWARD_KA = 0.175;
         public static final Distance FLYWHEEL_DIAMETER = Inches.of(4);
+        public static final Distance FLYWHEEL_CIRCUMFERENCE =
+                Meters.of(FLYWHEEL_DIAMETER.times(Math.PI).in(Meters));
         public static final Mass FLYWHEEL_MASS = Kilograms.of(1.531);
         public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
         public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);

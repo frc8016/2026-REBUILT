@@ -39,13 +39,13 @@ public class RobotContainer {
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final Spindexer spindexer = new Spindexer();
     private final Feed feed = new Feed();
-    public final TargetSelector targetSelector =
+    private final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
-    public final BallisticsManager ballisticsManager =
+    private final BallisticsManager ballisticsManager =
             new BallisticsManager(targetSelector.getCurrentTarget());
     private final Flywheel flywheel = new Flywheel();
 
-    public final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
+    private final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive =
@@ -69,6 +69,8 @@ public class RobotContainer {
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
+
+        flywheel.setDefaultCommand(flywheel.idleFlywheel());
 
         configureBindings();
 
@@ -114,8 +116,7 @@ public class RobotContainer {
                                                         -joystick.getLeftX()))));
 
         joystick.rightTrigger()
-                .whileTrue(flywheel.spinFlywheel())
-                .whileFalse(flywheel.idleFlywheel());
+                .onTrue(flywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()));
 
         joystick.rightTrigger()
                 .and(flywheel.isReady)
@@ -141,5 +142,12 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
+    }
+
+    public void updateSubsystems() {
+        photonVision.updateVision();
+        targetSelector.updateAlliance();
+        targetSelector.updateTargetSelection();
+        ballisticsManager.update();
     }
 }
