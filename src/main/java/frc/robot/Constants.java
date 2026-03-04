@@ -65,7 +65,7 @@ public final class Constants {
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 0.1;
+        public static final double READY_TOLERANCE = 1;
         public static final double FEED_FORWARD_KS = 0.28;
         public static final double FEED_FORWARD_KV = 1.52;
         public static final double FEED_FORWARD_KA = 0.175;
