@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.commands.AutonomousClimb;
+import frc.robot.commands.AutonomousClimb;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
