@@ -26,7 +26,13 @@ public class BallisticsManager extends SubsystemBase {
     }
 
     public void update() {
-        Pose2d turretPose = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight").pose;
+        LimelightHelpers.PoseEstimate limelightEstimate =
+                LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+
+        if (limelightEstimate == null) return;
+        System.out.println(limelightEstimate.pose);
+
+        Pose2d turretPose = limelightEstimate.pose;
         Pose2d target = targetPoseSupplier.get().toPose2d();
         Translation2d targetTranslation = target.relativeTo(turretPose).getTranslation();
 

@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -15,11 +14,12 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FlyWheelConstants;
+import java.util.function.Supplier;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.mechanisms.config.FlyWheelConfig;
@@ -35,7 +35,6 @@ public class Flywheel extends SubsystemBase {
 
     private final SparkMax flywheelMotor = new SparkMax(4, MotorType.kBrushless);
     private final SparkMax flywheelMotorfollower = new SparkMax(5, MotorType.kBrushless);
-    private final Distance flywheelDiameter = Inches.of(4);
 
     private final SmartMotorControllerConfig motorConfig =
             new SmartMotorControllerConfig(this)
@@ -81,26 +80,29 @@ public class Flywheel extends SubsystemBase {
 
     private boolean isReady() {
         return MathUtil.isNear(
-                FlyWheelConstants.SHOOTING_SETPOINT.in(MetersPerSecond),
-                flywheel.getSpeed().in(RotationsPerSecond)
-                        * flywheelDiameter.times(Math.PI).in(Meters),
+                flywheel.getMechanismSetpointVelocity()
+                                .orElse(RotationsPerSecond.of(0))
+                                .in(RotationsPerSecond)
+                        * FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters),
+                flywheel.getLinearVelocity().in(MetersPerSecond),
                 FlyWheelConstants.READY_TOLERANCE);
     }
 
     public Flywheel() {}
 
-    public Command spinFlywheel() {
+    public Command spinFlywheel(Supplier<LinearVelocity> velocity) {
+        System.out.println(velocity.get().in(MetersPerSecond));
         return this.flywheel.setSpeed(
                 RotationsPerSecond.of(
-                        FlyWheelConstants.SHOOTING_SETPOINT.in(MetersPerSecond)
-                                / flywheelDiameter.times(Math.PI).in(Meters)));
+                        velocity.get().in(MetersPerSecond)
+                                / FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
     }
 
     public Command idleFlywheel() {
         return this.flywheel.setSpeed(
                 RotationsPerSecond.of(
                         FlyWheelConstants.IDLE_SETPOINT.in(MetersPerSecond)
-                                / flywheelDiameter.times(Math.PI).in(Meters)));
+                                / FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
     }
 
     public final Trigger isReady =

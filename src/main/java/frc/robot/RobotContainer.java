@@ -70,6 +70,8 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
+        flywheel.setDefaultCommand(flywheel.idleFlywheel());
+
         configureBindings();
 
         // Warmup PathPlanner to avoid Java pauses
@@ -114,8 +116,7 @@ public class RobotContainer {
                                                         -joystick.getLeftX()))));
 
         joystick.rightTrigger()
-                .whileTrue(flywheel.spinFlywheel())
-                .whileFalse(flywheel.idleFlywheel());
+                .onTrue(flywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()));
 
         joystick.rightTrigger()
                 .and(flywheel.isReady)
