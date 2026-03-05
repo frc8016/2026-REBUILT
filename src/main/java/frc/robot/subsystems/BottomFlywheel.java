@@ -18,7 +18,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.FlyWheelConstants;
+import frc.robot.Constants.BottomFlyWheelConstants;
 import java.util.function.Supplier;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
@@ -31,7 +31,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
-public class Flywheel extends SubsystemBase {
+public class BottomFlywheel extends SubsystemBase {
 
     private final SparkMax flywheelMotor = new SparkMax(4, MotorType.kBrushless);
     private final SparkMax flywheelMotorfollower = new SparkMax(5, MotorType.kBrushless);
@@ -39,28 +39,28 @@ public class Flywheel extends SubsystemBase {
     private final SmartMotorControllerConfig motorConfig =
             new SmartMotorControllerConfig(this)
                     .withClosedLoopController(
-                            FlyWheelConstants.PROPORTIONAL,
-                            FlyWheelConstants.INTEGRAL,
-                            FlyWheelConstants.DERIVATIVE,
-                            FlyWheelConstants.TRAPAZOIDAL_MAX_VELOCITY,
-                            FlyWheelConstants.TRAPAZOIDAL_MAX_ACCELERATION)
+                            BottomFlyWheelConstants.PROPORTIONAL,
+                            BottomFlyWheelConstants.INTEGRAL,
+                            BottomFlyWheelConstants.DERIVATIVE,
+                            BottomFlyWheelConstants.TRAPAZOIDAL_MAX_VELOCITY,
+                            BottomFlyWheelConstants.TRAPAZOIDAL_MAX_ACCELERATION)
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1, 1)))
                     .withIdleMode(MotorMode.COAST)
-                    .withTelemetry("FlywheelMotor", TelemetryVerbosity.HIGH)
-                    .withStatorCurrentLimit(FlyWheelConstants.STATOR_CURRENT_LIMIT)
+                    .withTelemetry("BottomFlywheelMotor", TelemetryVerbosity.HIGH)
+                    .withStatorCurrentLimit(BottomFlyWheelConstants.STATOR_CURRENT_LIMIT)
                     .withMotorInverted(false)
-                    .withClosedLoopRampRate(FlyWheelConstants.CLOSED_LOOP_RAMP_RATE)
-                    .withOpenLoopRampRate(FlyWheelConstants.OPEN_LOOP_RAMP_RATE)
+                    .withClosedLoopRampRate(BottomFlyWheelConstants.CLOSED_LOOP_RAMP_RATE)
+                    .withOpenLoopRampRate(BottomFlyWheelConstants.OPEN_LOOP_RAMP_RATE)
                     .withFeedforward(
                             new SimpleMotorFeedforward(
-                                    FlyWheelConstants.FEED_FORWARD_KS,
-                                    FlyWheelConstants.FEED_FORWARD_KV,
-                                    FlyWheelConstants.FEED_FORWARD_KA))
+                                    BottomFlyWheelConstants.FEED_FORWARD_KS,
+                                    BottomFlyWheelConstants.FEED_FORWARD_KV,
+                                    BottomFlyWheelConstants.FEED_FORWARD_KA))
                     .withSimFeedforward(
                             new SimpleMotorFeedforward(
-                                    FlyWheelConstants.SIM_FEED_FORWARD_KS,
-                                    FlyWheelConstants.SIM_FEED_FORWARD_KV,
-                                    FlyWheelConstants.SIM_FEED_FORWARD_KA))
+                                    BottomFlyWheelConstants.SIM_FEED_FORWARD_KS,
+                                    BottomFlyWheelConstants.SIM_FEED_FORWARD_KV,
+                                    BottomFlyWheelConstants.SIM_FEED_FORWARD_KA))
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     .withFollowers(Pair.of(flywheelMotorfollower, true));
 
@@ -69,11 +69,12 @@ public class Flywheel extends SubsystemBase {
 
     private final FlyWheelConfig flywheelConfig =
             new FlyWheelConfig(motor)
-                    .withDiameter(FlyWheelConstants.FLYWHEEL_DIAMETER)
-                    .withMass(FlyWheelConstants.FLYWHEEL_MASS)
-                    .withTelemetry("FlywheelMech", TelemetryVerbosity.HIGH)
+                    .withDiameter(BottomFlyWheelConstants.FLYWHEEL_DIAMETER)
+                    .withMass(BottomFlyWheelConstants.FLYWHEEL_MASS)
+                    .withTelemetry("BottomFlywheelMechanism", TelemetryVerbosity.HIGH)
                     .withSoftLimit(
-                            FlyWheelConstants.SOFT_LIMIT.negate(), FlyWheelConstants.SOFT_LIMIT);
+                            BottomFlyWheelConstants.SOFT_LIMIT.negate(),
+                            BottomFlyWheelConstants.SOFT_LIMIT);
     // .withSpeedometerSimulation(RPM.of(7500)); // optional to make graph of velocity not position
 
     private final FlyWheel flywheel = new FlyWheel(flywheelConfig);
@@ -83,32 +84,35 @@ public class Flywheel extends SubsystemBase {
                 flywheel.getMechanismSetpointVelocity()
                                 .orElse(RotationsPerSecond.of(0))
                                 .in(RotationsPerSecond)
-                        * FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters),
+                        * BottomFlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters),
                 flywheel.getLinearVelocity().in(MetersPerSecond),
-                FlyWheelConstants.READY_TOLERANCE);
+                BottomFlyWheelConstants.READY_TOLERANCE);
     }
 
-    public Flywheel() {}
+    public BottomFlywheel() {}
 
     public Command spinFlywheel(Supplier<LinearVelocity> velocity) {
         return this.flywheel.setSpeed(
                 () ->
                         RotationsPerSecond.of(
                                 velocity.get().in(MetersPerSecond)
-                                        / FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
+                                        / BottomFlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(
+                                                Meters)));
     }
 
     public Command idleFlywheel() {
         return this.flywheel.setSpeed(
                 RotationsPerSecond.of(
-                        FlyWheelConstants.IDLE_SETPOINT.in(MetersPerSecond)
-                                / FlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
+                        BottomFlyWheelConstants.IDLE_SETPOINT.in(MetersPerSecond)
+                                / BottomFlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
     }
 
     public final Trigger isReady =
             new Trigger(this::isReady)
                     // Stay ready for short time after to prevent flapping
-                    .debounce(FlyWheelConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
+                    .debounce(
+                            BottomFlyWheelConstants.IS_READY_DELAY,
+                            Debouncer.DebounceType.kFalling);
 
     @Override
     public void periodic() {
