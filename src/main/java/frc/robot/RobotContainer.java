@@ -19,12 +19,13 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallisticsManager;
+import frc.robot.subsystems.BottomFlywheel;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
-import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
+import frc.robot.subsystems.TopFlywheel;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -43,7 +44,8 @@ public class RobotContainer {
             new TargetSelector(() -> drivetrain.getState().Pose);
     private final BallisticsManager ballisticsManager =
             new BallisticsManager(targetSelector.getCurrentTarget());
-    private final Flywheel flywheel = new Flywheel();
+    private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
+    private final TopFlywheel topFlywheel = new TopFlywheel();
 
     private final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
@@ -61,7 +63,6 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
-    private final CommandXboxController xboxController = new CommandXboxController(1);
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -70,7 +71,8 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-        flywheel.setDefaultCommand(flywheel.idleFlywheel());
+        bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
+        topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
 
         configureBindings();
 
@@ -105,7 +107,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        joystick.a().onTrue(topFlywheel.sysId());
         joystick.b()
                 .whileTrue(
                         drivetrain.applyRequest(
@@ -116,10 +118,20 @@ public class RobotContainer {
                                                         -joystick.getLeftX()))));
 
         joystick.rightTrigger()
-                .onTrue(flywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()));
+                .whileTrue(
+                        bottomFlywheel.spinFlywheel(
+                                () ->
+                                        MetersPerSecond.of(
+                                                10))) // ballisticsManager.flywheelVelocitySupplier()
+                .whileTrue(
+                        topFlywheel.spinFlywheel(
+                                () ->
+                                        MetersPerSecond.of(
+                                                10))); // ballisticsManager.flywheelVelocitySupplier()
 
         joystick.rightTrigger()
-                .and(flywheel.isReady)
+                .and(bottomFlywheel.isReady)
+                .and(topFlywheel.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
         // Run SysId routines when holding back/start and X/Y.

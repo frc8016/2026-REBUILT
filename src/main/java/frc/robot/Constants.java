@@ -58,7 +58,7 @@ public final class Constants {
         public static final double FEED_SPEED = 1;
     }
 
-    public static class FlyWheelConstants {
+    public static class BottomFlyWheelConstants {
         public static final double IS_READY_DELAY = 0.05;
         public static final double PROPORTIONAL = 0.1;
         public static final double INTEGRAL = 0;
@@ -69,13 +69,38 @@ public final class Constants {
         public static final double FEED_FORWARD_KS = 0.28;
         public static final double FEED_FORWARD_KV = 1.52;
         public static final double FEED_FORWARD_KA = 0.175;
-        public static final double SIM_FEED_FORWARD_KS = 0;
-        public static final double SIM_FEED_FORWARD_KV = 1.52;
-        public static final double SIM_FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0.0096372;
+        public static final double SIM_FEED_FORWARD_KV = 0.12421;
+        public static final double SIM_FEED_FORWARD_KA = 0.15227;
         public static final Distance FLYWHEEL_DIAMETER = Inches.of(4);
-        public static final Distance FLYWHEEL_CIRCUMFERENCE =
-                Meters.of(FLYWHEEL_DIAMETER.times(Math.PI).in(Meters));
         public static final Mass FLYWHEEL_MASS = Kilograms.of(1.531);
+        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
+        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
+        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
+                RotationsPerSecondPerSecond.of(2500);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+    }
+
+    public static class TopFlyWheelConstants {
+        public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 1;
+        public static final double IS_READY_DELAY = 0.05;
+        public static final double PROPORTIONAL = 0.1;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+        public static final int MAX_CURRENT = 50;
+        public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
+        public static final double READY_TOLERANCE = 1;
+        public static final double FEED_FORWARD_KS = 0.28;
+        public static final double FEED_FORWARD_KV = 1.52;
+        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0.044289;
+        public static final double SIM_FEED_FORWARD_KV = 0.1227;
+        public static final double SIM_FEED_FORWARD_KA = 0.006877;
+        public static final Distance FLYWHEEL_DIAMETER = Inches.of(2);
+        public static final Mass FLYWHEEL_MASS =
+                Kilograms.of(0.25); // TODO: need weight of flywheel
         public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
         public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
         public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
