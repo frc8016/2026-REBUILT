@@ -107,7 +107,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        joystick.a().onTrue(topFlywheel.sysId());
         joystick.b()
                 .whileTrue(
                         drivetrain.applyRequest(
@@ -118,12 +118,12 @@ public class RobotContainer {
                                                         -joystick.getLeftX()))));
 
         joystick.rightTrigger()
-                .onTrue(
+                .whileTrue(
                         bottomFlywheel.spinFlywheel(
                                 () ->
                                         MetersPerSecond.of(
                                                 10))) // ballisticsManager.flywheelVelocitySupplier()
-                .onTrue(
+                .whileTrue(
                         topFlywheel.spinFlywheel(
                                 () ->
                                         MetersPerSecond.of(

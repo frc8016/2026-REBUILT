@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
@@ -9,7 +8,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -77,31 +75,27 @@ public class TopFlywheel extends SubsystemBase {
     private final FlyWheel flywheel = new FlyWheel(flywheelConfig);
 
     private boolean isReady() {
-        return MathUtil.isNear(
-                flywheel.getMechanismSetpointVelocity()
-                                .orElse(RotationsPerSecond.of(0))
-                                .in(RotationsPerSecond)
-                        * TopFlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters),
-                flywheel.getLinearVelocity().in(MetersPerSecond),
-                TopFlyWheelConstants.READY_TOLERANCE);
+        return flywheel.getSpeed()
+                .isNear(
+                        flywheel.getMechanismSetpointVelocity().orElse(RotationsPerSecond.of(0)),
+                        TopFlyWheelConstants.READY_TOLERANCE);
     }
 
     public TopFlywheel() {}
 
     public Command spinFlywheel(Supplier<LinearVelocity> velocity) {
-        return this.flywheel.setSpeed(
+        return this.flywheel.run(
                 () ->
-                        RotationsPerSecond.of(
-                                velocity.get().in(MetersPerSecond)
-                                        * TopFlyWheelConstants.PROPORTIONALITY_TO_BOTTOM_FLYWHEEL
-                                        / TopFlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
+                        flywheelConfig.getAngularVelocity(
+                                MetersPerSecond.of(
+                                        velocity.get().in(MetersPerSecond)
+                                                * TopFlyWheelConstants
+                                                        .PROPORTIONALITY_TO_BOTTOM_FLYWHEEL)));
     }
 
     public Command idleFlywheel() {
-        return this.flywheel.setSpeed(
-                RotationsPerSecond.of(
-                        TopFlyWheelConstants.IDLE_SETPOINT.in(MetersPerSecond)
-                                / TopFlyWheelConstants.FLYWHEEL_CIRCUMFERENCE.in(Meters)));
+        return this.flywheel.run(
+                flywheelConfig.getAngularVelocity(TopFlyWheelConstants.IDLE_SETPOINT));
     }
 
     public final Trigger isReady =

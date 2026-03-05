@@ -69,12 +69,10 @@ public final class Constants {
         public static final double FEED_FORWARD_KS = 0.28;
         public static final double FEED_FORWARD_KV = 1.52;
         public static final double FEED_FORWARD_KA = 0.175;
-        public static final double SIM_FEED_FORWARD_KS = 0;
-        public static final double SIM_FEED_FORWARD_KV = 1.52;
-        public static final double SIM_FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0.0096372;
+        public static final double SIM_FEED_FORWARD_KV = 0.12421;
+        public static final double SIM_FEED_FORWARD_KA = 0.15227;
         public static final Distance FLYWHEEL_DIAMETER = Inches.of(4);
-        public static final Distance FLYWHEEL_CIRCUMFERENCE =
-                Meters.of(FLYWHEEL_DIAMETER.times(Math.PI).in(Meters));
         public static final Mass FLYWHEEL_MASS = Kilograms.of(1.531);
         public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
         public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
@@ -97,14 +95,12 @@ public final class Constants {
         public static final double FEED_FORWARD_KS = 0.28;
         public static final double FEED_FORWARD_KV = 1.52;
         public static final double FEED_FORWARD_KA = 0.175;
-        public static final double SIM_FEED_FORWARD_KS = 0;
-        public static final double SIM_FEED_FORWARD_KV = 1.52;
-        public static final double SIM_FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0.044289;
+        public static final double SIM_FEED_FORWARD_KV = 0.1227;
+        public static final double SIM_FEED_FORWARD_KA = 0.006877;
         public static final Distance FLYWHEEL_DIAMETER = Inches.of(2);
-        public static final Distance FLYWHEEL_CIRCUMFERENCE =
-                Meters.of(FLYWHEEL_DIAMETER.times(Math.PI).in(Meters));
         public static final Mass FLYWHEEL_MASS =
-                Kilograms.of(0.75); // TODO: need weight of flywheel
+                Kilograms.of(0.25); // TODO: need weight of flywheel
         public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
         public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
         public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
