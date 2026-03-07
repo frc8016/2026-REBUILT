@@ -158,6 +158,33 @@ public final class Constants {
         public static final LinearVelocity MIN_PROJECTILE_VELOCITY = MetersPerSecond.of(7.0);
     }
 
+    public static class HoodConstants { // TODO: upadate all constants here
+        public static final double PROPORTIONAL = 0.1;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+        public static final int MAX_CURRENT = 50;
+        public static final double READY_TOLERANCE = 1;
+        public static final double FEED_FORWARD_KS = 0.28;
+        public static final double FEED_FORWARD_KV = 1.52;
+        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0.044289;
+        public static final double SIM_FEED_FORWARD_KV = 0.1227;
+        public static final double SIM_FEED_FORWARD_KA = 0.006877;
+        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
+        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
+        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
+                RotationsPerSecondPerSecond.of(2500);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+        public static final double IS_READY_DELAY = 0.05;
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(0);
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(100);
+        public static final Distance HOOD_LENGTH = Meters.of(0.1);
+        public static final Angle START_ANGLE = Degrees.of(0); // TODO: update with start angle
+        public static final Mass HOOD_WEIGHT = Kilograms.of(2);
+    }
+
     public static class VisionConstants {
         public static final boolean USE_VISION =
                 true; // IMPORTANT we set this to true when useing vision and false
