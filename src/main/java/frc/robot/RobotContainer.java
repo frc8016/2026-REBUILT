@@ -22,6 +22,8 @@ import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
+import frc.robot.subsystems.IntakeArm;
+import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
@@ -40,7 +42,9 @@ public class RobotContainer {
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final Spindexer spindexer = new Spindexer();
     private final Feed feed = new Feed();
-    private final TargetSelector targetSelector =
+    private final IntakeArm intakeArm = new IntakeArm();
+    private final IntakeRoller intakeRoller = new IntakeRoller();
+    public final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
     private final BallisticsManager ballisticsManager =
             new BallisticsManager(targetSelector.getCurrentTarget());
@@ -73,6 +77,7 @@ public class RobotContainer {
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
+        intakeArm.setDefaultCommand(intakeArm.raiseIntake());
 
         configureBindings();
 
@@ -133,6 +138,11 @@ public class RobotContainer {
                 .and(bottomFlywheel.isReady)
                 .and(topFlywheel.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
+
+        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
+        joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
+
+        joystick.x().whileTrue(intakeRoller.spinBackwards());
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
