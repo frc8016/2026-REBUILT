@@ -5,11 +5,13 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -21,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -61,8 +64,11 @@ public final class Constants {
     public static class IntakeConstants {}
 
     public static class ArmConstants {
-        public static final double MassPounds = 1; // TODO Need to be changed
-        public static final Distance ArmLength = Meters.of(0.135); // TODO Need to be changed
+        public static final Mass MASS = Pounds.of(1); // TODO Need to be changed
+        public static final Distance ARM_LENGTH = Meters.of(0.135); // TODO Need to be changed
+        public static final Angle DOWN_ANGLE = Degrees.of(0);
+        public static final Angle UP_ANGLE = Degrees.of(90);
+        public static final Angle START_ANGLE = Degrees.of(90);
     }
 
     public static class BottomFlyWheelConstants {

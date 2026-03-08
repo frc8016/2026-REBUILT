@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
@@ -14,7 +13,6 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -65,11 +63,11 @@ public class IntakeArm extends SubsystemBase {
     // Declares an arm configuration.
     private final ArmConfig m_config =
             new ArmConfig(motor1)
-                    .withLength(ArmConstants.ArmLength)
+                    .withLength(ArmConstants.ARM_LENGTH)
                     .withHardLimit(Degrees.of(-100), Degrees.of(200))
                     .withTelemetry("intakeArmMechanism", TelemetryVerbosity.HIGH)
-                    .withMass(Pounds.of(ArmConstants.MassPounds))
-                    .withStartingPosition(Degrees.of(0));
+                    .withMass(ArmConstants.MASS)
+                    .withStartingPosition(ArmConstants.START_ANGLE);
 
     // Declares an arm using the arm configuration.
     private final Arm arm = new Arm(m_config);
@@ -89,8 +87,11 @@ public class IntakeArm extends SubsystemBase {
         return arm.sysId(Volts.of(3), Volts.of(3).per(Second), Second.of(30));
     }
 
-    public Command setAngle(Angle angle) {
-        System.out.println("MOVE");
-        return arm.setAngle(angle);
+    public Command lowerIntake() {
+        return this.arm.setAngle(ArmConstants.DOWN_ANGLE);
+    }
+
+    public Command raiseIntake() {
+        return this.arm.setAngle(ArmConstants.UP_ANGLE);
     }
 }
