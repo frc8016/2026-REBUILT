@@ -22,6 +22,11 @@ import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
+<<<<<<< HEAD
+=======
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.IntakeArm;
+>>>>>>> 0809bbf (add intake)
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
@@ -40,7 +45,14 @@ public class RobotContainer {
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final Spindexer spindexer = new Spindexer();
     private final Feed feed = new Feed();
+<<<<<<< HEAD
     private final TargetSelector targetSelector =
+=======
+    private final Flywheel flywheel = new Flywheel();
+    private final IntakeArm intakeArm = new IntakeArm();
+    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final TargetSelector targetSelector =
+>>>>>>> 0809bbf (add intake)
             new TargetSelector(() -> drivetrain.getState().Pose);
     private final BallisticsManager ballisticsManager =
             new BallisticsManager(targetSelector.getCurrentTarget());
@@ -133,6 +145,8 @@ public class RobotContainer {
                 .and(bottomFlywheel.isReady)
                 .and(topFlywheel.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
+
+        joystick.rightBumper().onTrue((intakeArm.sysId()));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

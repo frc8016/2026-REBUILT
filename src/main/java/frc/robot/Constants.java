@@ -62,7 +62,7 @@ public final class Constants {
 
     public static class ArmConstants {
         public static final double MassPounds = 1; // TODO Need to be changed
-        public static final double ArmLength = 0.135; // TODO Need to be changed
+        public static final Distance ArmLength = Meters.of(0.135); // TODO Need to be changed
     }
 
     public static class BottomFlyWheelConstants {

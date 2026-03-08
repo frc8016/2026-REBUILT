@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
@@ -32,9 +31,9 @@ import yams.motorcontrollers.local.SparkWrapper;
 
 public class IntakeArm extends SubsystemBase {
 
-    private final SparkMax armMotorL =
+    private final SparkMax armMotorLeft =
             new SparkMax(6, MotorType.kBrushless); // TODO: Might need to fix the motor id
-    private final SparkMax armMotorF =
+    private final SparkMax armMotorRight =
             new SparkMax(7, MotorType.kBrushless); // TODO: Might need to fix the motor id
 
     // There are most definatly a lot of constants and other variables that need to be edited to
@@ -46,28 +45,29 @@ public class IntakeArm extends SubsystemBase {
     private final SmartMotorControllerConfig motorConfig =
             new SmartMotorControllerConfig(this)
                     .withClosedLoopController(
-                            4, 0, 0, DegreesPerSecond.of(180), DegreesPerSecondPerSecond.of(90))
+                            1, 0, 0, DegreesPerSecond.of(180), DegreesPerSecondPerSecond.of(90))
                     .withSoftLimit(Degrees.of(-30), Degrees.of(100))
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
                     .withIdleMode(MotorMode.BRAKE)
-                    .withTelemetry("ArmMotor", TelemetryVerbosity.HIGH)
+                    .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(Amps.of(40))
                     .withMotorInverted(false)
                     .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withFeedforward(new ArmFeedforward(0, 0, 0, 0))
+                    .withFeedforward(new ArmFeedforward(0.03, 0.01, 0, 0.01))
+                    .withSimFeedforward(new ArmFeedforward(0, 0.01, 0.01))
                     .withControlMode(ControlMode.CLOSED_LOOP)
-                    .withFollowers(Pair.of(armMotorF, true));
+                    .withFollowers(Pair.of(armMotorRight, true));
 
     // Declares a motor using the motor configuration previously developed.
     private final SmartMotorController motor1 =
-            new SparkWrapper(armMotorL, DCMotor.getNEO(1), motorConfig);
+            new SparkWrapper(armMotorLeft, DCMotor.getNEO(1), motorConfig);
 
     // Declares an arm configuration.
-    private ArmConfig m_config =
+    private final ArmConfig m_config =
             new ArmConfig(motor1)
-                    .withLength(Meters.of(ArmConstants.ArmLength))
+                    .withLength(ArmConstants.ArmLength)
                     .withHardLimit(Degrees.of(-100), Degrees.of(200))
-                    .withTelemetry("ArmExample", TelemetryVerbosity.HIGH)
+                    .withTelemetry("intakeArmMechanism", TelemetryVerbosity.HIGH)
                     .withMass(Pounds.of(ArmConstants.MassPounds))
                     .withStartingPosition(Degrees.of(0));
 
@@ -90,6 +90,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command setAngle(Angle angle) {
+        System.out.println("MOVE");
         return arm.setAngle(angle);
     }
 }
