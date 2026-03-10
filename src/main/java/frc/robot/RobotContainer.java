@@ -80,6 +80,7 @@ public class RobotContainer {
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         intakeArm.setDefaultCommand(intakeArm.raiseIntake());
+        hood.setDefaultCommand(hood.lowerHood());
 
         configureBindings();
 
@@ -132,8 +133,8 @@ public class RobotContainer {
                                 .alongWith(
                                         hood.setAngle(
                                                 () ->
-                                                        Rotation2d.fromDegrees(
-                                                                90)))); // ballisticsManager.hoodAngleSupplier()
+                                                        Degrees.of(
+                                                                20)))); // ballisticsManager.hoodAngleSupplier()
 
         joystick.rightTrigger()
                 .and(bottomFlywheel.isReady)

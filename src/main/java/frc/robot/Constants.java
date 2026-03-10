@@ -159,7 +159,7 @@ public final class Constants {
     }
 
     public static class HoodConstants { // TODO: upadate all constants here
-        public static final double PROPORTIONAL = 0.1;
+        public static final double PROPORTIONAL = 1;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
@@ -178,11 +178,11 @@ public final class Constants {
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
-        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(0);
-        public static final Angle TOP_SOFT_LIMIT = Degrees.of(100);
-        public static final Distance HOOD_LENGTH = Meters.of(0.1);
-        public static final Angle START_ANGLE = Degrees.of(0); // TODO: update with start angle
-        public static final Mass HOOD_WEIGHT = Kilograms.of(2);
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(70);
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(30);
+        public static final Distance HOOD_LENGTH = Inches.of(17.8);
+        public static final Angle START_ANGLE = Degrees.of(70);
+        public static final Mass HOOD_WEIGHT = Kilograms.of(1);
     }
 
     public static class VisionConstants {

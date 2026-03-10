@@ -9,8 +9,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -18,8 +18,8 @@ import frc.robot.Constants.HoodConstants;
 import java.util.function.Supplier;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
-import yams.mechanisms.config.ArmConfig;
-import yams.mechanisms.positional.Arm;
+import yams.mechanisms.config.PivotConfig;
+import yams.mechanisms.positional.Pivot;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
@@ -38,8 +38,8 @@ public class Hood extends SubsystemBase {
                             HoodConstants.DERIVATIVE,
                             HoodConstants.TRAPAZOIDAL_MAX_VELOCITY,
                             HoodConstants.TRAPAZOIDAL_MAX_ACCELERATION)
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1, 1)))
-                    .withIdleMode(MotorMode.COAST)
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(712, 9)))
+                    .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(HoodConstants.STATOR_CURRENT_LIMIT)
                     .withMotorInverted(false)
@@ -60,19 +60,15 @@ public class Hood extends SubsystemBase {
     private final SmartMotorController hoodSMC =
             new SparkWrapper(hoodMotor, DCMotor.getNeo550(1), hoodMotorConfig);
 
-    private final ArmConfig hoodConfig =
-            new ArmConfig(hoodSMC)
+    private final PivotConfig hoodConfig =
+            new PivotConfig(hoodSMC)
                     .withTelemetry("HoodMechanism", TelemetryVerbosity.HIGH)
                     .withSoftLimits(HoodConstants.BOTTOM_SOFT_LIMIT, HoodConstants.TOP_SOFT_LIMIT)
                     .withHardLimit(Degrees.of(0), Degrees.of(120))
-                    .withLength(HoodConstants.HOOD_LENGTH)
-                    .withMass(HoodConstants.HOOD_WEIGHT)
-                    .withStartingPosition(
-                            HoodConstants
-                                    .START_ANGLE); // The Hood can be modeled as an arm since it has
-    // a gravitational force acted upon based on the angle its in
+                    .withMOI(HoodConstants.HOOD_LENGTH, HoodConstants.HOOD_WEIGHT)
+                    .withStartingPosition(HoodConstants.START_ANGLE);
 
-    private final Arm hood = new Arm(hoodConfig);
+    private final Pivot hood = new Pivot(hoodConfig);
 
     private boolean isReady() {
         return hood.getAngle()
@@ -89,8 +85,12 @@ public class Hood extends SubsystemBase {
 
     public void Update() {}
 
-    public Command setAngle(Supplier<Rotation2d> hoodAngle) {
-        return hood.setAngle(Degrees.of(hoodAngle.get().getDegrees()));
+    public Command setAngle(Supplier<Angle> hoodAngle) {
+        return hood.setAngle(hoodAngle);
+    }
+
+    public Command lowerHood() {
+        return setAngle(() -> HoodConstants.BOTTOM_SOFT_LIMIT);
     }
 
     public Command sysId() {

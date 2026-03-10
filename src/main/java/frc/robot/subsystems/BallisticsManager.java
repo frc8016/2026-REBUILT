@@ -1,12 +1,14 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
@@ -16,7 +18,7 @@ import java.util.function.Supplier;
 public class BallisticsManager extends SubsystemBase {
     private Supplier<Pose3d> targetPoseSupplier;
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
-    private Rotation2d hoodAngle = new Rotation2d();
+    private Angle hoodAngle = Radians.of(0);
     private Rotation2d targetHorizontalAngle = new Rotation2d();
 
     public BallisticsManager(Supplier<Pose3d> targetPose) {
@@ -50,7 +52,7 @@ public class BallisticsManager extends SubsystemBase {
         double hoodRadians = computeHoodAngle(targetDistanceMeters, flywheelMps, zMeters);
 
         this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
-        this.hoodAngle = new Rotation2d(hoodRadians);
+        this.hoodAngle = Radians.of(hoodRadians);
         this.targetHorizontalAngle = targetTranslation.getAngle();
     }
 
@@ -81,7 +83,7 @@ public class BallisticsManager extends SubsystemBase {
         return () -> this.targetHorizontalAngle;
     }
 
-    public Supplier<Rotation2d> hoodAngleSupplier() {
+    public Supplier<Angle> hoodAngleSupplier() {
         return () -> this.hoodAngle;
     }
 
