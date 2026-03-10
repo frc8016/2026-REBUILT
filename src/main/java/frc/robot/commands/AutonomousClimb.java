@@ -17,41 +17,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
 
 public class AutonomousClimb {
-    private Supplier<Pose2d> swervePoseSupplier;
-    private Optional<Alliance> alliance = DriverStation.getAlliance();
 
-    Supplier<Command> pathfindToClimb =
-            () -> {
-                String pathName = constructPathName(getClosestPoseName());
-                Optional<PathPlannerPath> maybePath = loadPath(pathName);
+    public static Command pathfindToClimb(Supplier<Pose2d> poseSupplier) {
+        return Commands.defer(
+                () -> {
+                    Map<Pose2d, String> poseMap = getLineupPoseMap();
+                    Pose2d closest = poseSupplier.get().nearest(new ArrayList<>(poseMap.keySet()));
+                    String pathName = "climb_" + poseMap.get(closest);
 
-                if (maybePath.isPresent()) {
-                    return AutoBuilder.pathfindThenFollowPath(
-                            maybePath.get(), AutonomousClimbConstants.constraints);
-                } else {
-                    return Commands.none();
-                }
-            };
-
-    public AutonomousClimb(Supplier<Pose2d> poseSupplierIn) {
-        swervePoseSupplier = poseSupplierIn;
+                    Optional<PathPlannerPath> maybePath = loadPath(pathName);
+                    if (maybePath.isPresent()) {
+                        return AutoBuilder.pathfindThenFollowPath(
+                                maybePath.get(), AutonomousClimbConstants.constraints);
+                    } else {
+                        return Commands.none();
+                    }
+                },
+                Set.of());
     }
 
-    public Command createPathfindToClimb() {
-        return pathfindToClimb.get();
-    }
-
-    private String getClosestPoseName() {
-        Pose2d pose =
-                swervePoseSupplier.get().nearest(new ArrayList<>(getLineupPoseMap().keySet()));
-        return getLineupPoseMap().get(pose);
-    }
-
-    private Map<Pose2d, String> getLineupPoseMap() {
+    private static Map<Pose2d, String> getLineupPoseMap() {
+        Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             return AutonomousClimbConstants.RED_CLIMB_POSITIONS;
         } else {
@@ -59,7 +50,7 @@ public class AutonomousClimb {
         }
     }
 
-    private Optional<PathPlannerPath> loadPath(String pathName) {
+    private static Optional<PathPlannerPath> loadPath(String pathName) {
         try {
             return Optional.of(PathPlannerPath.fromPathFile(pathName));
         } catch (FileVersionException | IOException | ParseException e) {
@@ -67,9 +58,5 @@ public class AutonomousClimb {
             e.printStackTrace();
             return Optional.empty();
         }
-    }
-
-    private String constructPathName(String pointName) {
-        return "climb_" + pointName;
     }
 }

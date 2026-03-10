@@ -30,7 +30,7 @@ import yams.motorcontrollers.local.SparkWrapper;
 
 public class TopFlywheel extends SubsystemBase {
 
-    private final SparkMax flywheelMotor = new SparkMax(6, MotorType.kBrushless);
+    private final SparkMax flywheelMotor = new SparkMax(3, MotorType.kBrushless);
 
     private final SmartMotorControllerConfig motorConfig =
             new SmartMotorControllerConfig(this)

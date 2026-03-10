@@ -113,10 +113,7 @@ public class RobotContainer {
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
         joystick.a().onTrue(topFlywheel.sysId());
-        joystick.b()
-                .whileTrue(
-                        new AutonomousClimb(() -> drivetrain.getState().Pose)
-                                .createPathfindToClimb());
+        joystick.b().whileTrue(AutonomousClimb.pathfindToClimb(() -> drivetrain.getState().Pose));
 
         joystick.rightTrigger()
                 .whileTrue(

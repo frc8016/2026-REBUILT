@@ -199,16 +199,16 @@ public final class Constants {
         public static final Map<Pose2d, String> BLUE_CLIMB_POSITIONS =
                 new HashMap<>(14) {
                     {
-                        put(new Pose2d(1.697, 5.188, new Rotation2d()), "right");
-                        put(new Pose2d(1.697, 2.099, new Rotation2d()), "left");
+                        put(new Pose2d(1.697, 5.188, new Rotation2d()), "left");
+                        put(new Pose2d(1.697, 2.099, new Rotation2d()), "right");
                     }
                 };
 
         public static final Map<Pose2d, String> RED_CLIMB_POSITIONS =
                 new HashMap<>(14) {
                     {
-                        put(new Pose2d(14.844, 2.099, new Rotation2d()), "right");
-                        put(new Pose2d(14.844, 5.188, new Rotation2d()), "left");
+                        put(new Pose2d(14.844, 2.099, new Rotation2d()), "left");
+                        put(new Pose2d(14.844, 5.188, new Rotation2d()), "right");
                     }
                 };
         public static PathConstraints constraints =
