@@ -22,6 +22,7 @@ import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feed;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.PhotonVisionManager;
@@ -50,6 +51,7 @@ public class RobotContainer {
             new BallisticsManager(targetSelector.getCurrentTarget());
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
+    private final Hood hood = new Hood();
 
     private final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
@@ -78,6 +80,7 @@ public class RobotContainer {
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         intakeArm.setDefaultCommand(intakeArm.raiseIntake());
+        hood.setDefaultCommand(hood.lowerHood());
 
         configureBindings();
 
@@ -117,19 +120,26 @@ public class RobotContainer {
 
         joystick.rightTrigger()
                 .whileTrue(
-                        bottomFlywheel.spinFlywheel(
-                                () ->
-                                        MetersPerSecond.of(
-                                                10))) // ballisticsManager.flywheelVelocitySupplier()
-                .whileTrue(
-                        topFlywheel.spinFlywheel(
-                                () ->
-                                        MetersPerSecond.of(
-                                                10))); // ballisticsManager.flywheelVelocitySupplier()
+                        bottomFlywheel
+                                .spinFlywheel(
+                                        () ->
+                                                MetersPerSecond.of(
+                                                        10)) // ballisticsManager.flywheelVelocitySupplier()
+                                .alongWith(
+                                        topFlywheel.spinFlywheel(
+                                                () ->
+                                                        MetersPerSecond.of(
+                                                                10))) // ballisticsManager.flywheelVelocitySupplier()
+                                .alongWith(
+                                        hood.setAngle(
+                                                () ->
+                                                        Degrees.of(
+                                                                20)))); // ballisticsManager.hoodAngleSupplier()
 
         joystick.rightTrigger()
                 .and(bottomFlywheel.isReady)
                 .and(topFlywheel.isReady)
+                .and(hood.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
         joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
