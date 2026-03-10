@@ -10,13 +10,13 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.AutonomousClimb;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
@@ -113,14 +113,7 @@ public class RobotContainer {
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
         joystick.a().onTrue(topFlywheel.sysId());
-        joystick.b()
-                .whileTrue(
-                        drivetrain.applyRequest(
-                                () ->
-                                        point.withModuleDirection(
-                                                new Rotation2d(
-                                                        -joystick.getLeftY(),
-                                                        -joystick.getLeftX()))));
+        joystick.b().whileTrue(AutonomousClimb.pathfindToClimb(() -> drivetrain.getState().Pose));
 
         joystick.rightTrigger()
                 .whileTrue(

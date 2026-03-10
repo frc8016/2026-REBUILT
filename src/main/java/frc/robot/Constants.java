@@ -16,9 +16,12 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -32,6 +35,8 @@ import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.Time;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -188,5 +193,26 @@ public final class Constants {
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout TAG_LAYOUT =
                 AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+    }
+
+    public static class AutonomousClimbConstants {
+        public static final Map<Pose2d, String> BLUE_CLIMB_POSITIONS =
+                new HashMap<>(14) {
+                    {
+                        put(new Pose2d(1.697, 5.188, new Rotation2d()), "left");
+                        put(new Pose2d(1.697, 2.099, new Rotation2d()), "right");
+                    }
+                };
+
+        public static final Map<Pose2d, String> RED_CLIMB_POSITIONS =
+                new HashMap<>(14) {
+                    {
+                        put(new Pose2d(14.844, 2.099, new Rotation2d()), "left");
+                        put(new Pose2d(14.844, 5.188, new Rotation2d()), "right");
+                    }
+                };
+        public static PathConstraints constraints =
+                new PathConstraints(
+                        5.210, 7.1, Units.degreesToRadians(540), Units.degreesToRadians(1851));
     }
 }
