@@ -28,7 +28,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
 public class Hood extends SubsystemBase {
-    private final SparkMax hoodMotor = new SparkMax(8, MotorType.kBrushless);
+    private final SparkMax hoodMotor = new SparkMax(9, MotorType.kBrushless);
 
     private final SmartMotorControllerConfig hoodMotorConfig =
             new SmartMotorControllerConfig(this)
