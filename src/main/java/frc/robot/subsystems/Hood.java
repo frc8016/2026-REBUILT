@@ -38,7 +38,7 @@ public class Hood extends SubsystemBase {
                             HoodConstants.DERIVATIVE,
                             HoodConstants.TRAPAZOIDAL_MAX_VELOCITY,
                             HoodConstants.TRAPAZOIDAL_MAX_ACCELERATION)
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(712, 9)))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1246, 9)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(HoodConstants.STATOR_CURRENT_LIMIT)
