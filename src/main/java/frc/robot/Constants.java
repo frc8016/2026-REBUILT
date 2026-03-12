@@ -60,6 +60,30 @@ public final class Constants {
         public static final double OUTPUTRANGE_MAX_VALUE = 1.0;
         public static final double MAX_VEL_RPM = 950;
         public static final double TX_TOLERANCE = 1;
+        public static final double PROPORTIONAL = 1;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+        public static final int MAX_CURRENT = 50;
+        public static final double READY_TOLERANCE = 1;
+        public static final double FEED_FORWARD_KS = 0.28;
+        public static final double FEED_FORWARD_KV = 1.52;
+        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double SIM_FEED_FORWARD_KS = 0.044289;
+        public static final double SIM_FEED_FORWARD_KV = 0.1227;
+        public static final double SIM_FEED_FORWARD_KA = 0.006877;
+        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
+        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
+        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
+                RotationsPerSecondPerSecond.of(2500);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+        public static final double IS_READY_DELAY = 0.05;
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(70);
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(30);
+        public static final Distance TURRET_LENGTH = Inches.of(17.8);
+        public static final Angle START_ANGLE = Degrees.of(70);
+        public static final Mass TURRET_WEIGHT = Kilograms.of(1);
     }
 
     public static class FeedConstants {

@@ -14,7 +14,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.TurretConstants;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
@@ -51,14 +50,15 @@ public class Turret extends SubsystemBase {
     private final SmartMotorController TurrerSMC =
             new SparkWrapper(m_turretmotor, DCMotor.getNeo550(1), m_turretmotorconfig);
 
-    private final PivotConfig hoodConfig =
+    private final PivotConfig TurretConfig =
             new PivotConfig(TurrerSMC)
                     .withTelemetry("TurretMechanism", TelemetryVerbosity.HIGH)
-                    .withSoftLimits(HoodConstants.BOTTOM_SOFT_LIMIT, HoodConstants.TOP_SOFT_LIMIT)
+                    .withSoftLimits(
+                            TurretConstants.BOTTOM_SOFT_LIMIT, TurretConstants.TOP_SOFT_LIMIT)
                     .withHardLimit(Degrees.of(0), Degrees.of(120))
-                    .withMOI(HoodConstants.HOOD_LENGTH, HoodConstants.HOOD_WEIGHT)
-                    .withStartingPosition(HoodConstants.START_ANGLE);
-    private final Pivot Turret = new Pivot(hoodConfig);
+                    .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
+                    .withStartingPosition(TurretConstants.START_ANGLE);
+    private final Pivot Turret = new Pivot(TurretConfig);
 
     public Turret(BallisticsManager ballisticsManager) {
         this.ballisticsManager = ballisticsManager;
@@ -67,7 +67,7 @@ public class Turret extends SubsystemBase {
     public void runTurret() {
         Angle tx = ballisticsManager.TX().get();
         if (!MathUtil.isNear(tx.magnitude(), 0, Constants.TurretConstants.TX_TOLERANCE)) {
-            Turret.setAngle(tx);
+            Turret.setAngle(tx.plus(Turret.getAngle())); // maby working
 
         } else {
             Turret.setAngle(tx);
