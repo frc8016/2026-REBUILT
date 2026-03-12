@@ -57,8 +57,9 @@ public class Turret extends SubsystemBase {
                     .withSoftLimits(
                             TurretConstants.BOTTOM_SOFT_LIMIT, TurretConstants.TOP_SOFT_LIMIT)
                     .withHardLimit(Degrees.of(0), Degrees.of(120))
-                    .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
+                    // .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
                     .withStartingPosition(TurretConstants.START_ANGLE);
+
     private final Pivot Turret = new Pivot(TurretConfig);
 
     public Turret(BallisticsManager ballisticsManager) {
