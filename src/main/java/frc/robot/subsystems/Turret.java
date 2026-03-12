@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -37,8 +35,8 @@ public class Turret extends SubsystemBase {
                             TurretConstants.P_VALUE,
                             TurretConstants.I_VALUE,
                             TurretConstants.D_VALUE,
-                            DegreesPerSecond.of(180),
-                            DegreesPerSecondPerSecond.of(90))
+                            TurretConstants.TRAPAZOIDAL_MAX_VELOCITY,
+                            TurretConstants.TRAPAZOIDAL_MAX_ACCELERATION)
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withMotorInverted(false)
