@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
@@ -67,11 +66,11 @@ public class Turret extends SubsystemBase {
 
     public void runTurret() {
         Angle tx = ballisticsManager.TX().get();
-        if (!MathUtil.isNear(tx.magnitude(Degrees), Constants.TurretConstants.TX_TOLERANCE)) {
+        if (!MathUtil.isNear(tx.magnitude(), 0, Constants.TurretConstants.TX_TOLERANCE)) {
             Turret.setAngle(tx);
 
         } else {
-            m_turretmotorClosedLoopController.setSetpoint(0, ControlType.kVelocity);
+            Turret.setAngle(tx);
         }
     }
 
