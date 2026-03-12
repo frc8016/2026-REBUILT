@@ -44,7 +44,6 @@ public class IntakeArm extends SubsystemBase {
             new SmartMotorControllerConfig(this)
                     .withClosedLoopController(
                             1, 0, 0, DegreesPerSecond.of(180), DegreesPerSecondPerSecond.of(90))
-                    .withSoftLimit(Degrees.of(-30), Degrees.of(100))
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
@@ -64,7 +63,8 @@ public class IntakeArm extends SubsystemBase {
     private final ArmConfig m_config =
             new ArmConfig(motor1)
                     .withLength(ArmConstants.ARM_LENGTH)
-                    .withHardLimit(Degrees.of(-100), Degrees.of(200))
+                    .withSoftLimits(Degrees.of(0), Degrees.of(100)) // TODO: fix constant
+                    .withHardLimit(Degrees.of(0), Degrees.of(100))
                     .withTelemetry("intakeArmMechanism", TelemetryVerbosity.HIGH)
                     .withMass(ArmConstants.MASS)
                     .withStartingPosition(ArmConstants.START_ANGLE);
@@ -75,10 +75,12 @@ public class IntakeArm extends SubsystemBase {
     // Declares an system for the arm containing commands and periodics.
     public IntakeArm() {}
 
+    @Override
     public void periodic() {
         arm.updateTelemetry();
     }
 
+    @Override
     public void simulationPeriodic() {
         arm.simIterate();
     }
