@@ -1,0 +1,81 @@
+package frc.robot.subsystems;
+
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.TurretConstants;
+import yams.gearing.GearBox;
+import yams.gearing.MechanismGearing;
+import yams.mechanisms.config.PivotConfig;
+import yams.mechanisms.positional.Pivot;
+import yams.motorcontrollers.SmartMotorController;
+import yams.motorcontrollers.SmartMotorControllerConfig;
+import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
+import yams.motorcontrollers.local.SparkWrapper;
+
+public class Turret extends SubsystemBase {
+    private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
+    private final BallisticsManager ballisticsManager;
+
+    SmartMotorControllerConfig m_turretmotorconfig =
+            new SmartMotorControllerConfig(this)
+                    .withControlMode(ControlMode.CLOSED_LOOP)
+                    .withClosedLoopController(
+                            TurretConstants.P_VALUE,
+                            TurretConstants.I_VALUE,
+                            TurretConstants.D_VALUE,
+                            DegreesPerSecond.of(180),
+                            DegreesPerSecondPerSecond.of(90))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                    .withIdleMode(MotorMode.BRAKE)
+                    .withMotorInverted(false)
+                    .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
+                    .withStatorCurrentLimit(Amps.of(40))
+                    .withClosedLoopRampRate(Seconds.of(0.25))
+                    .withOpenLoopRampRate(Seconds.of(0.25))
+                    .withSoftLimit(Degrees.of(-180), Degrees.of(180));
+    private final SmartMotorController TurrerSMC =
+            new SparkWrapper(m_turretmotor, DCMotor.getNeo550(1), m_turretmotorconfig);
+
+    private final PivotConfig hoodConfig =
+            new PivotConfig(TurrerSMC)
+                    .withTelemetry("TurretMechanism", TelemetryVerbosity.HIGH)
+                    .withSoftLimits(HoodConstants.BOTTOM_SOFT_LIMIT, HoodConstants.TOP_SOFT_LIMIT)
+                    .withHardLimit(Degrees.of(0), Degrees.of(120))
+                    .withMOI(HoodConstants.HOOD_LENGTH, HoodConstants.HOOD_WEIGHT)
+                    .withStartingPosition(HoodConstants.START_ANGLE);
+    private final Pivot Turret = new Pivot(hoodConfig);
+
+    public Turret(BallisticsManager ballisticsManager) {
+        this.ballisticsManager = ballisticsManager;
+    }
+
+    public void runTurret() {
+        Angle tx = ballisticsManager.TX().get();
+        if (!MathUtil.isNear(tx.magnitude(Degrees), Constants.TurretConstants.TX_TOLERANCE)) {
+            Turret.setAngle(tx);
+
+        } else {
+            m_turretmotorClosedLoopController.setSetpoint(0, ControlType.kVelocity);
+        }
+    }
+
+    public Command Autoaim() {
+        return this.runOnce(() -> this.runTurret());
+    }
+}

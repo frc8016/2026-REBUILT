@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Radians;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -19,7 +18,7 @@ public class BallisticsManager extends SubsystemBase {
     private Supplier<Pose3d> targetPoseSupplier;
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
     private Angle hoodAngle = Radians.of(0);
-    private Rotation2d targetHorizontalAngle = new Rotation2d();
+    private Angle targetHorizontalAngle = Radians.of(0);
 
     public BallisticsManager(Supplier<Pose3d> targetPose) {
         LimelightHelpers.setPipelineIndex("limelight", 0);
@@ -53,7 +52,7 @@ public class BallisticsManager extends SubsystemBase {
 
         this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
         this.hoodAngle = Radians.of(hoodRadians);
-        this.targetHorizontalAngle = targetTranslation.getAngle();
+        this.targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
     }
 
     public double computeTargetProjectileVelocity(double dMeters) {
@@ -79,7 +78,7 @@ public class BallisticsManager extends SubsystemBase {
         return Math.atan((v2 + Math.sqrt(discriminant)) / (g * d));
     }
 
-    public Supplier<Rotation2d> TX() {
+    public Supplier<Angle> TX() {
         return () -> this.targetHorizontalAngle;
     }
 
