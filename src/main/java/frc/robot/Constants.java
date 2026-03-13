@@ -95,6 +95,23 @@ public final class Constants {
         public static final Angle DOWN_ANGLE = Degrees.of(0);
         public static final Angle UP_ANGLE = Degrees.of(90);
         public static final Angle START_ANGLE = Degrees.of(90);
+        public static final Current CURRENT_LIMIT = Amps.of(40);
+        public static final Time RAMP_RATE = Seconds.of(0.25);
+
+        public static final double KS = 0.03;
+        public static final double KG = 0.01;
+        public static final double KV = 0;
+        public static final double KA = 0.01;
+
+        public static final double SIM_KS = 0;
+        public static final double SIM_KG = 0.01;
+        public static final double SIM_KV = 0.01;
+
+        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(0);
+        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(100);
+
+        public static final Angle HARD_LIMIT_LOWER = Degrees.of(0);
+        public static final Angle HARD_LIMIT_UPPER = Degrees.of(100);
     }
 
     public static class BottomFlyWheelConstants {

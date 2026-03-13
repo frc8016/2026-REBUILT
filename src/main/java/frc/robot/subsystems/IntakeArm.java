@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -44,15 +41,21 @@ public class IntakeArm extends SubsystemBase {
             new SmartMotorControllerConfig(this)
                     .withClosedLoopController(
                             1, 0, 0, DegreesPerSecond.of(180), DegreesPerSecondPerSecond.of(90))
-                    .withSoftLimit(Degrees.of(-30), Degrees.of(100))
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
-                    .withStatorCurrentLimit(Amps.of(40))
+                    .withStatorCurrentLimit(ArmConstants.CURRENT_LIMIT)
                     .withMotorInverted(false)
-                    .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withFeedforward(new ArmFeedforward(0.03, 0.01, 0, 0.01))
-                    .withSimFeedforward(new ArmFeedforward(0, 0.01, 0.01))
+                    .withClosedLoopRampRate(ArmConstants.RAMP_RATE)
+                    .withFeedforward(
+                            new ArmFeedforward(
+                                    ArmConstants.KS,
+                                    ArmConstants.KG,
+                                    ArmConstants.KV,
+                                    ArmConstants.KA))
+                    .withSimFeedforward(
+                            new ArmFeedforward(
+                                    ArmConstants.SIM_KS, ArmConstants.SIM_KG, ArmConstants.SIM_KV))
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     .withFollowers(Pair.of(armMotorRight, true));
 
@@ -64,7 +67,8 @@ public class IntakeArm extends SubsystemBase {
     private final ArmConfig m_config =
             new ArmConfig(motor1)
                     .withLength(ArmConstants.ARM_LENGTH)
-                    .withHardLimit(Degrees.of(-100), Degrees.of(200))
+                    .withSoftLimits(ArmConstants.SOFT_LIMIT_LOWER, ArmConstants.SOFT_LIMIT_UPPER)
+                    .withHardLimit(ArmConstants.HARD_LIMIT_LOWER, ArmConstants.HARD_LIMIT_UPPER)
                     .withTelemetry("intakeArmMechanism", TelemetryVerbosity.HIGH)
                     .withMass(ArmConstants.MASS)
                     .withStartingPosition(ArmConstants.START_ANGLE);
@@ -75,10 +79,12 @@ public class IntakeArm extends SubsystemBase {
     // Declares an system for the arm containing commands and periodics.
     public IntakeArm() {}
 
+    @Override
     public void periodic() {
         arm.updateTelemetry();
     }
 
+    @Override
     public void simulationPeriodic() {
         arm.simIterate();
     }
