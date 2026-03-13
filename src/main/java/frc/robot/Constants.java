@@ -11,7 +11,6 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -48,7 +47,7 @@ import java.util.Map;
  */
 public final class Constants {
     public static class SpindexerConstants {
-        public static final double SPINDEXER_SPEED = 1;
+        public static final double SPINDEXER_SPEED = -1;
     }
 
     public static class TurretConstants {
@@ -90,41 +89,41 @@ public final class Constants {
     public static class IntakeConstants {}
 
     public static class ArmConstants {
-        public static final Mass MASS = Pounds.of(1); // TODO Need to be changed
-        public static final Distance ARM_LENGTH = Meters.of(0.135); // TODO Need to be changed
-        public static final Angle DOWN_ANGLE = Degrees.of(0);
+        public static final Mass MASS = Kilograms.of(3.1);
+        public static final Distance ARM_LENGTH = Inches.of(11.25);
+        public static final Angle DOWN_ANGLE = Degrees.of(-10);
         public static final Angle UP_ANGLE = Degrees.of(90);
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
 
-        public static final double KS = 0.03;
-        public static final double KG = 0.01;
-        public static final double KV = 0;
-        public static final double KA = 0.01;
+        public static final double KS = 0.98761;
+        public static final double KG = 0.71904;
+        public static final double KV = 1.3535;
+        public static final double KA = 0.62598;
 
         public static final double SIM_KS = 0;
         public static final double SIM_KG = 0.01;
         public static final double SIM_KV = 0.01;
 
-        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(0);
-        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(100);
+        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(-10);
+        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(90);
 
-        public static final Angle HARD_LIMIT_LOWER = Degrees.of(0);
-        public static final Angle HARD_LIMIT_UPPER = Degrees.of(100);
+        public static final Angle HARD_LIMIT_LOWER = Degrees.of(-10);
+        public static final Angle HARD_LIMIT_UPPER = Degrees.of(90);
     }
 
     public static class BottomFlyWheelConstants {
         public static final double IS_READY_DELAY = 0.05;
-        public static final double PROPORTIONAL = 0.1;
+        public static final double PROPORTIONAL = 0.015;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 1;
-        public static final double FEED_FORWARD_KS = 0.28;
-        public static final double FEED_FORWARD_KV = 1.52;
-        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double READY_TOLERANCE = 3;
+        public static final double FEED_FORWARD_KS = 0.61865;
+        public static final double FEED_FORWARD_KV = 0.095313;
+        public static final double FEED_FORWARD_KA = 0.040166;
         public static final double SIM_FEED_FORWARD_KS = 0.0096372;
         public static final double SIM_FEED_FORWARD_KV = 0.12421;
         public static final double SIM_FEED_FORWARD_KA = 0.15227;
@@ -141,16 +140,16 @@ public final class Constants {
 
     public static class TopFlyWheelConstants {
         public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 1;
-        public static final double IS_READY_DELAY = 0.05;
-        public static final double PROPORTIONAL = 0.1;
+        public static final double IS_READY_DELAY = 0.03;
+        public static final double PROPORTIONAL = 0.02;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 1;
-        public static final double FEED_FORWARD_KS = 0.28;
-        public static final double FEED_FORWARD_KV = 1.52;
-        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double READY_TOLERANCE = 3;
+        public static final double FEED_FORWARD_KS = 0.41484;
+        public static final double FEED_FORWARD_KV = 0.10539;
+        public static final double FEED_FORWARD_KA = 0.018782;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
@@ -217,7 +216,7 @@ public final class Constants {
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
         public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(70);
-        public static final Angle TOP_SOFT_LIMIT = Degrees.of(30);
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(40);
         public static final Distance HOOD_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(70);
         public static final Mass HOOD_WEIGHT = Kilograms.of(1);

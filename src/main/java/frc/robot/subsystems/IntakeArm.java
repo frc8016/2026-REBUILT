@@ -40,8 +40,8 @@ public class IntakeArm extends SubsystemBase {
     private final SmartMotorControllerConfig motorConfig =
             new SmartMotorControllerConfig(this)
                     .withClosedLoopController(
-                            1, 0, 0, DegreesPerSecond.of(180), DegreesPerSecondPerSecond.of(90))
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                            0.001, 0, 0, DegreesPerSecond.of(180), DegreesPerSecondPerSecond.of(90))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(30, 1)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(ArmConstants.CURRENT_LIMIT)
@@ -79,6 +79,10 @@ public class IntakeArm extends SubsystemBase {
     // Declares an system for the arm containing commands and periodics.
     public IntakeArm() {}
 
+    public Command set(double dutycycle) {
+        return arm.set(dutycycle);
+    }
+
     @Override
     public void periodic() {
         arm.updateTelemetry();
@@ -90,7 +94,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command sysId() {
-        return arm.sysId(Volts.of(3), Volts.of(3).per(Second), Second.of(30));
+        return arm.sysId(Volts.of(7), Volts.of(2).per(Second), Second.of(4));
     }
 
     public Command lowerIntake() {
