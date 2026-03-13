@@ -6,14 +6,12 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import java.util.function.Supplier;
 import yams.gearing.GearBox;
@@ -29,7 +27,6 @@ import yams.motorcontrollers.local.SparkWrapper;
 
 public class Turret extends SubsystemBase {
     private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
-    private final BallisticsManager ballisticsManager;
 
     SmartMotorControllerConfig m_turretmotorconfig =
             new SmartMotorControllerConfig(this)
@@ -60,25 +57,21 @@ public class Turret extends SubsystemBase {
                     // .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
                     .withStartingPosition(TurretConstants.START_ANGLE);
 
-    private final Pivot Turret = new Pivot(TurretConfig);
+    // private final Pivot Turret = new Pivot(TurretConfig);
+    // public void runTurret() {
+    //     Angle tx = ballisticsManager.TX().get();
+    //     if (!MathUtil.isNear(tx.magnitude(), 0, Constants.TurretConstants.TX_TOLERANCE)) {
+    //         Turret.setAngle(tx.plus(Turret.getAngle())); // maby working
 
-    public Turret(BallisticsManager ballisticsManager) {
-        this.ballisticsManager = ballisticsManager;
-    }
+    //     } else {
+    //         Turret.setAngle(tx);
+    //     }
+    // }
 
-    public void runTurret() {
-        Angle tx = ballisticsManager.TX().get();
-        if (!MathUtil.isNear(tx.magnitude(), 0, Constants.TurretConstants.TX_TOLERANCE)) {
-            Turret.setAngle(tx.plus(Turret.getAngle())); // maby working
-
-        } else {
-            Turret.setAngle(tx);
-        }
-    }
-
-    public Command Autoaim() {
-        return this.runOnce(() -> this.runTurret());
-    }
+    // public Command Autoaim() {
+    //     return this.runOnce(() -> this.runTurret());
+    // }
+    public Turret() {}
 
     private final Pivot turret = new Pivot(TurretConfig);
 
