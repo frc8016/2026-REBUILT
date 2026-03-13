@@ -80,7 +80,7 @@ public final class Constants {
         public static final Angle TOP_SOFT_LIMIT = Degrees.of(30); // fix
         public static final Distance TURRET_LENGTH = Inches.of(17.8); // fix
         public static final Angle START_ANGLE = Degrees.of(0);
-        public static final Mass TURRET_WEIGHT = Kilograms.of(1); // fix
+        public static final Mass TURRET_WEIGHT = Kilograms.of(10); // fix
     }
 
     public static class FeedConstants {
