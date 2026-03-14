@@ -23,6 +23,7 @@ public class BallisticsManager extends SubsystemBase {
     public BallisticsManager(Supplier<Pose3d> targetPose) {
         LimelightHelpers.setPipelineIndex("limelight", 0);
         LimelightHelpers.SetIMUMode("limelight", 2);
+        LimelightHelpers.setCameraPose_RobotSpace("limelight", 0.089, 0.15, 0.0762, 0, 15, 0);
         this.targetPoseSupplier = targetPose;
     }
 

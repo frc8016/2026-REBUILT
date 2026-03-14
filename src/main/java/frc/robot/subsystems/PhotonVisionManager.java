@@ -28,14 +28,10 @@ public class PhotonVisionManager {
         lowerRightCamera = new PhotonCamera(LOWER_RIGHT_CAMERA_NAME);
         lowerLeftPoseEstimator =
                 new PhotonPoseEstimator(
-                        TAG_LAYOUT,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        LOWER_LEFT_CAMERA_POSE);
+                        TAG_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, LEFT_CAMERA_POSE);
         lowerRightPoseEstimator =
                 new PhotonPoseEstimator(
-                        TAG_LAYOUT,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        LOWER_RIGHT_CAMERA_POSE);
+                        TAG_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, RIGHT_CAMERA_POSE);
         lowerLeftPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         lowerRightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 

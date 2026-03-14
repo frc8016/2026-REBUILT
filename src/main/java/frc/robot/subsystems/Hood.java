@@ -38,7 +38,7 @@ public class Hood extends SubsystemBase {
                             HoodConstants.DERIVATIVE,
                             HoodConstants.TRAPAZOIDAL_MAX_VELOCITY,
                             HoodConstants.TRAPAZOIDAL_MAX_ACCELERATION)
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1246, 9)))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1246 / 9)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(HoodConstants.STATOR_CURRENT_LIMIT)
@@ -55,7 +55,8 @@ public class Hood extends SubsystemBase {
                                     HoodConstants.SIM_FEED_FORWARD_KS,
                                     HoodConstants.SIM_FEED_FORWARD_KV,
                                     HoodConstants.SIM_FEED_FORWARD_KA))
-                    .withControlMode(ControlMode.CLOSED_LOOP);
+                    .withControlMode(ControlMode.CLOSED_LOOP)
+                    .withMotorInverted(true);
 
     private final SmartMotorController hoodSMC =
             new SparkWrapper(hoodMotor, DCMotor.getNeo550(1), hoodMotorConfig);
@@ -79,6 +80,10 @@ public class Hood extends SubsystemBase {
 
     public Hood() {}
 
+    public Command set(double dutycycle) {
+        return hood.set(dutycycle);
+    }
+
     public final Trigger isReady =
             new Trigger(this::isReady)
                     .debounce(HoodConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
@@ -86,7 +91,7 @@ public class Hood extends SubsystemBase {
     public void Update() {}
 
     public Command setAngle(Supplier<Angle> hoodAngle) {
-        return hood.setAngle(hoodAngle);
+        return hood.setAngle(() -> Degrees.of(90).minus(hoodAngle.get()));
     }
 
     public Command lowerHood() {
@@ -95,9 +100,9 @@ public class Hood extends SubsystemBase {
 
     public Command sysId() {
         return hood.sysId(
-                Volts.of(4.0), // maximumVoltage
+                Volts.of(5.0), // maximumVoltage
                 Volts.per(Second).of(0.5), // step
-                Seconds.of(8.0) // duration
+                Seconds.of(8) // duration
                 );
     }
 

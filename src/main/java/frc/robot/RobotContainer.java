@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.AutonomousClimb;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
@@ -115,26 +114,16 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.a().onTrue(topFlywheel.sysId());
-        joystick.b().whileTrue(AutonomousClimb.pathfindToClimb(() -> drivetrain.getState().Pose));
+        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
 
         joystick.rightTrigger()
                 .whileTrue(
                         bottomFlywheel
-                                .spinFlywheel(
-                                        () ->
-                                                MetersPerSecond.of(
-                                                        10)) // ballisticsManager.flywheelVelocitySupplier()
+                                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
                                 .alongWith(
                                         topFlywheel.spinFlywheel(
-                                                () ->
-                                                        MetersPerSecond.of(
-                                                                10))) // ballisticsManager.flywheelVelocitySupplier()
-                                .alongWith(
-                                        hood.setAngle(
-                                                () ->
-                                                        Degrees.of(
-                                                                20)))); // ballisticsManager.hoodAngleSupplier()
+                                                ballisticsManager.flywheelVelocitySupplier()))
+                                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier())));
 
         joystick.rightTrigger()
                 .and(bottomFlywheel.isReady)
@@ -142,7 +131,6 @@ public class RobotContainer {
                 .and(hood.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
-        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
         joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
 
         joystick.x().whileTrue(intakeRoller.spinBackwards());
