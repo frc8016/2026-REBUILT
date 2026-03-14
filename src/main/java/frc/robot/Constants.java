@@ -97,6 +97,10 @@ public final class Constants {
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
 
+        public static final double PROPORTIONAL = 0.001;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+
         public static final double KS = 0.98761;
         public static final double KG = 0.71904;
         public static final double KV = 1.3535;
