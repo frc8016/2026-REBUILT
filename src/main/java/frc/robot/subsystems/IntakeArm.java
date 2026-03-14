@@ -94,7 +94,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command sysId() {
-        return arm.sysId(Volts.of(7), Volts.of(2).per(Second), Second.of(4));
+        return arm.sysId(Volts.of(3), Volts.of(2).per(Second), Second.of(4));
     }
 
     public Command lowerIntake() {

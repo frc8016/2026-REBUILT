@@ -79,7 +79,7 @@ public class RobotContainer {
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         intakeArm.setDefaultCommand(intakeArm.raiseIntake());
-        hood.setDefaultCommand(hood.lowerHood());
+        hood.setDefaultCommand(hood.set(0));
 
         configureBindings();
 
@@ -114,7 +114,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.a().onTrue(hood.sysId());
+        // joystick.a().onTrue(hood.sysId());
         // joystick.b().whileTrue(AutonomousClimb.pathfindToClimb(() ->
         // drivetrain.getState().Pose));
 
@@ -136,7 +136,7 @@ public class RobotContainer {
                                         hood.setAngle(
                                                 () ->
                                                         Degrees.of(
-                                                                20)))); // ballisticsManager.hoodAngleSupplier()
+                                                                40)))); // ballisticsManager.hoodAngleSupplier()
 
         joystick.rightTrigger()
                 .and(bottomFlywheel.isReady)
