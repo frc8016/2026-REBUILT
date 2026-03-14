@@ -232,27 +232,27 @@ public final class Constants {
         public static final String LOWER_RIGHT_CAMERA_NAME = "ArducamOV2311Cam1";
         public static final String LOWER_LEFT_CAMERA_NAME = "ArducamOV2311Cam2";
 
-        public static final Transform3d LOWER_RIGHT_CAMERA_POSE =
+        public static final Transform3d RIGHT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
-                                Units.inchesToMeters(0), // x: forward positive
-                                Units.inchesToMeters(0), // y: left positive
-                                Units.inchesToMeters(0)), // z: up positive
+                                Units.inchesToMeters(3), // x: forward positive
+                                Units.inchesToMeters(-11.25), // y: left positive
+                                Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),
-                                Units.degreesToRadians(0),
-                                Units.degreesToRadians(0)));
+                                Units.degreesToRadians(-32),
+                                Units.degreesToRadians(-90)));
 
-        public static final Transform3d LOWER_LEFT_CAMERA_POSE =
+        public static final Transform3d LEFT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
-                                Units.inchesToMeters(0), // x: forward positive
-                                Units.inchesToMeters(0), // y: left positive
-                                Units.inchesToMeters(0)), // z: up positive
+                                Units.inchesToMeters(3), // x: forward positive
+                                Units.inchesToMeters(11.25), // y: left positive
+                                Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),
-                                Units.degreesToRadians(0),
-                                Units.degreesToRadians(-45)));
+                                Units.degreesToRadians(-15),
+                                Units.degreesToRadians(90)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout TAG_LAYOUT =
