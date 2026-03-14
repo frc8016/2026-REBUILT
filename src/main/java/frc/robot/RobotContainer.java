@@ -114,7 +114,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.rightBumper().onTrue(intakeArm.lowerIntake());
+        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
 
         joystick.rightTrigger()
                 .whileTrue(
