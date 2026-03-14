@@ -91,27 +91,32 @@ public final class Constants {
     public static class ArmConstants {
         public static final Mass MASS = Kilograms.of(3.1);
         public static final Distance ARM_LENGTH = Inches.of(11.25);
-        public static final Angle DOWN_ANGLE = Degrees.of(-6); // TODO: update this with actual
+        public static final Angle DOWN_ANGLE = Degrees.of(-6);
         public static final Angle UP_ANGLE = Degrees.of(88);
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
 
-        public static final double PROPORTIONAL = 4;
+        public static final double PROPORTIONAL = 0.005;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
 
-        public static final double KS = 0.047102;
-        public static final double KG = 0.26097;
-        public static final double KV = 4.7211;
-        public static final double KA = 0.63003;
+        public static final double KS = 0.98761;
+        public static final double KG = 0.71904;
+        public static final double KV = 1.3535;
+        public static final double KA = 0.62598;
+
+        // public static final double KS = 0.047102;
+        // public static final double KG = 0.26097;
+        // public static final double KV = 4.7211;
+        // public static final double KA = 0.63003;
 
         public static final double SIM_KS = 0;
         public static final double SIM_KG = 0.01;
         public static final double SIM_KV = 0.01;
 
-        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(0);
-        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(85);
+        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(-7);
+        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(89);
 
         public static final Angle HARD_LIMIT_LOWER = Degrees.of(-10);
         public static final Angle HARD_LIMIT_UPPER = Degrees.of(90);
