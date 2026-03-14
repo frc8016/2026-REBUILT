@@ -91,8 +91,8 @@ public final class Constants {
     public static class ArmConstants {
         public static final Mass MASS = Kilograms.of(3.1);
         public static final Distance ARM_LENGTH = Inches.of(11.25);
-        public static final Angle DOWN_ANGLE = Degrees.of(-10);
-        public static final Angle UP_ANGLE = Degrees.of(90);
+        public static final Angle DOWN_ANGLE = Degrees.of(0); // TODO: update this with actual
+        public static final Angle UP_ANGLE = Degrees.of(88);
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
@@ -219,8 +219,8 @@ public final class Constants {
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
-        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(27); // actual 23
-        public static final Angle TOP_SOFT_LIMIT = Degrees.of(44); // actual 48
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(25); // actual 23
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(46); // actual 48
         public static final Distance HOOD_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(23);
         public static final Mass HOOD_WEIGHT = Kilograms.of(1);
