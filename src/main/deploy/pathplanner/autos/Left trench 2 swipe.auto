@@ -1,0 +1,85 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeArmDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeRollers"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LT to mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "mid to LT through"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LT through to mid 2nd pass"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "mid 2 to LT through"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
