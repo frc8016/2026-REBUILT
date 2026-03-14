@@ -79,7 +79,7 @@ public class RobotContainer {
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         intakeArm.setDefaultCommand(intakeArm.raiseIntake());
-        hood.setDefaultCommand(hood.lowerHood());
+        // hood.setDefaultCommand(hood.lowerHood());
 
         configureBindings();
 
@@ -114,7 +114,9 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        // joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
+        // joystick.a().onTrue(intakeArm.sysId());
+
+        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
 
         joystick.rightTrigger()
                 .whileTrue(

@@ -91,27 +91,27 @@ public final class Constants {
     public static class ArmConstants {
         public static final Mass MASS = Kilograms.of(3.1);
         public static final Distance ARM_LENGTH = Inches.of(11.25);
-        public static final Angle DOWN_ANGLE = Degrees.of(0); // TODO: update this with actual
+        public static final Angle DOWN_ANGLE = Degrees.of(-6); // TODO: update this with actual
         public static final Angle UP_ANGLE = Degrees.of(88);
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
 
-        public static final double PROPORTIONAL = 0.001;
+        public static final double PROPORTIONAL = 4;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
 
-        public static final double KS = 0.98761;
-        public static final double KG = 0.71904;
-        public static final double KV = 1.3535;
-        public static final double KA = 0.62598;
+        public static final double KS = 0.047102;
+        public static final double KG = 0.26097;
+        public static final double KV = 4.7211;
+        public static final double KA = 0.63003;
 
         public static final double SIM_KS = 0;
         public static final double SIM_KG = 0.01;
         public static final double SIM_KV = 0.01;
 
-        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(-10);
-        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(90);
+        public static final Angle SOFT_LIMIT_LOWER = Degrees.of(0);
+        public static final Angle SOFT_LIMIT_UPPER = Degrees.of(85);
 
         public static final Angle HARD_LIMIT_LOWER = Degrees.of(-10);
         public static final Angle HARD_LIMIT_UPPER = Degrees.of(90);
@@ -236,7 +236,7 @@ public final class Constants {
         public static final String LOWER_RIGHT_CAMERA_NAME = "ArducamOV2311Cam1";
         public static final String LOWER_LEFT_CAMERA_NAME = "ArducamOV2311Cam2";
 
-        public static final Transform3d RIGHT_CAMERA_POSE =
+        public static final Transform3d LEFT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
                                 Units.inchesToMeters(3), // x: forward positive
@@ -244,10 +244,10 @@ public final class Constants {
                                 Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),
-                                Units.degreesToRadians(-32),
+                                Units.degreesToRadians(-15),
                                 Units.degreesToRadians(-90)));
 
-        public static final Transform3d LEFT_CAMERA_POSE =
+        public static final Transform3d RIGHT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
                                 Units.inchesToMeters(3), // x: forward positive
@@ -255,7 +255,7 @@ public final class Constants {
                                 Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),
-                                Units.degreesToRadians(-15),
+                                Units.degreesToRadians(-32),
                                 Units.degreesToRadians(90)));
 
         // The layout of the AprilTags on the field

@@ -45,7 +45,7 @@ public class IntakeArm extends SubsystemBase {
                             ArmConstants.DERIVATIVE,
                             DegreesPerSecond.of(45),
                             DegreesPerSecondPerSecond.of(45))
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(30)))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(33.75)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(ArmConstants.CURRENT_LIMIT)
@@ -98,7 +98,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command sysId() {
-        return arm.sysId(Volts.of(3), Volts.of(2).per(Second), Second.of(4));
+        return arm.sysId(Volts.of(1), Volts.of(6).per(Second), Second.of(8));
     }
 
     public Command lowerIntake() {
