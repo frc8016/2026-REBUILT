@@ -79,7 +79,7 @@ public class RobotContainer {
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         intakeArm.setDefaultCommand(intakeArm.raiseIntake());
-        hood.setDefaultCommand(hood.set(0));
+        hood.setDefaultCommand(hood.lowerHood());
 
         configureBindings();
 
@@ -114,37 +114,23 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        // joystick.a().onTrue(hood.sysId());
-        // joystick.b().whileTrue(AutonomousClimb.pathfindToClimb(() ->
-        // drivetrain.getState().Pose));
-
         joystick.rightBumper().onTrue(intakeArm.lowerIntake());
 
         joystick.rightTrigger()
                 .whileTrue(
                         bottomFlywheel
-                                .spinFlywheel(
-                                        () ->
-                                                MetersPerSecond.of(
-                                                        10)) // ballisticsManager.flywheelVelocitySupplier()
+                                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
                                 .alongWith(
                                         topFlywheel.spinFlywheel(
-                                                () ->
-                                                        MetersPerSecond.of(
-                                                                10))) // ballisticsManager.flywheelVelocitySupplier()
-                                .alongWith(
-                                        hood.setAngle(
-                                                () ->
-                                                        Degrees.of(
-                                                                40)))); // ballisticsManager.hoodAngleSupplier()
+                                                ballisticsManager.flywheelVelocitySupplier()))
+                                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier())));
 
         joystick.rightTrigger()
                 .and(bottomFlywheel.isReady)
                 .and(topFlywheel.isReady)
-                // .and(hood.isReady)
+                .and(hood.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
-        // joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
         joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
 
         joystick.x().whileTrue(intakeRoller.spinBackwards());
