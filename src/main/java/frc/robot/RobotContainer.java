@@ -114,7 +114,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
+        // joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
 
         joystick.rightTrigger()
                 .whileTrue(
@@ -122,18 +122,19 @@ public class RobotContainer {
                                 .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
                                 .alongWith(
                                         topFlywheel.spinFlywheel(
-                                                ballisticsManager.flywheelVelocitySupplier()))
-                                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier())));
+                                                ballisticsManager.flywheelVelocitySupplier())));
+
+        // .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier())));
 
         joystick.rightTrigger()
                 .and(bottomFlywheel.isReady)
                 .and(topFlywheel.isReady)
-                .and(hood.isReady)
+                // .and(hood.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
-        joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
+        // joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
 
-        joystick.x().whileTrue(intakeRoller.spinBackwards());
+        // joystick.x().whileTrue(intakeRoller.spinBackwards());
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

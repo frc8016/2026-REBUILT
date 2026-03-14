@@ -76,7 +76,7 @@ public class TunerConstants {
 
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
-    public static final CANBus kCANBus = new CANBus("", "./logs/example.hoot");
+    public static final CANBus kCANBus = new CANBus("drivetrain", "./logs/example.hoot");
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
@@ -139,7 +139,7 @@ public class TunerConstants {
     // Front Left
     private static final int kFrontLeftDriveMotorId = 2;
     private static final int kFrontLeftSteerMotorId = 1;
-    private static final int kFrontLeftEncoderId = 1;
+    private static final int kFrontLeftEncoderId = 9;
     private static final Angle kFrontLeftEncoderOffset = Rotations.of(0.4501953125);
     private static final boolean kFrontLeftSteerMotorInverted = true;
     private static final boolean kFrontLeftEncoderInverted = false;
@@ -150,7 +150,7 @@ public class TunerConstants {
     // Front Right
     private static final int kFrontRightDriveMotorId = 8;
     private static final int kFrontRightSteerMotorId = 7;
-    private static final int kFrontRightEncoderId = 4;
+    private static final int kFrontRightEncoderId = 12;
     private static final Angle kFrontRightEncoderOffset = Rotations.of(0.044677734375);
     private static final boolean kFrontRightSteerMotorInverted = true;
     private static final boolean kFrontRightEncoderInverted = false;
@@ -161,7 +161,7 @@ public class TunerConstants {
     // Back Left
     private static final int kBackLeftDriveMotorId = 6;
     private static final int kBackLeftSteerMotorId = 5;
-    private static final int kBackLeftEncoderId = 3;
+    private static final int kBackLeftEncoderId = 11;
     private static final Angle kBackLeftEncoderOffset = Rotations.of(0.106689453125);
     private static final boolean kBackLeftSteerMotorInverted = true;
     private static final boolean kBackLeftEncoderInverted = false;
@@ -172,7 +172,7 @@ public class TunerConstants {
     // Back Right
     private static final int kBackRightDriveMotorId = 4;
     private static final int kBackRightSteerMotorId = 3;
-    private static final int kBackRightEncoderId = 2;
+    private static final int kBackRightEncoderId = 10;
     private static final Angle kBackRightEncoderOffset = Rotations.of(0.434326171875);
     private static final boolean kBackRightSteerMotorInverted = true;
     private static final boolean kBackRightEncoderInverted = false;
