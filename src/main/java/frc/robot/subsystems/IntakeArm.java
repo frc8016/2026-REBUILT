@@ -12,6 +12,7 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import yams.gearing.GearBox;
@@ -26,6 +27,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
 public class IntakeArm extends SubsystemBase {
+    private boolean isDown = false;
 
     private final SparkMax armMotorLeft =
             new SparkMax(6, MotorType.kBrushless); // TODO: Might need to fix the motor id
@@ -108,10 +110,14 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command lowerIntake() {
-        return this.arm.setAngle(ArmConstants.DOWN_ANGLE);
+        return this.arm.setAngle(ArmConstants.DOWN_ANGLE).finallyDo(() -> isDown = true);
     }
 
     public Command raiseIntake() {
-        return this.arm.setAngle(ArmConstants.UP_ANGLE);
+        return this.arm.setAngle(ArmConstants.UP_ANGLE).finallyDo(() -> isDown = false);
+    }
+
+    public Command toggleIntake() {
+        return Commands.either(raiseIntake(), lowerIntake(), () -> isDown);
     }
 }

@@ -9,10 +9,12 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -78,8 +80,12 @@ public class RobotContainer {
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
-        intakeArm.setDefaultCommand(intakeArm.raiseIntake());
         // hood.setDefaultCommand(hood.lowerHood());
+
+        // Named commands for autonomous
+        NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntake());
+        NamedCommands.registerCommand("Shoot", buildShootCommand());
+        NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
 
         configureBindings();
 
@@ -114,29 +120,10 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        // joystick.a().onTrue(intakeArm.sysId());
-
-        joystick.rightBumper().toggleOnTrue(intakeArm.lowerIntake());
-
-        joystick.rightTrigger()
-                .whileTrue(
-                        bottomFlywheel
-                                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
-                                .alongWith(
-                                        topFlywheel.spinFlywheel(
-                                                ballisticsManager.flywheelVelocitySupplier())));
-
-        // .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier())));
-
-        joystick.rightTrigger()
-                .and(bottomFlywheel.isReady)
-                .and(topFlywheel.isReady)
-                // .and(hood.isReady)
-                .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
-
+        joystick.rightBumper().onTrue(intakeArm.toggleIntake());
+        joystick.rightTrigger().whileTrue(buildShootCommand());
         joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
-
-        // joystick.x().whileTrue(intakeRoller.spinBackwards());
+        joystick.x().whileTrue(intakeRoller.spinBackwards());
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -153,6 +140,20 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+    }
+
+    private Command buildShootCommand() {
+        return bottomFlywheel
+                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
+                .alongWith(topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()))
+                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
+                .alongWith(
+                        Commands.waitUntil(
+                                        bottomFlywheel
+                                                .isReady
+                                                .and(topFlywheel.isReady)
+                                                .and(hood.isReady))
+                                .andThen(spindexer.run().alongWith(feed.run())));
     }
 
     public Command getAutonomousCommand() {
