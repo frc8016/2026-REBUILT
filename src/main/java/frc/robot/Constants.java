@@ -96,6 +96,7 @@ public final class Constants {
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
+        public static final Angle TOGGLE_TOLERANCE = Degrees.of(5);
 
         public static final double PROPORTIONAL = 35;
         public static final double INTEGRAL = 0;
