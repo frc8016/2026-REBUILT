@@ -102,8 +102,8 @@ public class Hood extends SubsystemBase {
 
     public Command sysId() {
         return hood.sysId(
-                Volts.of(5.0), // maximumVoltage
-                Volts.per(Second).of(0.5), // step
+                Volts.of(0.5), // maximumVoltage
+                Volts.per(Second).of(6), // step
                 Seconds.of(8) // duration
                 );
     }

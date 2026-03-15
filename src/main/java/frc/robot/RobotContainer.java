@@ -80,7 +80,7 @@ public class RobotContainer {
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
-        // hood.setDefaultCommand(hood.lowerHood());
+        hood.setDefaultCommand(hood.lowerHood());
 
         // Named commands for autonomous
         NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntake());
