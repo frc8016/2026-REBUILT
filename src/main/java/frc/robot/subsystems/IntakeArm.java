@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Kilograms;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -42,10 +43,15 @@ public class IntakeArm extends SubsystemBase {
                     .withClosedLoopController(
                             ArmConstants.PROPORTIONAL,
                             ArmConstants.INTEGRAL,
-                            ArmConstants.DERIVATIVE,
-                            DegreesPerSecond.of(45),
-                            DegreesPerSecondPerSecond.of(45))
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(30)))
+                            ArmConstants.DERIVATIVE)
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(33.75)))
+                    .withExponentialProfile(
+                            Volts.of(12),
+                            DCMotor.getNEO(1),
+                            KilogramSquareMeters.of(
+                                    (1.0 / 3.0)
+                                            * ArmConstants.MASS.in(Kilograms)
+                                            * Math.pow(ArmConstants.ARM_LENGTH.in(Meters), 2)))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(ArmConstants.CURRENT_LIMIT)
@@ -98,7 +104,7 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command sysId() {
-        return arm.sysId(Volts.of(3), Volts.of(2).per(Second), Second.of(4));
+        return arm.sysId(Volts.of(1), Volts.of(6).per(Second), Second.of(8));
     }
 
     public Command lowerIntake() {
