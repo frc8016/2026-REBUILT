@@ -134,7 +134,7 @@ public class RobotContainer {
                 // .and(hood.isReady)
                 .whileTrue(spindexer.run().alongWith(feed.run())); // TODO: add turret is ready
 
-        // joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
+        joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
 
         // joystick.x().whileTrue(intakeRoller.spinBackwards());
 
