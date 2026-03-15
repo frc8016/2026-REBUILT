@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -34,10 +35,12 @@ public class Turret extends SubsystemBase {
                     .withClosedLoopController(
                             TurretConstants.P_VALUE,
                             TurretConstants.I_VALUE,
-                            TurretConstants.D_VALUE,
-                            TurretConstants.TRAPAZOIDAL_MAX_VELOCITY,
-                            TurretConstants.TRAPAZOIDAL_MAX_ACCELERATION)
+                            TurretConstants.D_VALUE)
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                    .withExponentialProfile(
+                            Volts.of(12),
+                            TurretConstants.MAX_VELOCITY,
+                            TurretConstants.MAX_ACCELERATION)
                     .withIdleMode(MotorMode.BRAKE)
                     .withMotorInverted(false)
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)

@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.KilogramSquareMeters;
-import static edu.wpi.first.units.Units.Kilograms;
-import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -12,6 +11,7 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -27,17 +27,9 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
 public class IntakeArm extends SubsystemBase {
-    private boolean isDown = false;
 
-    private final SparkMax armMotorLeft =
-            new SparkMax(6, MotorType.kBrushless); // TODO: Might need to fix the motor id
-    private final SparkMax armMotorRight =
-            new SparkMax(7, MotorType.kBrushless); // TODO: Might need to fix the motor id
-
-    // There are most definatly a lot of constants and other variables that need to be edited to
-    // make this code accurate to our mechanical arm.
-    // There are some declerations in the constants folder for certain varibles already, but they
-    // also need their values changed.
+    private final SparkMax armMotorLeft = new SparkMax(6, MotorType.kBrushless);
+    private final SparkMax armMotorRight = new SparkMax(7, MotorType.kBrushless);
 
     // Declares a motor configuration.
     private final SmartMotorControllerConfig motorConfig =
@@ -47,13 +39,15 @@ public class IntakeArm extends SubsystemBase {
                             ArmConstants.INTEGRAL,
                             ArmConstants.DERIVATIVE)
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(33.75)))
+                    // .withExponentialProfile(
+                    //         Volts.of(12),
+                    //         DCMotor.getNEO(1),
+                    //         KilogramSquareMeters.of(
+                    //                 (1.0 / 3.0)
+                    //                         * ArmConstants.MASS.in(Kilograms)
+                    //                         * Math.pow(ArmConstants.ARM_LENGTH.in(Meters), 2)))
                     .withExponentialProfile(
-                            Volts.of(12),
-                            DCMotor.getNEO(1),
-                            KilogramSquareMeters.of(
-                                    (1.0 / 3.0)
-                                            * ArmConstants.MASS.in(Kilograms)
-                                            * Math.pow(ArmConstants.ARM_LENGTH.in(Meters), 2)))
+                            Volts.of(12), DegreesPerSecond.of(45), DegreesPerSecondPerSecond.of(45))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(ArmConstants.CURRENT_LIMIT)
@@ -110,14 +104,26 @@ public class IntakeArm extends SubsystemBase {
     }
 
     public Command lowerIntake() {
-        return this.arm.setAngle(ArmConstants.DOWN_ANGLE).finallyDo(() -> isDown = true);
+        return this.arm.setAngle(ArmConstants.DOWN_ANGLE);
     }
 
     public Command raiseIntake() {
-        return this.arm.setAngle(ArmConstants.UP_ANGLE).finallyDo(() -> isDown = false);
+        return this.arm.setAngle(ArmConstants.UP_ANGLE);
+    }
+
+    private boolean isDown() {
+        return arm.getMechanismSetpoint()
+                .map(
+                        setpoint ->
+                                setpoint.isNear(
+                                        ArmConstants.DOWN_ANGLE, ArmConstants.TOGGLE_TOLERANCE))
+                .orElse(false);
     }
 
     public Command toggleIntake() {
-        return Commands.either(raiseIntake(), lowerIntake(), () -> isDown);
+        return Commands.runOnce(
+                () ->
+                        CommandScheduler.getInstance()
+                                .schedule(isDown() ? raiseIntake() : lowerIntake()));
     }
 }

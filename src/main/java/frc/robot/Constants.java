@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
@@ -67,10 +69,9 @@ public final class Constants {
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
-        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
-        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
-        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
-                RotationsPerSecondPerSecond.of(2500);
+        public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(180);
+        public static final AngularAcceleration MAX_ACCELERATION =
+                DegreesPerSecondPerSecond.of(500);
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
@@ -96,6 +97,7 @@ public final class Constants {
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
         public static final Time RAMP_RATE = Seconds.of(0.25);
+        public static final Angle TOGGLE_TOLERANCE = Degrees.of(5);
 
         public static final double PROPORTIONAL = 35;
         public static final double INTEGRAL = 0;
@@ -222,10 +224,9 @@ public final class Constants {
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
-        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
-        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
-        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
-                RotationsPerSecondPerSecond.of(2500);
+        public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(180);
+        public static final AngularAcceleration MAX_ACCELERATION =
+                DegreesPerSecondPerSecond.of(900);
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);

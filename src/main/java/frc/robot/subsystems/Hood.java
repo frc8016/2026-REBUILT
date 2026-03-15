@@ -35,10 +35,12 @@ public class Hood extends SubsystemBase {
                     .withClosedLoopController(
                             HoodConstants.PROPORTIONAL,
                             HoodConstants.INTEGRAL,
-                            HoodConstants.DERIVATIVE,
-                            HoodConstants.TRAPAZOIDAL_MAX_VELOCITY,
-                            HoodConstants.TRAPAZOIDAL_MAX_ACCELERATION)
+                            HoodConstants.DERIVATIVE)
                     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1246 / 9)))
+                    .withExponentialProfile(
+                            Volts.of(12),
+                            HoodConstants.MAX_VELOCITY,
+                            HoodConstants.MAX_ACCELERATION)
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("Hood", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(HoodConstants.STATOR_CURRENT_LIMIT)
