@@ -3,10 +3,10 @@
   "robotLength": 0.889,
   "holonomicMode": true,
   "pathFolders": [
-    "middle",
     "auto align paths",
-    "left bump",
     "left trench",
+    "left bump",
+    "middle",
     "right bump",
     "right trench"
   ],
