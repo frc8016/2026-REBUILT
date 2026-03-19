@@ -45,13 +45,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LT to mid"
+            "pathName": "Right trench to mid"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to LT through"
+            "pathName": "mid to right trench"
           }
         },
         {
@@ -76,13 +76,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LT to mid 2"
+            "pathName": "Right trench to mid"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to LT through 2"
+            "pathName": "mid to right trench"
           }
         },
         {

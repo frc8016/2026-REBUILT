@@ -66,8 +66,12 @@
       "rotationDegrees": 142.88238266757648
     },
     {
-      "waypointRelativePos": 1.7178538390379166,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 1.4958371877890801,
+      "rotationDegrees": 36.05406701873369
+    },
+    {
+      "waypointRelativePos": 2.3172987974098076,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
@@ -83,13 +87,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "left trench",
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": -152.98733465206158
+    "rotation": -165.0
   },
   "useDefaultConstraints": true
 }
