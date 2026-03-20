@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
-<<<<<<< HEAD
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-=======
->>>>>>> f744a1a (start of turret)
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
