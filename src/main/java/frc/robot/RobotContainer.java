@@ -126,7 +126,7 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.rightBumper().onTrue(intakeArm.toggleIntake());
+        joystick.rightBumper().toggleOnTrue(intakeArm.toggleIntake());
         joystick.rightTrigger().whileTrue(buildShootCommand());
         joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
         joystick.x().whileTrue(intakeRoller.spinBackwards());

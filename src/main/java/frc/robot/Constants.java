@@ -147,7 +147,7 @@ public final class Constants {
     }
 
     public static class TopFlyWheelConstants {
-        public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 1;
+        public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 0.5;
         public static final double IS_READY_DELAY = 0.03;
         public static final double PROPORTIONAL = 0.02;
         public static final double INTEGRAL = 0;
