@@ -36,7 +36,9 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {}
 
     @Override
-    public void disabledExit() {}
+    public void disabledExit() {
+        m_robotContainer.onDisabledExit();
+    }
 
     @Override
     public void autonomousInit() {
