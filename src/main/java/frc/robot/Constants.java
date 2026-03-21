@@ -238,6 +238,18 @@ public final class Constants {
         public static final Mass HOOD_WEIGHT = Kilograms.of(1);
     }
 
+    public static class LimelightConstants {
+        // Camera offset from turret pivot in turret-local frame (meters)
+        // At turret angle = 0, turret-local "forward" = robot forward
+        public static final double CAM_FORWARD = 0.089;
+        public static final double CAM_RIGHT = 0.15;
+        public static final double CAM_UP = 0.0762;
+
+        // Camera orientation relative to turret (fixed, degrees)
+        public static final double CAM_ROLL = 0.0;
+        public static final double CAM_PITCH = 15.0;
+    }
+
     public static class VisionConstants {
         public static final boolean USE_VISION =
                 true; // IMPORTANT we set this to true when useing vision and false

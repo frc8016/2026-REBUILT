@@ -30,6 +30,8 @@ import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.TopFlywheel;
+import frc.robot.subsystems.Turret;
+import java.util.Set;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -46,10 +48,14 @@ public class RobotContainer {
     private final Feed feed = new Feed();
     private final IntakeArm intakeArm = new IntakeArm();
     private final IntakeRoller intakeRoller = new IntakeRoller();
+    private final Turret turret = new Turret();
     public final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
     private final BallisticsManager ballisticsManager =
-            new BallisticsManager(targetSelector.getCurrentTarget());
+            new BallisticsManager(
+                    targetSelector.getCurrentTarget(),
+                    () -> drivetrain.getState().Pose.getRotation().getDegrees(),
+                    turret::getAngle);
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
     private final Hood hood = new Hood();
@@ -143,17 +149,23 @@ public class RobotContainer {
     }
 
     private Command buildShootCommand() {
-        return bottomFlywheel
-                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
-                .alongWith(topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()))
-                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
-                .alongWith(
-                        Commands.waitUntil(
-                                        bottomFlywheel
-                                                .isReady
-                                                .and(topFlywheel.isReady)
-                                                .and(hood.isReady))
-                                .andThen(spindexer.run().alongWith(feed.run())));
+        return Commands.defer(
+                () ->
+                        bottomFlywheel
+                                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
+                                .alongWith(
+                                        topFlywheel.spinFlywheel(
+                                                ballisticsManager.flywheelVelocitySupplier()))
+                                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
+                                .alongWith(turret.setAngle(ballisticsManager.TX()))
+                                .alongWith(
+                                        Commands.waitUntil(
+                                                        bottomFlywheel
+                                                                .isReady
+                                                                .and(topFlywheel.isReady)
+                                                                .and(hood.isReady))
+                                                .andThen(spindexer.run().alongWith(feed.run()))),
+                Set.of(ballisticsManager, topFlywheel, turret, hood, bottomFlywheel));
     }
 
     public Command getAutonomousCommand() {
@@ -166,5 +178,9 @@ public class RobotContainer {
         targetSelector.updateAlliance();
         targetSelector.updateTargetSelection();
         ballisticsManager.update();
+    }
+
+    public void onDisabledExit() {
+        ballisticsManager.enableInternalIMU();
     }
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 
@@ -11,28 +12,58 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.LimelightHelpers;
 import java.util.function.Supplier;
 
 public class BallisticsManager extends SubsystemBase {
-    private Supplier<Pose3d> targetPoseSupplier;
+    private final Supplier<Pose3d> targetPoseSupplier;
+    private final Supplier<Double> robotYawDegreesSupplier;
+    private final Supplier<Angle> turretAngleSupplier;
+
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
     private Angle hoodAngle = Radians.of(0);
     private Angle targetHorizontalAngle = Radians.of(0);
 
-    public BallisticsManager(Supplier<Pose3d> targetPose) {
+    public BallisticsManager(
+            Supplier<Pose3d> targetPose,
+            Supplier<Double> robotYawDegrees,
+            Supplier<Angle> turretAngle) {
         LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.SetIMUMode("limelight", 2);
-        LimelightHelpers.setCameraPose_RobotSpace("limelight", 0.089, 0.15, 0.0762, 0, 15, 0);
+        // Start with EXTERNAL_SEED so the internal IMU calibrates against the drivetrain gyro
+        LimelightHelpers.SetIMUMode("limelight", 1);
+        // Camera offset from turret pivot (turret is treated as "robot" for the Limelight)
+        LimelightHelpers.setCameraPose_RobotSpace(
+                "limelight",
+                LimelightConstants.CAM_FORWARD,
+                LimelightConstants.CAM_RIGHT,
+                LimelightConstants.CAM_UP,
+                LimelightConstants.CAM_ROLL,
+                LimelightConstants.CAM_PITCH,
+                0);
         this.targetPoseSupplier = targetPose;
+        this.robotYawDegreesSupplier = robotYawDegrees;
+        this.turretAngleSupplier = turretAngle;
+    }
+
+    /** Switch to internal IMU mode once the IMU has been seeded during disabled. */
+    public void enableInternalIMU() {
+        LimelightHelpers.SetIMUMode("limelight", 2);
     }
 
     public void update() {
+        // Turret's field heading = robot heading + turret angle relative to robot
+        double turretFieldYaw =
+                robotYawDegreesSupplier.get() + turretAngleSupplier.get().in(Degrees);
+        LimelightHelpers.SetRobotOrientation("limelight", turretFieldYaw, 0, 0, 0, 0, 0);
+
         LimelightHelpers.PoseEstimate limelightEstimate =
                 LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
         if (limelightEstimate == null) return;
         Pose2d turretPose = limelightEstimate.pose;
+
+        System.out.println(limelightEstimate.pose.getX() + " " + limelightEstimate.pose.getY());
 
         // A (0, 0) pose means the limelight has no valid data — skip this cycle
         if (Math.abs(turretPose.getX()) < 1E-6 && Math.abs(turretPose.getY()) < 1E-6) {
