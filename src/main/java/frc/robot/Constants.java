@@ -78,7 +78,9 @@ public final class Constants {
         public static final Angle TOP_SOFT_LIMIT = Degrees.of(0);
         public static final Distance TURRET_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(0);
-        public static final Mass TURRET_WEIGHT = Kilograms.of(10);
+        public static final Mass TURRET_WEIGHT = Kilograms.of(10); // fix
+        public static final double PIVOT_FORWARD_M = 0.0; // TODO: measure from robot center
+        public static final double PIVOT_LEFT_M = 0.0; // TODO: measure from robot center
     }
 
     public static class FeedConstants {
