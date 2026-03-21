@@ -76,8 +76,8 @@ public final class Constants {
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
-        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(70); // fix
-        public static final Angle TOP_SOFT_LIMIT = Degrees.of(30); // fix
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(0); // fix
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(220); // fix
         public static final Distance TURRET_LENGTH = Inches.of(17.8); // fix
         public static final Angle START_ANGLE = Degrees.of(0);
         public static final Mass TURRET_WEIGHT = Kilograms.of(10); // fix

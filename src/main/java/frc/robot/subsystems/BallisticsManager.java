@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
 import frc.robot.Constants.LimelightConstants;
@@ -24,6 +26,7 @@ public class BallisticsManager extends SubsystemBase {
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
     private Angle hoodAngle = Radians.of(0);
     private Angle targetHorizontalAngle = Radians.of(0);
+    private Field2d turretPoseField = new Field2d();
 
     public BallisticsManager(
             Supplier<Pose3d> targetPose,
@@ -51,6 +54,12 @@ public class BallisticsManager extends SubsystemBase {
         LimelightHelpers.SetIMUMode("limelight", 2);
     }
 
+    @Override
+    public void periodic() {
+        SmartDashboard.putData("turretPose", turretPoseField);
+        SmartDashboard.putNumber("targetHorizontalAngle", targetHorizontalAngle.magnitude());
+    }
+
     public void update() {
         // Turret's field heading = robot heading + turret angle relative to robot
         double turretFieldYaw =
@@ -62,8 +71,6 @@ public class BallisticsManager extends SubsystemBase {
 
         if (limelightEstimate == null) return;
         Pose2d turretPose = limelightEstimate.pose;
-
-        System.out.println(limelightEstimate.pose.getX() + " " + limelightEstimate.pose.getY());
 
         // A (0, 0) pose means the limelight has no valid data — skip this cycle
         if (Math.abs(turretPose.getX()) < 1E-6 && Math.abs(turretPose.getY()) < 1E-6) {
@@ -85,6 +92,7 @@ public class BallisticsManager extends SubsystemBase {
         this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
         this.hoodAngle = Radians.of(hoodRadians);
         this.targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
+        this.turretPoseField.setRobotPose(turretPose);
     }
 
     public double computeTargetProjectileVelocity(double dMeters) {

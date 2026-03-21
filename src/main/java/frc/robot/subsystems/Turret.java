@@ -56,7 +56,7 @@ public class Turret extends SubsystemBase {
                     .withTelemetry("TurretMechanism", TelemetryVerbosity.HIGH)
                     .withSoftLimits(
                             TurretConstants.BOTTOM_SOFT_LIMIT, TurretConstants.TOP_SOFT_LIMIT)
-                    .withHardLimit(Degrees.of(0), Degrees.of(120))
+                    .withHardLimit(Degrees.of(0), Degrees.of(220))
                     .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
                     .withStartingPosition(TurretConstants.START_ANGLE);
 
