@@ -213,15 +213,15 @@ public final class Constants {
     }
 
     public static class HoodConstants { // TODO: upadate all constants here
-        public static final double PROPORTIONAL = 0.01;
+        public static final double PROPORTIONAL = 60;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final double READY_TOLERANCE = 1;
-        public static final double FEED_FORWARD_KS = 0.041818;
-        public static final double FEED_FORWARD_KG = 0;
-        public static final double FEED_FORWARD_KV = 5.1693;
-        public static final double FEED_FORWARD_KA = 2.123;
+        public static final double FEED_FORWARD_KS = 0.029184;
+        public static final double FEED_FORWARD_KG = 0.30625;
+        public static final double FEED_FORWARD_KV = 6.8929;
+        public static final double FEED_FORWARD_KA = 1.6422;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KG = 0;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
