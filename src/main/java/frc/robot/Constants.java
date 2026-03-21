@@ -219,9 +219,11 @@ public final class Constants {
         public static final int MAX_CURRENT = 50;
         public static final double READY_TOLERANCE = 1;
         public static final double FEED_FORWARD_KS = 0.041818;
+        public static final double FEED_FORWARD_KG = 0;
         public static final double FEED_FORWARD_KV = 5.1693;
         public static final double FEED_FORWARD_KA = 2.123;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
+        public static final double SIM_FEED_FORWARD_KG = 0;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
         public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(180);

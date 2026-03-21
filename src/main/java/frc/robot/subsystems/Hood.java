@@ -7,7 +7,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
@@ -18,8 +18,8 @@ import frc.robot.Constants.HoodConstants;
 import java.util.function.Supplier;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
-import yams.mechanisms.config.PivotConfig;
-import yams.mechanisms.positional.Pivot;
+import yams.mechanisms.config.ArmConfig;
+import yams.mechanisms.positional.Arm;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
@@ -48,13 +48,15 @@ public class Hood extends SubsystemBase {
                     .withClosedLoopRampRate(HoodConstants.CLOSED_LOOP_RAMP_RATE)
                     .withOpenLoopRampRate(HoodConstants.OPEN_LOOP_RAMP_RATE)
                     .withFeedforward(
-                            new SimpleMotorFeedforward(
+                            new ArmFeedforward(
                                     HoodConstants.FEED_FORWARD_KS,
+                                    HoodConstants.FEED_FORWARD_KG,
                                     HoodConstants.FEED_FORWARD_KV,
                                     HoodConstants.FEED_FORWARD_KA))
                     .withSimFeedforward(
-                            new SimpleMotorFeedforward(
+                            new ArmFeedforward(
                                     HoodConstants.SIM_FEED_FORWARD_KS,
+                                    HoodConstants.SIM_FEED_FORWARD_KG,
                                     HoodConstants.SIM_FEED_FORWARD_KV,
                                     HoodConstants.SIM_FEED_FORWARD_KA))
                     .withControlMode(ControlMode.CLOSED_LOOP)
@@ -63,15 +65,16 @@ public class Hood extends SubsystemBase {
     private final SmartMotorController hoodSMC =
             new SparkWrapper(hoodMotor, DCMotor.getNeo550(1), hoodMotorConfig);
 
-    private final PivotConfig hoodConfig =
-            new PivotConfig(hoodSMC)
+    private final ArmConfig hoodConfig =
+            new ArmConfig(hoodSMC)
                     .withTelemetry("HoodMechanism", TelemetryVerbosity.HIGH)
                     .withSoftLimits(HoodConstants.BOTTOM_SOFT_LIMIT, HoodConstants.TOP_SOFT_LIMIT)
                     .withHardLimit(Degrees.of(0), Degrees.of(120))
-                    .withMOI(HoodConstants.HOOD_LENGTH, HoodConstants.HOOD_WEIGHT)
+                    .withLength(HoodConstants.HOOD_LENGTH)
+                    .withMass(HoodConstants.HOOD_WEIGHT)
                     .withStartingPosition(HoodConstants.START_ANGLE);
 
-    private final Pivot hood = new Pivot(hoodConfig);
+    private final Arm hood = new Arm(hoodConfig);
 
     private boolean isReady() {
         return hood.getAngle()
