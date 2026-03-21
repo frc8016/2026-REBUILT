@@ -90,8 +90,9 @@ public class BottomFlywheel extends SubsystemBase {
     }
 
     public Command idleFlywheel() {
-        return this.flywheel.run(
-                flywheelConfig.getAngularVelocity(BottomFlyWheelConstants.IDLE_SETPOINT));
+        return this.flywheel.set(0);
+        // return this.flywheel.run(
+        //         flywheelConfig.getAngularVelocity(BottomFlyWheelConstants.IDLE_SETPOINT));
     }
 
     public final Trigger isReady =

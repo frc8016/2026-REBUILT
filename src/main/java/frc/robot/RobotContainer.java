@@ -163,7 +163,8 @@ public class RobotContainer {
                                                         bottomFlywheel
                                                                 .isReady
                                                                 .and(topFlywheel.isReady)
-                                                                .and(hood.isReady))
+                                                                .and(hood.isReady)
+                                                                .and(turret.isReady))
                                                 .andThen(spindexer.run().alongWith(feed.run()))),
                 Set.of(ballisticsManager, topFlywheel, turret, hood, bottomFlywheel));
     }
