@@ -76,8 +76,8 @@ public final class Constants {
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
-        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(70); // fix
-        public static final Angle TOP_SOFT_LIMIT = Degrees.of(30); // fix
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(0); // fix
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(220); // fix
         public static final Distance TURRET_LENGTH = Inches.of(17.8); // fix
         public static final Angle START_ANGLE = Degrees.of(0);
         public static final Mass TURRET_WEIGHT = Kilograms.of(10); // fix
@@ -236,6 +236,18 @@ public final class Constants {
         public static final Distance HOOD_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(23);
         public static final Mass HOOD_WEIGHT = Kilograms.of(1);
+    }
+
+    public static class LimelightConstants {
+        // Camera offset from turret pivot in turret-local frame (meters)
+        // At turret angle = 0, turret-local "forward" = robot forward
+        public static final double CAM_FORWARD = 0.089;
+        public static final double CAM_RIGHT = 0.15;
+        public static final double CAM_UP = 0.0762;
+
+        // Camera orientation relative to turret (fixed, degrees)
+        public static final double CAM_ROLL = 0.0;
+        public static final double CAM_PITCH = 15.0;
     }
 
     public static class VisionConstants {

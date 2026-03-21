@@ -56,24 +56,10 @@ public class Turret extends SubsystemBase {
                     .withTelemetry("TurretMechanism", TelemetryVerbosity.HIGH)
                     .withSoftLimits(
                             TurretConstants.BOTTOM_SOFT_LIMIT, TurretConstants.TOP_SOFT_LIMIT)
-                    .withHardLimit(Degrees.of(0), Degrees.of(120))
-                    // .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
+                    .withHardLimit(Degrees.of(0), Degrees.of(220))
+                    .withMOI(TurretConstants.TURRET_LENGTH, TurretConstants.TURRET_WEIGHT)
                     .withStartingPosition(TurretConstants.START_ANGLE);
 
-    // private final Pivot Turret = new Pivot(TurretConfig);
-    // public void runTurret() {
-    //     Angle tx = ballisticsManager.TX().get();
-    //     if (!MathUtil.isNear(tx.magnitude(), 0, Constants.TurretConstants.TX_TOLERANCE)) {
-    //         Turret.setAngle(tx.plus(Turret.getAngle())); // maby working
-
-    //     } else {
-    //         Turret.setAngle(tx);
-    //     }
-    // }
-
-    // public Command Autoaim() {
-    //     return this.runOnce(() -> this.runTurret());
-    // }
     public Turret() {}
 
     private final Pivot turret = new Pivot(TurretConfig);
@@ -91,6 +77,10 @@ public class Turret extends SubsystemBase {
 
     public Command setAngle(Supplier<Angle> offset) {
         return turret.setAngle(() -> offset.get().plus(turret.getAngle()));
+    }
+
+    public Angle getAngle() {
+        return turret.getAngle();
     }
 
     @Override
