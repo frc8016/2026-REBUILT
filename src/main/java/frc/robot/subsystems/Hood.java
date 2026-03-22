@@ -7,7 +7,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
@@ -18,8 +18,8 @@ import frc.robot.Constants.HoodConstants;
 import java.util.function.Supplier;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
-import yams.mechanisms.config.PivotConfig;
-import yams.mechanisms.positional.Pivot;
+import yams.mechanisms.config.ArmConfig;
+import yams.mechanisms.positional.Arm;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
@@ -42,36 +42,39 @@ public class Hood extends SubsystemBase {
                             HoodConstants.MAX_VELOCITY,
                             HoodConstants.MAX_ACCELERATION)
                     .withIdleMode(MotorMode.BRAKE)
-                    .withTelemetry("Hood", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(HoodConstants.STATOR_CURRENT_LIMIT)
                     .withMotorInverted(false)
                     .withClosedLoopRampRate(HoodConstants.CLOSED_LOOP_RAMP_RATE)
                     .withOpenLoopRampRate(HoodConstants.OPEN_LOOP_RAMP_RATE)
                     .withFeedforward(
-                            new SimpleMotorFeedforward(
+                            new ArmFeedforward(
                                     HoodConstants.FEED_FORWARD_KS,
+                                    HoodConstants.FEED_FORWARD_KG,
                                     HoodConstants.FEED_FORWARD_KV,
                                     HoodConstants.FEED_FORWARD_KA))
                     .withSimFeedforward(
-                            new SimpleMotorFeedforward(
+                            new ArmFeedforward(
                                     HoodConstants.SIM_FEED_FORWARD_KS,
+                                    HoodConstants.SIM_FEED_FORWARD_KG,
                                     HoodConstants.SIM_FEED_FORWARD_KV,
                                     HoodConstants.SIM_FEED_FORWARD_KA))
                     .withControlMode(ControlMode.CLOSED_LOOP)
-                    .withMotorInverted(true);
+                    .withMotorInverted(true)
+                    .withTelemetry("Hood", TelemetryVerbosity.HIGH);
 
     private final SmartMotorController hoodSMC =
             new SparkWrapper(hoodMotor, DCMotor.getNeo550(1), hoodMotorConfig);
 
-    private final PivotConfig hoodConfig =
-            new PivotConfig(hoodSMC)
-                    .withTelemetry("HoodMechanism", TelemetryVerbosity.HIGH)
+    private final ArmConfig hoodConfig =
+            new ArmConfig(hoodSMC)
                     .withSoftLimits(HoodConstants.BOTTOM_SOFT_LIMIT, HoodConstants.TOP_SOFT_LIMIT)
                     .withHardLimit(Degrees.of(0), Degrees.of(120))
-                    .withMOI(HoodConstants.HOOD_LENGTH, HoodConstants.HOOD_WEIGHT)
-                    .withStartingPosition(HoodConstants.START_ANGLE);
+                    .withLength(HoodConstants.HOOD_LENGTH)
+                    .withMass(HoodConstants.HOOD_WEIGHT)
+                    .withStartingPosition(HoodConstants.START_ANGLE)
+                    .withTelemetry("HoodMechanism", TelemetryVerbosity.HIGH);
 
-    private final Pivot hood = new Pivot(hoodConfig);
+    private final Arm hood = new Arm(hoodConfig);
 
     private boolean isReady() {
         return hood.getAngle()
@@ -97,13 +100,13 @@ public class Hood extends SubsystemBase {
     }
 
     public Command lowerHood() {
-        return setAngle(() -> HoodConstants.BOTTOM_SOFT_LIMIT);
+        return hood.setAngle(() -> HoodConstants.BOTTOM_SOFT_LIMIT);
     }
 
     public Command sysId() {
         return hood.sysId(
-                Volts.of(5.0), // maximumVoltage
-                Volts.per(Second).of(0.5), // step
+                Volts.of(.7), // maximumVoltage
+                Volts.per(Second).of(5.5), // step
                 Seconds.of(8) // duration
                 );
     }

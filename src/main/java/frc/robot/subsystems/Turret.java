@@ -36,7 +36,7 @@ public class Turret extends SubsystemBase {
                             TurretConstants.P_VALUE,
                             TurretConstants.I_VALUE,
                             TurretConstants.D_VALUE)
-                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(3, 4)))
+                    .withGearing(new MechanismGearing(GearBox.fromReductionStages(40)))
                     .withExponentialProfile(
                             Volts.of(12),
                             TurretConstants.MAX_VELOCITY,
@@ -76,7 +76,7 @@ public class Turret extends SubsystemBase {
                     .debounce(TurretConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
 
     public Command setAngle(Supplier<Angle> offset) {
-        return turret.setAngle(() -> offset.get().plus(turret.getAngle()));
+        return turret.setAngle(() -> turret.getAngle().minus(offset.get()));
     }
 
     public Angle getAngle() {

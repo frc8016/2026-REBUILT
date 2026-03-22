@@ -86,7 +86,7 @@ public class RobotContainer {
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
-        // hood.setDefaultCommand(hood.lowerHood());
+        hood.setDefaultCommand(hood.lowerHood());
 
         // Named commands for autonomous
         NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntake());
@@ -163,7 +163,8 @@ public class RobotContainer {
                                                         bottomFlywheel
                                                                 .isReady
                                                                 .and(topFlywheel.isReady)
-                                                                .and(hood.isReady))
+                                                                .and(hood.isReady)
+                                                                .and(turret.isReady))
                                                 .andThen(spindexer.run().alongWith(feed.run()))),
                 Set.of(ballisticsManager, topFlywheel, turret, hood, bottomFlywheel));
     }

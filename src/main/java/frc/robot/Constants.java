@@ -53,41 +53,38 @@ public final class Constants {
     }
 
     public static class TurretConstants {
-
-        public static final double P_VALUE = 0.0; // find
-        public static final double I_VALUE = 0.0; // find
-        public static final double D_VALUE = 0.0; // find
+        public static final double P_VALUE = 40;
+        public static final double I_VALUE = 0.0;
+        public static final double D_VALUE = 0.0;
         public static final double OUTPUTRANGE_MIN_VALUE = -1.0;
         public static final double OUTPUTRANGE_MAX_VALUE = 1.0;
         public static final double MAX_VEL_RPM = 950;
         public static final double TX_TOLERANCE = 1;
         public static final int MAX_CURRENT = 50;
         public static final double READY_TOLERANCE = 1;
-        public static final double FEED_FORWARD_KS = 0.28;
-        public static final double FEED_FORWARD_KV = 1.52;
-        public static final double FEED_FORWARD_KA = 0.175;
+        public static final double FEED_FORWARD_KS = 0.23381;
+        public static final double FEED_FORWARD_KV = 5.1633;
+        public static final double FEED_FORWARD_KA = 0.73177;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
-        public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(180);
+        public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(360);
         public static final AngularAcceleration MAX_ACCELERATION =
-                DegreesPerSecondPerSecond.of(500);
+                DegreesPerSecondPerSecond.of(720);
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
-        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(0); // fix
-        public static final Angle TOP_SOFT_LIMIT = Degrees.of(220); // fix
-        public static final Distance TURRET_LENGTH = Inches.of(17.8); // fix
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(-210);
+        public static final Angle TOP_SOFT_LIMIT = Degrees.of(0);
+        public static final Distance TURRET_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(0);
-        public static final Mass TURRET_WEIGHT = Kilograms.of(10); // fix
+        public static final Mass TURRET_WEIGHT = Kilograms.of(10);
     }
 
     public static class FeedConstants {
         public static final double FEED_SPEED = 1;
     }
-
-    public static class IntakeConstants {}
 
     public static class ArmConstants {
         public static final Mass MASS = Kilograms.of(3.1);
@@ -105,14 +102,8 @@ public final class Constants {
 
         public static final double KS = 0.98761;
         public static final double KG = 0;
-        // public static final double KG = 0.26097;
         public static final double KV = 1.3535;
         public static final double KA = 0.62598;
-
-        // public static final double KS = 0;
-        // public static final double KG = 0;
-        // public static final double KV = 0;
-        // public static final double KA = 0;
 
         // public static final double KS = 0.047102;
         // public static final double KG = 0.26097;
@@ -156,7 +147,7 @@ public final class Constants {
     }
 
     public static class TopFlyWheelConstants {
-        public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 1;
+        public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 0.5;
         public static final double IS_READY_DELAY = 0.03;
         public static final double PROPORTIONAL = 0.02;
         public static final double INTEGRAL = 0;
@@ -187,9 +178,7 @@ public final class Constants {
         public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
         public static final Distance DRIVERSTATION_TO_TRENCH =
                 Meters.of(Units.inchesToMeters(156.06));
-        public static final Distance ROBOT_WIDTH_WITH_BUMPERS =
-                Meters.of(
-                        Units.inchesToMeters(33)); // TODO: update constant with actual robot width
+        public static final Distance ROBOT_WIDTH_WITH_BUMPERS = Meters.of(Units.inchesToMeters(33));
         public static final Pose3d HUB_TARGET_BLUE =
                 new Pose3d(
                         Units.inchesToMeters(182.11),
@@ -212,16 +201,18 @@ public final class Constants {
         public static final LinearVelocity MIN_PROJECTILE_VELOCITY = MetersPerSecond.of(7.0);
     }
 
-    public static class HoodConstants { // TODO: upadate all constants here
-        public static final double PROPORTIONAL = 0.01;
+    public static class HoodConstants {
+        public static final double PROPORTIONAL = 60;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final double READY_TOLERANCE = 1;
-        public static final double FEED_FORWARD_KS = 0.5633;
-        public static final double FEED_FORWARD_KV = 0;
-        public static final double FEED_FORWARD_KA = 1.5975;
+        public static final double FEED_FORWARD_KS = 0.029184;
+        public static final double FEED_FORWARD_KG = 0.30625;
+        public static final double FEED_FORWARD_KV = 6.8929;
+        public static final double FEED_FORWARD_KA = 1.6422;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
+        public static final double SIM_FEED_FORWARD_KG = 0;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
         public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(180);
@@ -231,7 +222,7 @@ public final class Constants {
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
-        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(25); // actual 23
+        public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(23); // actual 23
         public static final Angle TOP_SOFT_LIMIT = Degrees.of(46); // actual 48
         public static final Distance HOOD_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(23);
