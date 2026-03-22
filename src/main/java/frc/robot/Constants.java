@@ -61,9 +61,9 @@ public final class Constants {
         public static final double TX_TOLERANCE = 1;
         public static final int MAX_CURRENT = 50;
         public static final double READY_TOLERANCE = 0.05;
-        public static final double FEED_FORWARD_KS = 0.23381;
-        public static final double FEED_FORWARD_KV = 5.1633;
-        public static final double FEED_FORWARD_KA = 0.73177;
+        public static final double FEED_FORWARD_KS = 0.18683;
+        public static final double FEED_FORWARD_KV = 4.8891;
+        public static final double FEED_FORWARD_KA = 0.83048;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;

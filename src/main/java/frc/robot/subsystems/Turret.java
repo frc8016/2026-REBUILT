@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -82,6 +83,10 @@ public class Turret extends SubsystemBase {
 
     public Angle getAngle() {
         return turret.getAngle();
+    }
+
+    public Command sysId() {
+        return turret.sysId(Volts.of(1), Volts.of(7).per(Second), Seconds.of(5));
     }
 
     @Override

@@ -127,8 +127,9 @@ public class RobotContainer {
 
         joystick.rightBumper().onTrue(intakeArm.toggleIntake());
         joystick.rightTrigger().whileTrue(buildShootCommand());
-        joystick.leftTrigger().whileTrue(intakeRoller.spinForwards());
-        joystick.x().whileTrue(intakeRoller.spinBackwards());
+        joystick.leftTrigger()
+                .whileTrue(intakeRoller.spinForwards().alongWith(intakeArm.lowerIntake()));
+        joystick.x().whileTrue(intakeRoller.spinBackwards().alongWith(intakeArm.lowerIntake()));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
