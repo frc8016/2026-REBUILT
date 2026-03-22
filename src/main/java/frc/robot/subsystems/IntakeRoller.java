@@ -15,6 +15,6 @@ public class IntakeRoller extends SubsystemBase {
     }
 
     public Command spinBackwards() {
-        return new StartEndCommand(() -> this.intake.set(-0.5), () -> this.intake.set(0), this);
+        return new StartEndCommand(() -> this.intake.set(0.5), () -> this.intake.set(0), this);
     }
 }
