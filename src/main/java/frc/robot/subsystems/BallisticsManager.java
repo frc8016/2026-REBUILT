@@ -12,9 +12,9 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BallisticsManagerConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.utils.TunableNumber;
 import java.util.function.Supplier;
 
 public class BallisticsManager extends SubsystemBase {
@@ -26,6 +26,8 @@ public class BallisticsManager extends SubsystemBase {
     private Angle hoodAngle = Radians.of(0);
     private Angle targetHorizontalAngle = Radians.of(0);
     private Field2d turretPoseField = new Field2d();
+    private final TunableNumber flywheelMps = new TunableNumber("flywheelMps", 1);
+    private final TunableNumber hoodDegrees = new TunableNumber("hoodDegrees", 40);
 
     public BallisticsManager(
             Supplier<Pose3d> targetPose,
@@ -83,12 +85,12 @@ public class BallisticsManager extends SubsystemBase {
         // Avoid zero-length Translation2d which causes NaN in getAngle()
         if (targetDistanceMeters < 1E-6) return;
 
-        double flywheelMps =
-                BallisticsManagerConstants.FLYWHEEL_SPEED_MAP.get(targetDistanceMeters);
-        double hoodDegrees = BallisticsManagerConstants.HOOD_ANGLE_MAP.get(targetDistanceMeters);
+        // double flywheelMps =
+        //         BallisticsManagerConstants.FLYWHEEL_SPEED_MAP.get(targetDistanceMeters);
+        // double hoodDegrees = BallisticsManagerConstants.HOOD_ANGLE_MAP.get(targetDistanceMeters);
 
-        this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
-        this.hoodAngle = Degrees.of(hoodDegrees);
+        this.flywheelVelocity = MetersPerSecond.of(flywheelMps.get());
+        this.hoodAngle = Degrees.of(hoodDegrees.get());
         this.targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
         this.turretPoseField.setRobotPose(turretPose);
     }
