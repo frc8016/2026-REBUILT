@@ -48,7 +48,7 @@ import java.util.Map;
  */
 public final class Constants {
     public static class SpindexerConstants {
-        public static final double SPINDEXER_SPEED = -1;
+        public static final double SPINDEXER_SPEED = -0.5;
     }
 
     public static class TurretConstants {
@@ -60,7 +60,7 @@ public final class Constants {
         public static final double MAX_VEL_RPM = 950;
         public static final double TX_TOLERANCE = 1;
         public static final int MAX_CURRENT = 50;
-        public static final double READY_TOLERANCE = 1;
+        public static final double READY_TOLERANCE = 0.05;
         public static final double FEED_FORWARD_KS = 0.23381;
         public static final double FEED_FORWARD_KV = 5.1633;
         public static final double FEED_FORWARD_KA = 0.73177;
@@ -82,7 +82,7 @@ public final class Constants {
     }
 
     public static class FeedConstants {
-        public static final double FEED_SPEED = 1;
+        public static final double FEED_SPEED = 0.5;
     }
 
     public static class ArmConstants {
@@ -122,15 +122,15 @@ public final class Constants {
 
     public static class BottomFlyWheelConstants {
         public static final double IS_READY_DELAY = 0.05;
-        public static final double PROPORTIONAL = 0.015;
+        public static final double PROPORTIONAL = 0;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 3;
-        public static final double FEED_FORWARD_KS = 0.61865;
-        public static final double FEED_FORWARD_KV = 0.095313;
-        public static final double FEED_FORWARD_KA = 0.040166;
+        public static final double READY_TOLERANCE = 0.05;
+        public static final double FEED_FORWARD_KS = 0.32135;
+        public static final double FEED_FORWARD_KV = 0.11339;
+        public static final double FEED_FORWARD_KA = 0.040276;
         public static final double SIM_FEED_FORWARD_KS = 0.0096372;
         public static final double SIM_FEED_FORWARD_KV = 0.12421;
         public static final double SIM_FEED_FORWARD_KA = 0.15227;
@@ -148,15 +148,15 @@ public final class Constants {
     public static class TopFlyWheelConstants {
         public static final double PROPORTIONALITY_TO_BOTTOM_FLYWHEEL = 0.5;
         public static final double IS_READY_DELAY = 0.03;
-        public static final double PROPORTIONAL = 0.02;
+        public static final double PROPORTIONAL = 0;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 3;
-        public static final double FEED_FORWARD_KS = 0.41484;
-        public static final double FEED_FORWARD_KV = 0.10539;
-        public static final double FEED_FORWARD_KA = 0.018782;
+        public static final double READY_TOLERANCE = 0.05;
+        public static final double FEED_FORWARD_KS = 0.15956;
+        public static final double FEED_FORWARD_KV = 0.11947;
+        public static final double FEED_FORWARD_KA = 0.013798;
         public static final double SIM_FEED_FORWARD_KS = 0.044289;
         public static final double SIM_FEED_FORWARD_KV = 0.1227;
         public static final double SIM_FEED_FORWARD_KA = 0.006877;
@@ -234,7 +234,7 @@ public final class Constants {
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
-        public static final double READY_TOLERANCE = 1;
+        public static final double READY_TOLERANCE = 0.05;
         public static final double FEED_FORWARD_KS = 0.029184;
         public static final double FEED_FORWARD_KG = 0.30625;
         public static final double FEED_FORWARD_KV = 6.8929;

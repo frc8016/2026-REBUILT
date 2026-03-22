@@ -31,7 +31,6 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.TopFlywheel;
 import frc.robot.subsystems.Turret;
-import java.util.Set;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -149,24 +148,19 @@ public class RobotContainer {
     }
 
     private Command buildShootCommand() {
-        return Commands.defer(
-                () ->
-                        bottomFlywheel
-                                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
-                                .alongWith(
-                                        topFlywheel.spinFlywheel(
-                                                ballisticsManager.flywheelVelocitySupplier()))
-                                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
-                                .alongWith(turret.setAngle(ballisticsManager.TX()))
-                                .alongWith(
-                                        Commands.waitUntil(
-                                                        bottomFlywheel
-                                                                .isReady
-                                                                .and(topFlywheel.isReady)
-                                                                .and(hood.isReady)
-                                                                .and(turret.isReady))
-                                                .andThen(spindexer.run().alongWith(feed.run()))),
-                Set.of(ballisticsManager, topFlywheel, turret, hood, bottomFlywheel));
+        return bottomFlywheel
+                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
+                .alongWith(topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()))
+                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
+                .alongWith(turret.setAngle(ballisticsManager.TX()))
+                .alongWith(
+                        Commands.waitUntil(
+                                        bottomFlywheel
+                                                .isReady
+                                                .and(topFlywheel.isReady)
+                                                .and(hood.isReady)
+                                                .and(turret.isReady))
+                                .andThen(spindexer.run().alongWith(feed.run())));
     }
 
     public Command getAutonomousCommand() {

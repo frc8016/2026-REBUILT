@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -86,6 +87,7 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         turret.updateTelemetry();
+        SmartDashboard.putBoolean("turretIsReady", isReady());
     }
 
     @Override

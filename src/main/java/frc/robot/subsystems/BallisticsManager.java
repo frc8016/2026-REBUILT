@@ -28,7 +28,7 @@ public class BallisticsManager extends SubsystemBase {
     private Field2d turretPoseField = new Field2d();
     private final TunableNumber flywheelMps = new TunableNumber("flywheelMps", 1);
     private final TunableNumber hoodDegrees = new TunableNumber("hoodDegrees", 40);
-    private final double targetDistanceMeters = 0;
+    private double targetDistanceMeters = 0;
 
     public BallisticsManager(
             Supplier<Pose3d> targetPose,
@@ -59,7 +59,7 @@ public class BallisticsManager extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData("turretPose", turretPoseField);
-        SmartDashboard.putNumber("", targetDistanceMeters);
+        SmartDashboard.putNumber("targetDistanceMeters", targetDistanceMeters);
     }
 
     public void update() {
@@ -82,7 +82,7 @@ public class BallisticsManager extends SubsystemBase {
         Pose2d target = targetPoseSupplier.get().toPose2d();
         Translation2d targetTranslation = target.relativeTo(turretPose).getTranslation();
 
-        double targetDistanceMeters = targetTranslation.getNorm();
+        this.targetDistanceMeters = targetTranslation.getNorm();
 
         // Avoid zero-length Translation2d which causes NaN in getAngle()
         if (targetDistanceMeters < 1E-6) return;
