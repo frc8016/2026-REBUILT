@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -57,7 +56,6 @@ public class BallisticsManager extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData("turretPose", turretPoseField);
-        SmartDashboard.putNumber("targetHorizontalAngle", targetHorizontalAngle.magnitude());
     }
 
     public void update() {
@@ -85,37 +83,14 @@ public class BallisticsManager extends SubsystemBase {
         // Avoid zero-length Translation2d which causes NaN in getAngle()
         if (targetDistanceMeters < 1E-6) return;
 
-        double flywheelMps = computeTargetProjectileVelocity(targetDistanceMeters);
-        double zMeters = targetPoseSupplier.get().getZ();
-        double hoodRadians = computeHoodAngle(targetDistanceMeters, flywheelMps, zMeters);
+        double flywheelMps =
+                BallisticsManagerConstants.FLYWHEEL_SPEED_MAP.get(targetDistanceMeters);
+        double hoodDegrees = BallisticsManagerConstants.HOOD_ANGLE_MAP.get(targetDistanceMeters);
 
         this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
-        this.hoodAngle = Radians.of(hoodRadians);
+        this.hoodAngle = Degrees.of(hoodDegrees);
         this.targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
         this.turretPoseField.setRobotPose(turretPose);
-    }
-
-    public double computeTargetProjectileVelocity(double dMeters) {
-        double velocity =
-                (dMeters * BallisticsManagerConstants.VELOCITY_SLOPE)
-                        + BallisticsManagerConstants.VELOCITY_INTERCEPT.magnitude();
-
-        return MathUtil.clamp(
-                velocity,
-                BallisticsManagerConstants.MIN_PROJECTILE_VELOCITY.magnitude(),
-                BallisticsManagerConstants.MAX_PROJECTILE_VELOCITY.magnitude());
-    }
-
-    private double computeHoodAngle(double d, double v, double z) {
-        double v2 = v * v;
-        double v4 = v2 * v2;
-        double g = BallisticsManagerConstants.G.magnitude();
-
-        double discriminant = v4 - g * (g * (d * d) + 2 * z * v2);
-
-        if (discriminant < 0) return Math.PI / 4;
-
-        return Math.atan((v2 + Math.sqrt(discriminant)) / (g * d));
     }
 
     public Supplier<Angle> TX() {

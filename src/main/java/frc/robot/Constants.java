@@ -12,7 +12,6 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
@@ -26,13 +25,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.Time;
@@ -194,11 +193,40 @@ public final class Constants {
     }
 
     public static class BallisticsManagerConstants {
-        public static final LinearAcceleration G = MetersPerSecondPerSecond.of(9.806);
-        public static final double VELOCITY_SLOPE = 0.5;
-        public static final LinearVelocity VELOCITY_INTERCEPT = MetersPerSecond.of(7.5);
-        public static final LinearVelocity MAX_PROJECTILE_VELOCITY = MetersPerSecond.of(13.0);
-        public static final LinearVelocity MIN_PROJECTILE_VELOCITY = MetersPerSecond.of(7.0);
+        // Distance (meters) → hood angle (degrees)
+        public static final InterpolatingDoubleTreeMap HOOD_ANGLE_MAP =
+                new InterpolatingDoubleTreeMap();
+        // Distance (meters) → flywheel surface speed (m/s)
+        public static final InterpolatingDoubleTreeMap FLYWHEEL_SPEED_MAP =
+                new InterpolatingDoubleTreeMap();
+
+        static {
+            // Values derived from original physics model (z = 1.4478 m hub height)
+            HOOD_ANGLE_MAP.put(1.0, 84.9);
+            HOOD_ANGLE_MAP.put(2.0, 81.1);
+            HOOD_ANGLE_MAP.put(3.0, 78.1);
+            HOOD_ANGLE_MAP.put(4.0, 75.6);
+            HOOD_ANGLE_MAP.put(5.0, 73.7);
+            HOOD_ANGLE_MAP.put(6.0, 72.3);
+            HOOD_ANGLE_MAP.put(7.0, 71.2);
+            HOOD_ANGLE_MAP.put(8.0, 70.3);
+            HOOD_ANGLE_MAP.put(9.0, 69.6);
+            HOOD_ANGLE_MAP.put(10.0, 69.1);
+            HOOD_ANGLE_MAP.put(11.0, 68.9);
+
+            // velocity = d * 0.5 + 7.5, clamped to [7.0, 13.0]
+            FLYWHEEL_SPEED_MAP.put(1.0, 8.0);
+            FLYWHEEL_SPEED_MAP.put(2.0, 8.5);
+            FLYWHEEL_SPEED_MAP.put(3.0, 9.0);
+            FLYWHEEL_SPEED_MAP.put(4.0, 9.5);
+            FLYWHEEL_SPEED_MAP.put(5.0, 10.0);
+            FLYWHEEL_SPEED_MAP.put(6.0, 10.5);
+            FLYWHEEL_SPEED_MAP.put(7.0, 11.0);
+            FLYWHEEL_SPEED_MAP.put(8.0, 11.5);
+            FLYWHEEL_SPEED_MAP.put(9.0, 12.0);
+            FLYWHEEL_SPEED_MAP.put(10.0, 12.5);
+            FLYWHEEL_SPEED_MAP.put(11.0, 13.0);
+        }
     }
 
     public static class HoodConstants {
