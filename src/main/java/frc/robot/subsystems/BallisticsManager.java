@@ -28,6 +28,7 @@ public class BallisticsManager extends SubsystemBase {
     private Field2d turretPoseField = new Field2d();
     private final TunableNumber flywheelMps = new TunableNumber("flywheelMps", 1);
     private final TunableNumber hoodDegrees = new TunableNumber("hoodDegrees", 40);
+    private final double targetDistanceMeters = 0;
 
     public BallisticsManager(
             Supplier<Pose3d> targetPose,
@@ -58,6 +59,7 @@ public class BallisticsManager extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putData("turretPose", turretPoseField);
+        SmartDashboard.putNumber("", targetDistanceMeters);
     }
 
     public void update() {
