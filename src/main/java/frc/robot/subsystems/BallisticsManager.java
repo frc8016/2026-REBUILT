@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Radians;
 
@@ -156,8 +157,10 @@ public class BallisticsManager extends SubsystemBase {
 
         // Robot-relative velocity at turret pivot (WPILib: x = forward, y = left)
         // Cross product ω × r = (-ω * r_y, ω * r_x) for CCW-positive ω
-        double vxRobot = robotSpeeds.vxMetersPerSecond - omega * TurretConstants.PIVOT_LEFT_M;
-        double vyRobot = robotSpeeds.vyMetersPerSecond + omega * TurretConstants.PIVOT_FORWARD_M;
+        double vxRobot =
+                robotSpeeds.vxMetersPerSecond - omega * TurretConstants.PIVOT_LEFT_M.in(Meters);
+        double vyRobot =
+                robotSpeeds.vyMetersPerSecond + omega * TurretConstants.PIVOT_FORWARD_M.in(Meters);
 
         // Rotate from robot frame to field frame
         double cos = Math.cos(robotHeadingRad);
