@@ -202,30 +202,18 @@ public final class Constants {
 
         static {
             // Values derived from original physics model (z = 1.4478 m hub height)
-            HOOD_ANGLE_MAP.put(1.0, 84.9);
-            HOOD_ANGLE_MAP.put(2.0, 81.1);
-            HOOD_ANGLE_MAP.put(3.0, 78.1);
-            HOOD_ANGLE_MAP.put(4.0, 75.6);
-            HOOD_ANGLE_MAP.put(5.0, 73.7);
-            HOOD_ANGLE_MAP.put(6.0, 72.3);
-            HOOD_ANGLE_MAP.put(7.0, 71.2);
-            HOOD_ANGLE_MAP.put(8.0, 70.3);
-            HOOD_ANGLE_MAP.put(9.0, 69.6);
-            HOOD_ANGLE_MAP.put(10.0, 69.1);
-            HOOD_ANGLE_MAP.put(11.0, 68.9);
+            HOOD_ANGLE_MAP.put(2.5, 67.0);
+            HOOD_ANGLE_MAP.put(3.0, 65.0);
+            HOOD_ANGLE_MAP.put(3.5, 60.0);
+            HOOD_ANGLE_MAP.put(4.0, 60.0);
+            HOOD_ANGLE_MAP.put(4.5, 55.0);
 
             // velocity = d * 0.5 + 7.5, clamped to [7.0, 13.0]
-            FLYWHEEL_SPEED_MAP.put(1.0, 8.0);
-            FLYWHEEL_SPEED_MAP.put(2.0, 8.5);
-            FLYWHEEL_SPEED_MAP.put(3.0, 9.0);
-            FLYWHEEL_SPEED_MAP.put(4.0, 9.5);
-            FLYWHEEL_SPEED_MAP.put(5.0, 10.0);
-            FLYWHEEL_SPEED_MAP.put(6.0, 10.5);
-            FLYWHEEL_SPEED_MAP.put(7.0, 11.0);
-            FLYWHEEL_SPEED_MAP.put(8.0, 11.5);
-            FLYWHEEL_SPEED_MAP.put(9.0, 12.0);
-            FLYWHEEL_SPEED_MAP.put(10.0, 12.5);
-            FLYWHEEL_SPEED_MAP.put(11.0, 13.0);
+            FLYWHEEL_SPEED_MAP.put(2.5, 12.0);
+            FLYWHEEL_SPEED_MAP.put(3.0, 12.5);
+            FLYWHEEL_SPEED_MAP.put(3.5, 12.5);
+            FLYWHEEL_SPEED_MAP.put(4.0, 13.0);
+            FLYWHEEL_SPEED_MAP.put(4.5, 14.0);
         }
     }
 
