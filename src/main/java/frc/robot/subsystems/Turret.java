@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
@@ -46,10 +45,9 @@ public class Turret extends SubsystemBase {
                     .withIdleMode(MotorMode.BRAKE)
                     .withMotorInverted(false)
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
-                    .withStatorCurrentLimit(Amps.of(40))
-                    .withClosedLoopRampRate(Seconds.of(0.02))
-                    .withOpenLoopRampRate(Seconds.of(0.02))
-                    .withSoftLimit(Degrees.of(-180), Degrees.of(180));
+                    .withStatorCurrentLimit(TurretConstants.STATOR_CURRENT_LIMIT)
+                    .withClosedLoopRampRate(TurretConstants.CLOSED_LOOP_RAMP_RATE)
+                    .withOpenLoopRampRate(TurretConstants.OPEN_LOOP_RAMP_RATE);
     private final SmartMotorController TurrerSMC =
             new SparkWrapper(m_turretmotor, DCMotor.getNeo550(1), m_turretmotorconfig);
 
