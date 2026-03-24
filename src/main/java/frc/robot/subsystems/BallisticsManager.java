@@ -34,7 +34,7 @@ public class BallisticsManager extends SubsystemBase {
             Supplier<Double> robotYawDegrees,
             Supplier<Angle> turretAngle) {
         LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.SetIMUMode("limelight", 3);
+        LimelightHelpers.SetIMUMode("limelight", 1);
         // Camera offset from turret pivot (turret is treated as "robot" for the Limelight)
         // LimelightHelpers.setCameraPose_RobotSpace(
         //         "limelight",
@@ -51,7 +51,7 @@ public class BallisticsManager extends SubsystemBase {
 
     /** Switch to internal IMU mode once the IMU has been seeded during disabled. */
     public void enableInternalIMU() {
-        LimelightHelpers.SetIMUMode("limelight", 2);
+        LimelightHelpers.SetIMUMode("limelight", 3);
     }
 
     @Override
