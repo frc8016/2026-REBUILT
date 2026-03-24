@@ -47,8 +47,8 @@ public class Turret extends SubsystemBase {
                     .withMotorInverted(false)
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(Amps.of(40))
-                    .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(Seconds.of(0.25))
+                    .withClosedLoopRampRate(Seconds.of(0.02))
+                    .withOpenLoopRampRate(Seconds.of(0.02))
                     .withSoftLimit(Degrees.of(-180), Degrees.of(180));
     private final SmartMotorController TurrerSMC =
             new SparkWrapper(m_turretmotor, DCMotor.getNeo550(1), m_turretmotorconfig);
