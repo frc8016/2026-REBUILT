@@ -207,6 +207,10 @@ public final class Constants {
             HOOD_ANGLE_MAP.put(3.5, 60.0);
             HOOD_ANGLE_MAP.put(4.0, 60.0);
             HOOD_ANGLE_MAP.put(4.5, 55.0);
+            HOOD_ANGLE_MAP.put(5.0, 50.0);
+            HOOD_ANGLE_MAP.put(6.0, 40.0);
+            HOOD_ANGLE_MAP.put(7.0, 55.0);
+            HOOD_ANGLE_MAP.put(8.0, 60.0);
 
             // velocity = d * 0.5 + 7.5, clamped to [7.0, 13.0]
             FLYWHEEL_SPEED_MAP.put(2.5, 12.0);
@@ -214,6 +218,10 @@ public final class Constants {
             FLYWHEEL_SPEED_MAP.put(3.5, 12.5);
             FLYWHEEL_SPEED_MAP.put(4.0, 13.0);
             FLYWHEEL_SPEED_MAP.put(4.5, 14.0);
+            FLYWHEEL_SPEED_MAP.put(5.0, 14.0);
+            FLYWHEEL_SPEED_MAP.put(6.0, 16.0);
+            FLYWHEEL_SPEED_MAP.put(7.0, 18.0);
+            FLYWHEEL_SPEED_MAP.put(8.0, 20.0);
         }
     }
 
