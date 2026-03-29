@@ -26,4 +26,9 @@ public class Feed extends SubsystemBase {
         return new StartEndCommand(
                 () -> this.feed.set(FeedConstants.FEED_SPEED), () -> this.feed.set(0), this);
     }
+
+    public Command reverse() {
+        return new StartEndCommand(
+                () -> this.feed.set(-FeedConstants.FEED_SPEED), () -> this.feed.set(0), this);
+    }
 }

@@ -18,4 +18,11 @@ public class Spindexer extends SubsystemBase {
                 () -> this.spindexer.set(0),
                 this);
     }
+
+    public Command reverse() {
+        return new StartEndCommand(
+                () -> this.spindexer.set(-SpindexerConstants.SPINDEXER_SPEED),
+                () -> this.spindexer.set(0),
+                this);
+    }
 }
