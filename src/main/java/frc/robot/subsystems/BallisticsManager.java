@@ -35,7 +35,6 @@ public class BallisticsManager extends SubsystemBase {
             Supplier<Double> robotYawDegrees,
             Supplier<Angle> turretAngle) {
         LimelightHelpers.setPipelineIndex("limelight", 0);
-        // Start with EXTERNAL_SEED so the internal IMU calibrates against the drivetrain gyro
         LimelightHelpers.SetIMUMode("limelight", 1);
         // Camera offset from turret pivot (turret is treated as "robot" for the Limelight)
         LimelightHelpers.setCameraPose_RobotSpace(
@@ -53,7 +52,7 @@ public class BallisticsManager extends SubsystemBase {
 
     /** Switch to internal IMU mode once the IMU has been seeded during disabled. */
     public void enableInternalIMU() {
-        LimelightHelpers.SetIMUMode("limelight", 2);
+        LimelightHelpers.SetIMUMode("limelight", 3);
     }
 
     @Override
@@ -65,11 +64,11 @@ public class BallisticsManager extends SubsystemBase {
     public void update() {
         // Turret's field heading = robot heading + turret angle relative to robot
         double turretFieldYaw =
-                robotYawDegreesSupplier.get() + turretAngleSupplier.get().in(Degrees);
+                robotYawDegreesSupplier.get() - turretAngleSupplier.get().in(Degrees);
         LimelightHelpers.SetRobotOrientation("limelight", turretFieldYaw, 0, 0, 0, 0, 0);
 
         LimelightHelpers.PoseEstimate limelightEstimate =
-                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+                LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
         if (limelightEstimate == null) return;
         Pose2d turretPose = limelightEstimate.pose;

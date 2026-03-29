@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
@@ -30,6 +29,8 @@ import yams.motorcontrollers.local.SparkWrapper;
 
 public class Turret extends SubsystemBase {
     private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
+    // private final TunableNumber PROPORTIONAL = new TunableNumber("proportional", 40);
+    // private final TunableNumber DERIVATIVE = new TunableNumber("derivative", 0);
 
     SmartMotorControllerConfig m_turretmotorconfig =
             new SmartMotorControllerConfig(this)
@@ -46,10 +47,9 @@ public class Turret extends SubsystemBase {
                     .withIdleMode(MotorMode.BRAKE)
                     .withMotorInverted(false)
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
-                    .withStatorCurrentLimit(Amps.of(40))
-                    .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(Seconds.of(0.25))
-                    .withSoftLimit(Degrees.of(-180), Degrees.of(180));
+                    .withStatorCurrentLimit(TurretConstants.STATOR_CURRENT_LIMIT)
+                    .withClosedLoopRampRate(TurretConstants.CLOSED_LOOP_RAMP_RATE)
+                    .withOpenLoopRampRate(TurretConstants.OPEN_LOOP_RAMP_RATE);
     private final SmartMotorController TurrerSMC =
             new SparkWrapper(m_turretmotor, DCMotor.getNeo550(1), m_turretmotorconfig);
 

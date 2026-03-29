@@ -52,7 +52,7 @@ public final class Constants {
     }
 
     public static class TurretConstants {
-        public static final double P_VALUE = 40;
+        public static final double P_VALUE = 60;
         public static final double I_VALUE = 0.0;
         public static final double D_VALUE = 0.0;
         public static final double OUTPUTRANGE_MIN_VALUE = -1.0;
@@ -70,8 +70,8 @@ public final class Constants {
         public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(360);
         public static final AngularAcceleration MAX_ACCELERATION =
                 DegreesPerSecondPerSecond.of(720);
-        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
-        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.02);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.02);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
         public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(-210);
@@ -92,7 +92,7 @@ public final class Constants {
         public static final Angle UP_ANGLE = Degrees.of(88);
         public static final Angle START_ANGLE = Degrees.of(90);
         public static final Current CURRENT_LIMIT = Amps.of(40);
-        public static final Time RAMP_RATE = Seconds.of(0.25);
+        public static final Time RAMP_RATE = Seconds.of(0.02);
         public static final Angle TOGGLE_TOLERANCE = Degrees.of(5);
 
         public static final double PROPORTIONAL = 35;
@@ -140,8 +140,8 @@ public final class Constants {
         public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
         public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
                 RotationsPerSecondPerSecond.of(2500);
-        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
-        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.02);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.02);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
     }
 
@@ -167,8 +167,8 @@ public final class Constants {
         public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
         public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
                 RotationsPerSecondPerSecond.of(2500);
-        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
-        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.02);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.02);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
     }
 
@@ -234,8 +234,8 @@ public final class Constants {
         public static final AngularVelocity MAX_VELOCITY = DegreesPerSecond.of(180);
         public static final AngularAcceleration MAX_ACCELERATION =
                 DegreesPerSecondPerSecond.of(900);
-        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
-        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.02);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.02);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
         public static final double IS_READY_DELAY = 0.05;
         public static final Angle BOTTOM_SOFT_LIMIT = Degrees.of(23); // actual 23
