@@ -173,6 +173,11 @@ public class RobotContainer {
         targetSelector.updateAlliance();
         targetSelector.updateTargetSelection();
         ballisticsManager.update();
+        SmartDashboard.putNumber(
+                "robotSpeed",
+                Math.sqrt(
+                        Math.pow(drivetrain.getState().Speeds.vxMetersPerSecond, 2)
+                                + Math.pow(drivetrain.getState().Speeds.vyMetersPerSecond, 2)));
     }
 
     public void onDisabledExit() {
