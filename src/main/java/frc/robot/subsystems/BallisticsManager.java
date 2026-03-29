@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.LimelightHelpers;
 import java.util.function.Supplier;
 
@@ -36,14 +37,14 @@ public class BallisticsManager extends SubsystemBase {
         LimelightHelpers.setPipelineIndex("limelight", 0);
         LimelightHelpers.SetIMUMode("limelight", 1);
         // Camera offset from turret pivot (turret is treated as "robot" for the Limelight)
-        // LimelightHelpers.setCameraPose_RobotSpace(
-        //         "limelight",
-        //         LimelightConstants.CAM_FORWARD,
-        //         LimelightConstants.CAM_RIGHT,
-        //         LimelightConstants.CAM_UP,
-        //         LimelightConstants.CAM_ROLL,
-        //         LimelightConstants.CAM_PITCH,
-        //         0);
+        LimelightHelpers.setCameraPose_RobotSpace(
+                "limelight",
+                LimelightConstants.CAM_FORWARD,
+                LimelightConstants.CAM_RIGHT,
+                LimelightConstants.CAM_UP,
+                LimelightConstants.CAM_ROLL,
+                LimelightConstants.CAM_PITCH,
+                0);
         this.targetPoseSupplier = targetPose;
         this.robotYawDegreesSupplier = robotYawDegrees;
         this.turretAngleSupplier = turretAngle;
