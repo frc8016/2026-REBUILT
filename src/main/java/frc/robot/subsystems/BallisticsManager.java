@@ -67,7 +67,7 @@ public class BallisticsManager extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation("limelight", turretFieldYaw, 0, 0, 0, 0, 0);
 
         LimelightHelpers.PoseEstimate limelightEstimate =
-                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+                LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
         if (limelightEstimate == null) return;
         Pose2d turretPose = limelightEstimate.pose;

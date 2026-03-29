@@ -29,6 +29,8 @@ import yams.motorcontrollers.local.SparkWrapper;
 
 public class Turret extends SubsystemBase {
     private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
+    // private final TunableNumber PROPORTIONAL = new TunableNumber("proportional", 40);
+    // private final TunableNumber DERIVATIVE = new TunableNumber("derivative", 0);
 
     SmartMotorControllerConfig m_turretmotorconfig =
             new SmartMotorControllerConfig(this)
