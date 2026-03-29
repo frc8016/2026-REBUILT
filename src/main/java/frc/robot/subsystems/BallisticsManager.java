@@ -52,7 +52,7 @@ public class BallisticsManager extends SubsystemBase {
 
     /** Switch to internal IMU mode once the IMU has been seeded during disabled. */
     public void enableInternalIMU() {
-        LimelightHelpers.SetIMUMode("limelight", 3);
+        LimelightHelpers.SetIMUMode("limelight", 4);
     }
 
     @Override
