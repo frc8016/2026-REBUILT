@@ -25,6 +25,7 @@ import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.LimelightVisionManager;
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
@@ -47,13 +48,18 @@ public class RobotContainer {
     private final IntakeArm intakeArm = new IntakeArm();
     private final IntakeRoller intakeRoller = new IntakeRoller();
     private final Turret turret = new Turret();
+    private final LimelightVisionManager limelightVision =
+            new LimelightVisionManager(drivetrain, turret::getAngle, turret::getAngularVelocity);
+
     public final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
+
     private final BallisticsManager ballisticsManager =
             new BallisticsManager(
                     targetSelector.getCurrentTarget(),
-                    () -> drivetrain.getState().Pose.getRotation().getDegrees(),
+                    () -> drivetrain.getState().Pose,
                     turret::getAngle);
+
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
     private final Hood hood = new Hood();
@@ -181,6 +187,6 @@ public class RobotContainer {
     }
 
     public void onDisabledExit() {
-        ballisticsManager.enableInternalIMU();
+        limelightVision.enableInternalIMU();
     }
 }
