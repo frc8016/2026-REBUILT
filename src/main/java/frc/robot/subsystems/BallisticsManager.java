@@ -41,23 +41,12 @@ public class BallisticsManager extends SubsystemBase {
 
     @Override
     public void periodic() {
-        turretPoseField.setRobotPose(getTurretPose());
+        turretPoseField.setRobotPose(getTurretPose().get());
         SmartDashboard.putData("turretPose", turretPoseField);
         SmartDashboard.putNumber("targetDistanceMeters", targetDistanceMeters);
     }
 
     public void update() {
-        Pose2d robotPose = robotPoseSupplier.get();
-        Angle turretAngle = turretAngleSupplier.get(); // CCW negative
-
-        Rotation2d turretRotation =
-                Rotation2d.fromDegrees(
-                        robotPose.getRotation().getDegrees() - turretAngle.in(Degrees));
-
-        // Include turret offset
-        Transform2d turretTransform = getTurretTransform(turretRotation);
-        Pose2d turretPose = robotPose.transformBy(turretTransform);
-
         // Convert target Pose3d to 2D for horizontal targeting
         Pose3d targetPose3d = targetPoseSupplier.get();
         Pose2d targetPose2d =
@@ -65,6 +54,9 @@ public class BallisticsManager extends SubsystemBase {
                         targetPose3d.getX(),
                         targetPose3d.getY(),
                         targetPose3d.getRotation().toRotation2d());
+
+        // // Include turret offset
+        Pose2d turretPose = getTurretPose().get();
 
         // Compute vector from turret to target in 2D
         Translation2d targetTranslation =
@@ -86,11 +78,6 @@ public class BallisticsManager extends SubsystemBase {
         turretPoseField.setRobotPose(turretPose);
     }
 
-    private Transform2d getTurretTransform(Rotation2d turretRotation) {
-        return new Transform2d(
-                TurretConstants.TURRET_OFFSET.rotateBy(turretRotation), turretRotation);
-    }
-
     public Supplier<Angle> TX() {
         return () -> targetHorizontalAngle;
     }
@@ -103,13 +90,17 @@ public class BallisticsManager extends SubsystemBase {
         return () -> flywheelVelocity;
     }
 
-    /** Helper to get the turret pose (for Field2d visualization) */
-    private Pose2d getTurretPose() {
-        Pose2d robotPose = robotPoseSupplier.get();
-        Rotation2d turretRotation =
-                Rotation2d.fromDegrees(
-                        robotPose.getRotation().getDegrees()
-                                - turretAngleSupplier.get().in(Degrees));
-        return robotPose.transformBy(getTurretTransform(turretRotation));
+    private Supplier<Pose2d> getTurretPose() {
+        return () -> {
+            // Get fresh data inside the lambda
+            Pose2d robotPose = robotPoseSupplier.get();
+            Rotation2d turretRot = new Rotation2d(-turretAngleSupplier.get().in(Degrees));
+
+            // Create the transform (Fixed Offset, Current Rotation)
+            Transform2d robotToTurret = new Transform2d(TurretConstants.TURRET_OFFSET, turretRot);
+
+            // Apply to the robot's global pose
+            return robotPose.transformBy(robotToTurret);
+        };
     }
 }

@@ -13,6 +13,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.TurretConstants;
@@ -25,6 +27,7 @@ public class LimelightVisionManager extends SubsystemBase {
     private final Supplier<Angle> turretAngleSupplier;
     private final Supplier<AngularVelocity> turretAngularVelSupplier;
     private final String limelightName = "limelight";
+    private Field2d limelightPose = new Field2d();
 
     public LimelightVisionManager(
             CommandSwerveDrivetrain drivetrain,
@@ -96,6 +99,9 @@ public class LimelightVisionManager extends SubsystemBase {
 
         drivetrain.addVisionMeasurement(
                 robotPose, timestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+
+        limelightPose.setRobotPose(robotPose);
+        SmartDashboard.putData("limelightPose", limelightPose);
     }
 
     private Angle compensateForLatency(Angle angle, AngularVelocity vel, Time latency) {
