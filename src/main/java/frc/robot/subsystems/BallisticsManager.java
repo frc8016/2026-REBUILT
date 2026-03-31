@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degree;
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radian;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -93,7 +93,7 @@ public class BallisticsManager extends SubsystemBase {
         return () -> {
             // Get fresh data inside the lambda
             Pose2d robotPose = robotPoseSupplier.get();
-            Rotation2d turretRot = new Rotation2d(-turretAngleSupplier.get().in(Degrees));
+            Rotation2d turretRot = new Rotation2d(-turretAngleSupplier.get().in(Radian));
 
             // Create the transform (Fixed Offset, Current Rotation)
             Transform2d robotToTurret = new Transform2d(TurretConstants.TURRET_OFFSET, turretRot);

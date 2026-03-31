@@ -261,9 +261,10 @@ public final class Constants {
     public static class LimelightConstants {
         // Camera offset from turret pivot in turret-local frame (meters)
         // At turret angle = 0, turret-local "forward" = robot forward
-        public static final double CAM_FORWARD = 0.089; // positive forward
-        public static final double CAM_RIGHT = -0.15; // positive left
-        public static final double CAM_UP = 0.0762; // positive up
+        public static final double CAM_FORWARD = 0.089; // positive forward, from turret origin
+        public static final double CAM_RIGHT = -0.15; // positive left, from turret origin
+        public static final double CAM_UP =
+                Units.inchesToMeters(20); // positive up, from robot origin
 
         // Camera orientation relative to turret (fixed, degrees)
         public static final double CAM_ROLL = 0.0;
