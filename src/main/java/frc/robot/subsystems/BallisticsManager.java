@@ -59,8 +59,7 @@ public class BallisticsManager extends SubsystemBase {
         Pose2d turretPose = getTurretPose().get();
 
         // Compute vector from turret to target in 2D
-        Translation2d targetTranslation =
-                targetPose2d.getTranslation().minus(turretPose.getTranslation());
+        Translation2d targetTranslation = targetPose2d.relativeTo(turretPose).getTranslation();
 
         targetDistanceMeters = targetTranslation.getNorm();
 
