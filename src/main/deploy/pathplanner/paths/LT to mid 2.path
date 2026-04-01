@@ -12,7 +12,7 @@
         "y": 7.418129139072847
       },
       "isLocked": false,
-      "linkedName": "LT"
+      "linkedName": "LT through"
     },
     {
       "anchor": {
@@ -47,17 +47,17 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.3163737280295965,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 180.0
     },
     {
       "waypointRelativePos": 1.3691026827012052,
-      "rotationDegrees": -99.06356799860771
+      "rotationDegrees": -99.064
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.0761276519878766,
+      "minWaypointRelativePos": 1.16027812444286,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 2.0,
@@ -87,7 +87,7 @@
   "folder": "left trench",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
