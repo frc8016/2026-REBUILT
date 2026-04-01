@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
@@ -79,6 +80,10 @@ public final class Constants {
         public static final Distance TURRET_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(0);
         public static final Mass TURRET_WEIGHT = Kilograms.of(10);
+        public static final Distance PIVOT_FORWARD = Inches.of(-7.25);
+        public static final Distance PIVOT_LEFT = Inches.of(8);
+        public static final Translation2d TURRET_OFFSET =
+                new Translation2d(PIVOT_FORWARD.in(Meters), PIVOT_LEFT.in(Meters));
     }
 
     public static class FeedConstants {
@@ -202,23 +207,29 @@ public final class Constants {
 
         static {
             // Values derived from original physics model (z = 1.4478 m hub height)
-            HOOD_ANGLE_MAP.put(2.5, 67.0);
-            HOOD_ANGLE_MAP.put(3.0, 65.0);
-            HOOD_ANGLE_MAP.put(3.5, 60.0);
+            HOOD_ANGLE_MAP.put(1.72, 67.0);
+            HOOD_ANGLE_MAP.put(2.0, 67.0);
+            HOOD_ANGLE_MAP.put(2.5, 63.0);
+            HOOD_ANGLE_MAP.put(3.0, 63.0);
+            HOOD_ANGLE_MAP.put(3.5, 61.0);
             HOOD_ANGLE_MAP.put(4.0, 60.0);
             HOOD_ANGLE_MAP.put(4.5, 55.0);
-            HOOD_ANGLE_MAP.put(5.0, 50.0);
+            HOOD_ANGLE_MAP.put(5.0, 57.0);
+            HOOD_ANGLE_MAP.put(5.5, 57.0);
             HOOD_ANGLE_MAP.put(6.0, 40.0);
             HOOD_ANGLE_MAP.put(7.0, 55.0);
             HOOD_ANGLE_MAP.put(8.0, 60.0);
 
             // velocity = d * 0.5 + 7.5, clamped to [7.0, 13.0]
-            FLYWHEEL_SPEED_MAP.put(2.5, 12.0);
-            FLYWHEEL_SPEED_MAP.put(3.0, 12.5);
-            FLYWHEEL_SPEED_MAP.put(3.5, 12.5);
-            FLYWHEEL_SPEED_MAP.put(4.0, 13.0);
-            FLYWHEEL_SPEED_MAP.put(4.5, 14.0);
+            FLYWHEEL_SPEED_MAP.put(1.72, 10.0);
+            FLYWHEEL_SPEED_MAP.put(2.0, 10.5);
+            FLYWHEEL_SPEED_MAP.put(2.5, 11.0);
+            FLYWHEEL_SPEED_MAP.put(3.0, 12.0);
+            FLYWHEEL_SPEED_MAP.put(3.5, 12.1);
+            FLYWHEEL_SPEED_MAP.put(4.0, 12.9);
+            FLYWHEEL_SPEED_MAP.put(4.5, 13.0);
             FLYWHEEL_SPEED_MAP.put(5.0, 14.0);
+            FLYWHEEL_SPEED_MAP.put(5.5, 14.2);
             FLYWHEEL_SPEED_MAP.put(6.0, 16.0);
             FLYWHEEL_SPEED_MAP.put(7.0, 18.0);
             FLYWHEEL_SPEED_MAP.put(8.0, 20.0);
@@ -256,13 +267,16 @@ public final class Constants {
     public static class LimelightConstants {
         // Camera offset from turret pivot in turret-local frame (meters)
         // At turret angle = 0, turret-local "forward" = robot forward
-        public static final double CAM_FORWARD = 0.089;
-        public static final double CAM_RIGHT = 0.15;
-        public static final double CAM_UP = 0.0762;
+        public static final double CAM_FORWARD = 0.089; // positive forward, from turret origin
+        public static final double CAM_RIGHT = -0.15; // positive left, from turret origin
+        public static final double CAM_UP =
+                Units.inchesToMeters(20); // positive up, from robot origin
 
         // Camera orientation relative to turret (fixed, degrees)
         public static final double CAM_ROLL = 0.0;
         public static final double CAM_PITCH = 15.0;
+        public static final Translation2d CAM_OFFSET_FROM_TURRET_CENTER =
+                new Translation2d(CAM_FORWARD, CAM_RIGHT);
     }
 
     public static class VisionConstants {

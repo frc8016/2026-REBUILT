@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
@@ -10,6 +11,8 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +32,10 @@ import yams.motorcontrollers.local.SparkWrapper;
 
 public class Turret extends SubsystemBase {
     private final SparkMax m_turretmotor = new SparkMax(3, MotorType.kBrushless);
+    private Angle lastAngle = Degrees.of(0);
+    private double lastTimestamp = 0.0;
+    private AngularVelocity turretAngularVelocity = DegreesPerSecond.of(0);
+
     // private final TunableNumber PROPORTIONAL = new TunableNumber("proportional", 40);
     // private final TunableNumber DERIVATIVE = new TunableNumber("derivative", 0);
 
@@ -85,6 +92,10 @@ public class Turret extends SubsystemBase {
         return turret.getAngle();
     }
 
+    public AngularVelocity getAngularVelocity() {
+        return turretAngularVelocity;
+    }
+
     public Command sysId() {
         return turret.sysId(Volts.of(1), Volts.of(7).per(Second), Seconds.of(5));
     }
@@ -93,6 +104,18 @@ public class Turret extends SubsystemBase {
     public void periodic() {
         turret.updateTelemetry();
         SmartDashboard.putBoolean("turretIsReady", isReady());
+
+        double now = Timer.getFPGATimestamp();
+        double deltaTime = now - lastTimestamp;
+        Angle currentAngle = turret.getAngle();
+
+        if (deltaTime > 0) {
+            double deltaDeg = currentAngle.minus(lastAngle).in(Degrees);
+            turretAngularVelocity = DegreesPerSecond.of(deltaDeg / deltaTime);
+        }
+
+        lastAngle = currentAngle;
+        lastTimestamp = now;
     }
 
     @Override

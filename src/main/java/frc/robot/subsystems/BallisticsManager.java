@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Radian;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -13,98 +15,94 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
-import frc.robot.Constants.LimelightConstants;
-import frc.robot.LimelightHelpers;
+import frc.robot.Constants.TurretConstants;
 import java.util.function.Supplier;
 
 public class BallisticsManager extends SubsystemBase {
+
     private final Supplier<Pose3d> targetPoseSupplier;
-    private final Supplier<Double> robotYawDegreesSupplier;
-    private final Supplier<Angle> turretAngleSupplier;
+    private final Supplier<Pose2d> robotPoseSupplier;
+    private final Supplier<Angle> turretAngleSupplier; // CCW negative
 
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
-    private Angle hoodAngle = Radians.of(0);
-    private Angle targetHorizontalAngle = Radians.of(0);
+    private Angle hoodAngle = Degree.of(0);
+    private Angle targetHorizontalAngle = Degree.of(0);
     private Field2d turretPoseField = new Field2d();
-    // private final TunableNumber flywheelMps = new TunableNumber("flywheelMps", 1);
-    // private final TunableNumber hoodDegrees = new TunableNumber("hoodDegrees", 40);
     private double targetDistanceMeters = 0;
 
-    public BallisticsManager(
-            Supplier<Pose3d> targetPose,
-            Supplier<Double> robotYawDegrees,
-            Supplier<Angle> turretAngle) {
-        LimelightHelpers.setPipelineIndex("limelight", 0);
-        LimelightHelpers.SetIMUMode("limelight", 1);
-        // Camera offset from turret pivot (turret is treated as "robot" for the Limelight)
-        LimelightHelpers.setCameraPose_RobotSpace(
-                "limelight",
-                LimelightConstants.CAM_FORWARD,
-                LimelightConstants.CAM_RIGHT,
-                LimelightConstants.CAM_UP,
-                LimelightConstants.CAM_ROLL,
-                LimelightConstants.CAM_PITCH,
-                0);
-        this.targetPoseSupplier = targetPose;
-        this.robotYawDegreesSupplier = robotYawDegrees;
-        this.turretAngleSupplier = turretAngle;
-    }
+    // private static TunableNumber flywheelMps = new TunableNumber("flywheelMps", 10);
+    // private static TunableNumber hoodDeg = new TunableNumber("hoodDeg", 40);
 
-    /** Switch to internal IMU mode once the IMU has been seeded during disabled. */
-    public void enableInternalIMU() {
-        LimelightHelpers.SetIMUMode("limelight", 4);
+    public BallisticsManager(
+            Supplier<Pose3d> targetPoseSupplier,
+            Supplier<Pose2d> robotPoseSupplier,
+            Supplier<Angle> turretAngleSupplier) {
+        this.targetPoseSupplier = targetPoseSupplier;
+        this.robotPoseSupplier = robotPoseSupplier;
+        this.turretAngleSupplier = turretAngleSupplier;
     }
 
     @Override
     public void periodic() {
+        turretPoseField.setRobotPose(getTurretPose().get());
         SmartDashboard.putData("turretPose", turretPoseField);
         SmartDashboard.putNumber("targetDistanceMeters", targetDistanceMeters);
     }
 
     public void update() {
-        // Turret's field heading = robot heading + turret angle relative to robot
-        double turretFieldYaw =
-                robotYawDegreesSupplier.get() - turretAngleSupplier.get().in(Degrees);
-        LimelightHelpers.SetRobotOrientation("limelight", turretFieldYaw, 0, 0, 0, 0, 0);
+        // Convert target Pose3d to 2D for horizontal targeting
+        Pose3d targetPose3d = targetPoseSupplier.get();
+        Pose2d targetPose2d =
+                new Pose2d(
+                        targetPose3d.getX(),
+                        targetPose3d.getY(),
+                        targetPose3d.getRotation().toRotation2d());
 
-        LimelightHelpers.PoseEstimate limelightEstimate =
-                LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        // // Include turret offset
+        Pose2d turretPose = getTurretPose().get();
 
-        if (limelightEstimate == null) return;
-        Pose2d turretPose = limelightEstimate.pose;
+        // Compute vector from turret to target in 2D
+        Translation2d targetTranslation = targetPose2d.relativeTo(turretPose).getTranslation();
 
-        // A (0, 0) pose means the limelight has no valid data — skip this cycle
-        if (Math.abs(turretPose.getX()) < 1E-6 && Math.abs(turretPose.getY()) < 1E-6) {
-            return;
-        }
+        targetDistanceMeters = targetTranslation.getNorm();
 
-        Pose2d target = targetPoseSupplier.get().toPose2d();
-        Translation2d targetTranslation = target.relativeTo(turretPose).getTranslation();
-
-        this.targetDistanceMeters = targetTranslation.getNorm();
-
-        // Avoid zero-length Translation2d which causes NaN in getAngle()
         if (targetDistanceMeters < 1E-6) return;
 
+        // Lookup ballistics tables using horizontal distance
         double flywheelMps =
                 BallisticsManagerConstants.FLYWHEEL_SPEED_MAP.get(targetDistanceMeters);
-        double hoodDegrees = BallisticsManagerConstants.HOOD_ANGLE_MAP.get(targetDistanceMeters);
+        double hoodDeg = BallisticsManagerConstants.HOOD_ANGLE_MAP.get(targetDistanceMeters);
 
-        this.flywheelVelocity = MetersPerSecond.of(flywheelMps);
-        this.hoodAngle = Degrees.of(hoodDegrees);
-        this.targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
-        this.turretPoseField.setRobotPose(turretPose);
+        flywheelVelocity = MetersPerSecond.of(flywheelMps);
+        hoodAngle = Degree.of(hoodDeg);
+        targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
+
+        turretPoseField.setRobotPose(turretPose);
     }
 
     public Supplier<Angle> TX() {
-        return () -> this.targetHorizontalAngle;
+        return () -> targetHorizontalAngle;
     }
 
     public Supplier<Angle> hoodAngleSupplier() {
-        return () -> this.hoodAngle;
+        return () -> hoodAngle;
     }
 
     public Supplier<LinearVelocity> flywheelVelocitySupplier() {
-        return () -> this.flywheelVelocity;
+        return () -> flywheelVelocity;
+    }
+
+    private Supplier<Pose2d> getTurretPose() {
+        return () -> {
+            // Get fresh data inside the lambda
+            Pose2d robotPose = robotPoseSupplier.get();
+            Rotation2d turretRot = new Rotation2d(-turretAngleSupplier.get().in(Radian));
+
+            // Create the transform (Fixed Offset, Current Rotation)
+            Transform2d robotToTurret = new Transform2d(TurretConstants.TURRET_OFFSET, turretRot);
+
+            // Apply to the robot's global pose
+            return robotPose.transformBy(robotToTurret);
+        };
     }
 }
