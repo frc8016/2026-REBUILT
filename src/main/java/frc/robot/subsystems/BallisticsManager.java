@@ -30,6 +30,9 @@ public class BallisticsManager extends SubsystemBase {
     private Field2d turretPoseField = new Field2d();
     private double targetDistanceMeters = 0;
 
+    // private static TunableNumber flywheelMps = new TunableNumber("flywheelMps", 10);
+    // private static TunableNumber hoodDeg = new TunableNumber("hoodDeg", 40);
+
     public BallisticsManager(
             Supplier<Pose3d> targetPoseSupplier,
             Supplier<Pose2d> robotPoseSupplier,
