@@ -51,7 +51,7 @@ public class LimelightVisionManager extends SubsystemBase {
     }
 
     public void enableInternalIMU() {
-        LimelightHelpers.SetIMUMode(limelightName, 4);
+        LimelightHelpers.SetIMUMode(limelightName, 0);
     }
 
     @Override
@@ -67,10 +67,14 @@ public class LimelightVisionManager extends SubsystemBase {
 
         updateLimelightCameraPose(turretRotation);
 
+        double queryTimestamp = Timer.getFPGATimestamp() - latency.in(Seconds);
+        Rotation2d historicalRotation = drivetrain.samplePoseAt(queryTimestamp).get().getRotation();
+
         LimelightHelpers.SetRobotOrientation(
                 limelightName,
-                state.Pose.getRotation().getDegrees(),
-                Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond),
+                historicalRotation.getDegrees(),
+                // Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond),
+                0,
                 0,
                 0,
                 0,

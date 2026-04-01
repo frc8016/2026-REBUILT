@@ -80,8 +80,8 @@ public final class Constants {
         public static final Distance TURRET_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(0);
         public static final Mass TURRET_WEIGHT = Kilograms.of(10);
-        public static final Distance PIVOT_FORWARD = Inches.of(-8.5);
-        public static final Distance PIVOT_LEFT = Inches.of(5.75);
+        public static final Distance PIVOT_FORWARD = Inches.of(-7.25);
+        public static final Distance PIVOT_LEFT = Inches.of(8);
         public static final Translation2d TURRET_OFFSET =
                 new Translation2d(PIVOT_FORWARD.in(Meters), PIVOT_LEFT.in(Meters));
     }
