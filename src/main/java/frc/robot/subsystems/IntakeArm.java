@@ -120,6 +120,10 @@ public class IntakeArm extends SubsystemBase {
                 .orElse(false);
     }
 
+    public Command lowerIntakeAndFinish() {
+        return this.arm.runTo(ArmConstants.DOWN_ANGLE, ArmConstants.TOGGLE_TOLERANCE);
+    }
+
     public Command toggleIntake() {
         return Commands.runOnce(
                 () ->

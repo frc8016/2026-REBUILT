@@ -11,7 +11,7 @@ public class IntakeRoller extends SubsystemBase {
             new SparkMax(8, MotorType.kBrushless); // Might need to change motor id
 
     public Command spinForwards() {
-        return new StartEndCommand(() -> this.intake.set(-0.5), () -> this.intake.set(0), this);
+        return new StartEndCommand(() -> this.intake.set(-1), () -> this.intake.set(0), this);
     }
 
     public Command spinBackwards() {

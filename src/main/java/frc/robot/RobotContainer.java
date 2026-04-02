@@ -83,17 +83,16 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        // Named commands for autonomous
+        NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntakeAndFinish());
+        NamedCommands.registerCommand("Shoot", buildAutoShootCommand());
+        NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         hood.setDefaultCommand(hood.lowerHood());
-
-        // Named commands for autonomous
-        NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntake());
-        NamedCommands.registerCommand("Shoot", buildShootCommand());
-        NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
 
         configureBindings();
 
@@ -167,6 +166,27 @@ public class RobotContainer {
                                                 .and(hood.isReady)
                                                 .and(turret.isReady))
                                 .andThen(spindexer.run().alongWith(feed.run())));
+    }
+
+    private Command buildAutoShootCommand() {
+        return Commands.deadline(
+                        Commands.waitUntil(
+                                        bottomFlywheel
+                                                .isReady
+                                                .and(topFlywheel.isReady)
+                                                .and(hood.isReady)
+                                                .and(turret.isReady))
+                                .withTimeout(2.0)
+                                .andThen(spindexer.run().alongWith(feed.run()).withTimeout(1)),
+                        bottomFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
+                        topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
+                        hood.setAngle(ballisticsManager.hoodAngleSupplier()),
+                        turret.setAngle(ballisticsManager.TX()))
+                .andThen(
+                        bottomFlywheel
+                                .idleFlywheel()
+                                .alongWith(topFlywheel.idleFlywheel(), hood.lowerHood())
+                                .withTimeout(0.02));
     }
 
     public Command getAutonomousCommand() {

@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -84,6 +85,7 @@ public final class Constants {
         public static final Distance PIVOT_LEFT = Inches.of(8);
         public static final Translation2d TURRET_OFFSET =
                 new Translation2d(PIVOT_FORWARD.in(Meters), PIVOT_LEFT.in(Meters));
+        public static final Angle TOGGLE_TOLERANCE = Degrees.of(5);
     }
 
     public static class FeedConstants {
@@ -148,6 +150,7 @@ public final class Constants {
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+        public static final AngularVelocity TOGGLE_TOLERANCE = RotationsPerSecond.of(1);
     }
 
     public static class TopFlyWheelConstants {
@@ -175,6 +178,7 @@ public final class Constants {
         public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
+        public static final AngularVelocity TOGGLE_TOLERANCE = RotationsPerSecond.of(1);
     }
 
     public static class TargetConstants {
@@ -262,6 +266,7 @@ public final class Constants {
         public static final Distance HOOD_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(23);
         public static final Mass HOOD_WEIGHT = Kilograms.of(1);
+        public static final Angle TOGGLE_TOLERANCE = Degrees.of(1);
     }
 
     public static class LimelightConstants {

@@ -100,6 +100,11 @@ public class Hood extends SubsystemBase {
         return hood.setAngle(() -> Degrees.of(90).minus(hoodAngle.get()));
     }
 
+    public Command setAngleAndFinish(Supplier<Angle> hoodAngle) {
+        return hood.runTo(
+                () -> Degrees.of(90).minus(hoodAngle.get()), HoodConstants.TOGGLE_TOLERANCE);
+    }
+
     public Command lowerHood() {
         return hood.setAngle(() -> HoodConstants.BOTTOM_SOFT_LIMIT);
     }
