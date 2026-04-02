@@ -90,12 +90,6 @@ public class BottomFlywheel extends SubsystemBase {
         return this.flywheel.run(() -> flywheelConfig.getAngularVelocity(velocity.get()));
     }
 
-    public Command spinFlywheelAndFinish(Supplier<LinearVelocity> velocity) {
-        return this.flywheel.runTo(
-                () -> flywheelConfig.getAngularVelocity(velocity.get()),
-                BottomFlyWheelConstants.TOGGLE_TOLERANCE);
-    }
-
     public Command idleFlywheel() {
         return this.flywheel.set(0);
         // return this.flywheel.run(

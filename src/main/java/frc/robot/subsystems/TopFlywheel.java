@@ -94,17 +94,6 @@ public class TopFlywheel extends SubsystemBase {
                                                         .PROPORTIONALITY_TO_BOTTOM_FLYWHEEL)));
     }
 
-    public Command spinFlywheelAndFinish(Supplier<LinearVelocity> velocity) {
-        return this.flywheel.runTo(
-                () ->
-                        flywheelConfig.getAngularVelocity(
-                                MetersPerSecond.of(
-                                        velocity.get().in(MetersPerSecond)
-                                                * TopFlyWheelConstants
-                                                        .PROPORTIONALITY_TO_BOTTOM_FLYWHEEL)),
-                TopFlyWheelConstants.TOGGLE_TOLERANCE);
-    }
-
     public Command idleFlywheel() {
         return this.flywheel.set(0);
         // return this.flywheel.run(

@@ -63,14 +63,14 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.6688251618871437,
-      "rotationDegrees": 148.78601409050273
+      "rotationDegrees": 122.26895199758319
     },
     {
-      "waypointRelativePos": 1.4958371877890801,
+      "waypointRelativePos": 1.4002659574468104,
       "rotationDegrees": 144.7797856593731
     },
     {
-      "waypointRelativePos": 2.3172987974098076,
+      "waypointRelativePos": 2.126329787234023,
       "rotationDegrees": 180.0
     }
   ],
@@ -95,7 +95,12 @@
       "name": "IntakeRollers",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": 2.1499605367008585,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeRollers"
+        }
+      }
     }
   ],
   "globalConstraints": {

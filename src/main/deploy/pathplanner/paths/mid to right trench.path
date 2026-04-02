@@ -66,11 +66,11 @@
       "rotationDegrees": -120.93874746359917
     },
     {
-      "waypointRelativePos": 1.2405180388529102,
+      "waypointRelativePos": 1.128989361702129,
       "rotationDegrees": -59.45508410199991
     },
     {
-      "waypointRelativePos": 2.5809435707678077,
+      "waypointRelativePos": 2.2300531914893558,
       "rotationDegrees": 0.0
     }
   ],
@@ -80,7 +80,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 0.9638081654483862,
       "constraints": {
-        "maxVelocity": 2.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -90,7 +90,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeRollers",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 2.0126282557221744,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeRollers"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

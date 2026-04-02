@@ -29,12 +29,6 @@
                       "data": {
                         "name": "IntakeArmDown"
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakeRollers"
-                      }
                     }
                   ]
                 }
@@ -43,22 +37,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "intake depo"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              }
-            ]
+            "pathName": "intake depo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

@@ -88,9 +88,8 @@ public class Turret extends SubsystemBase {
         return turret.setAngle(() -> turret.getAngle().minus(offset.get()));
     }
 
-    public Command setAngleAndFinish(Supplier<Angle> offset) {
-        return turret.runTo(
-                () -> turret.getAngle().minus(offset.get()), TurretConstants.TOGGLE_TOLERANCE);
+    public Command idleTurret() {
+        return turret.setAngle(Degrees.of(0));
     }
 
     public Angle getAngle() {

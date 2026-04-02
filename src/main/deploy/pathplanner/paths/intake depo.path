@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5,
+        "x": 0.5000000000000001,
         "y": 6.358884107493486
       },
       "isLocked": false,
@@ -20,7 +20,7 @@
         "y": 5.208270259849778
       },
       "prevControl": {
-        "x": 0.4999999999999998,
+        "x": 0.49999999999999983,
         "y": 6.155323770824464
       },
       "nextControl": null,
@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeRollers",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeRollers"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 3.0,

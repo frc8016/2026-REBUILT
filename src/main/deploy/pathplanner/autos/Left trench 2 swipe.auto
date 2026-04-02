@@ -42,21 +42,45 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LT to mid 2"
+            "name": "IntakeArmUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeArmDown"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to LT through 2"
+            "pathName": "LT to mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "mid to LT through"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeArmUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeArmDown"
           }
         }
       ]

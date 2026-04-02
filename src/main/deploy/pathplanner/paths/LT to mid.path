@@ -75,7 +75,12 @@
       "name": "IntakeRollers",
       "waypointRelativePos": 0.9786898184688249,
       "endWaypointRelativePos": 2.0,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "IntakeRollers"
+        }
+      }
     }
   ],
   "globalConstraints": {
