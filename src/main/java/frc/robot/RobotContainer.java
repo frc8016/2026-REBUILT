@@ -35,7 +35,7 @@ import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed =
-            1.0
+            0.8 // TODO: reset to one
                     * TunerConstants.kSpeedAt12Volts.in(
                             MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate =
@@ -135,7 +135,7 @@ public class RobotContainer {
         joystick.rightTrigger().whileTrue(buildShootCommand());
         joystick.leftTrigger()
                 .whileTrue(intakeRoller.spinForwards().alongWith(intakeArm.lowerIntake()));
-        joystick.leftBumper()
+        joystick.rightBumper()
                 .whileTrue(intakeRoller.spinBackwards().alongWith(intakeArm.lowerIntake()));
         joystick.b().whileTrue(spindexer.reverse().alongWith(feed.reverse()));
 
