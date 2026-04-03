@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,7 +35,7 @@ import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed =
-            1.0
+            0.8 // TODO: reset to one
                     * TunerConstants.kSpeedAt12Volts.in(
                             MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate =
@@ -83,17 +84,19 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        // Named commands for autonomous
+        NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntakeAndFinish());
+        NamedCommands.registerCommand("IntakeArmUp", intakeArm.raiseIntakeAndFinish());
+        NamedCommands.registerCommand("Shoot", buildAutoShootCommand());
+        NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
+        NamedCommands.registerCommand("ReverseFeed", spindexer.reverse().alongWith(feed.reverse()));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         hood.setDefaultCommand(hood.lowerHood());
-
-        // Named commands for autonomous
-        NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntake());
-        NamedCommands.registerCommand("Shoot", buildShootCommand());
-        NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
+        turret.setDefaultCommand(turret.idleTurret());
 
         configureBindings();
 
@@ -128,11 +131,11 @@ public class RobotContainer {
         RobotModeTriggers.disabled()
                 .whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.rightBumper().onTrue(intakeArm.toggleIntake());
+        joystick.leftBumper().onTrue(intakeArm.toggleIntake());
         joystick.rightTrigger().whileTrue(buildShootCommand());
         joystick.leftTrigger()
                 .whileTrue(intakeRoller.spinForwards().alongWith(intakeArm.lowerIntake()));
-        joystick.leftBumper()
+        joystick.rightBumper()
                 .whileTrue(intakeRoller.spinBackwards().alongWith(intakeArm.lowerIntake()));
         joystick.b().whileTrue(spindexer.reverse().alongWith(feed.reverse()));
 
@@ -169,6 +172,27 @@ public class RobotContainer {
                                 .andThen(spindexer.run().alongWith(feed.run())));
     }
 
+    private Command buildAutoShootCommand() {
+        return Commands.deadline(
+                        Commands.waitUntil(
+                                        bottomFlywheel
+                                                .isReady
+                                                .and(topFlywheel.isReady)
+                                                .and(hood.isReady)
+                                                .and(turret.isReady))
+                                .withTimeout(2.0)
+                                .andThen(spindexer.run().alongWith(feed.run()).withTimeout(1.5)),
+                        bottomFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
+                        topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
+                        hood.setAngle(ballisticsManager.hoodAngleSupplier()),
+                        turret.setAngle(ballisticsManager.TX()))
+                .andThen(
+                        bottomFlywheel
+                                .idleFlywheel()
+                                .alongWith(topFlywheel.idleFlywheel(), hood.lowerHood())
+                                .withTimeout(0.02));
+    }
+
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
@@ -184,6 +208,7 @@ public class RobotContainer {
                 Math.sqrt(
                         Math.pow(drivetrain.getState().Speeds.vxMetersPerSecond, 2)
                                 + Math.pow(drivetrain.getState().Speeds.vyMetersPerSecond, 2)));
+        SmartDashboard.putNumber("MatchTime", DriverStation.getMatchTime());
     }
 
     public void onDisabledExit() {
