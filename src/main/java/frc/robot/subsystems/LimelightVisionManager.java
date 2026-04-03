@@ -83,28 +83,31 @@ public class LimelightVisionManager extends SubsystemBase {
         var llEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
         if (llEstimate == null || llEstimate.tagCount == 0) return;
 
-        Pose2d robotPose = llEstimate.pose;
+        Pose2d llPose = llEstimate.pose;
 
         // Hard rejects
+        double distanceToOdometry =
+                state.Pose.getTranslation().getDistance(llPose.getTranslation());
         double omegaDegPerSec = Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond);
-        if (Math.abs(omegaDegPerSec) > 900.0) return;
-        if (llEstimate.avgTagDist > 7.0) return;
+        if (Math.abs(omegaDegPerSec) > 360.0) return;
+        if (llEstimate.avgTagDist > 3.0 || llEstimate.avgTagDist < 0.5) return;
+        if (distanceToOdometry > 0.5) return;
 
         // Build Covariance matrix
         double linearSpeed =
                 Math.hypot(state.Speeds.vxMetersPerSecond, state.Speeds.vyMetersPerSecond);
         boolean highSpeed = linearSpeed > 3.0;
         boolean highRotation = Math.abs(omegaDegPerSec) > 540.0;
-        double poseDiff = state.Pose.getTranslation().getDistance(robotPose.getTranslation());
+        double poseDiff = state.Pose.getTranslation().getDistance(llPose.getTranslation());
         double xyStdDev = computeXYStdDev(llEstimate, poseDiff, highSpeed, highRotation);
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
         double timestamp = Timer.getFPGATimestamp() - latency.in(Seconds);
 
         drivetrain.addVisionMeasurement(
-                robotPose, timestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+                llPose, timestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
-        limelightPose.setRobotPose(robotPose);
+        limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);
     }
 
