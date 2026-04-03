@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.LimelightHelpers;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class LimelightVisionManager extends SubsystemBase {
@@ -59,7 +60,10 @@ public class LimelightVisionManager extends SubsystemBase {
         var state = drivetrain.getState();
 
         // Latency compensation
-        Time latency = Milliseconds.of(LimelightHelpers.getLatency_Capture(limelightName));
+        Time latency =
+                Milliseconds.of(
+                        LimelightHelpers.getLatency_Capture(limelightName)
+                                + LimelightHelpers.getLatency_Pipeline(limelightName));
         Angle turretAngle = turretAngleSupplier.get().negate(); // CCW negative
         AngularVelocity turretVel = turretAngularVelSupplier.get().negate();
         Angle compensatedTurretAngle = compensateForLatency(turretAngle, turretVel, latency);
@@ -67,8 +71,10 @@ public class LimelightVisionManager extends SubsystemBase {
 
         updateLimelightCameraPose(turretRotation);
 
-        double queryTimestamp = Timer.getFPGATimestamp() - latency.in(Seconds);
-        Rotation2d historicalRotation = drivetrain.samplePoseAt(queryTimestamp).get().getRotation();
+        double latencyAdjustedTimestamp = Timer.getFPGATimestamp() - latency.in(Seconds);
+        Optional<Pose2d> sample = drivetrain.samplePoseAt(latencyAdjustedTimestamp);
+        if (sample.isEmpty()) return;
+        Rotation2d historicalRotation = sample.get().getRotation();
 
         LimelightHelpers.SetRobotOrientation(
                 limelightName,
@@ -97,15 +103,13 @@ public class LimelightVisionManager extends SubsystemBase {
         double linearSpeed =
                 Math.hypot(state.Speeds.vxMetersPerSecond, state.Speeds.vyMetersPerSecond);
         boolean highSpeed = linearSpeed > 3.0;
-        boolean highRotation = Math.abs(omegaDegPerSec) > 540.0;
+        boolean highRotation = Math.abs(omegaDegPerSec) > 180.0;
         double poseDiff = state.Pose.getTranslation().getDistance(llPose.getTranslation());
         double xyStdDev = computeXYStdDev(llEstimate, poseDiff, highSpeed, highRotation);
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
-        double timestamp = Timer.getFPGATimestamp() - latency.in(Seconds);
-
         drivetrain.addVisionMeasurement(
-                llPose, timestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+                llPose, latencyAdjustedTimestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
         limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);
