@@ -47,7 +47,7 @@ public class IntakeArm extends SubsystemBase {
                     //                         * ArmConstants.MASS.in(Kilograms)
                     //                         * Math.pow(ArmConstants.ARM_LENGTH.in(Meters), 2)))
                     .withExponentialProfile(
-                            Volts.of(12), DegreesPerSecond.of(45), DegreesPerSecondPerSecond.of(45))
+                            Volts.of(12), DegreesPerSecond.of(45), DegreesPerSecondPerSecond.of(30))
                     .withIdleMode(MotorMode.BRAKE)
                     .withTelemetry("intakeMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(ArmConstants.CURRENT_LIMIT)

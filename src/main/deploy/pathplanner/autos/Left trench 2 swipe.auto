@@ -54,6 +54,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "LT to mid"
@@ -81,6 +87,12 @@
           "type": "named",
           "data": {
             "name": "IntakeArmDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

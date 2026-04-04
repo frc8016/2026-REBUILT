@@ -75,15 +75,17 @@ public class LimelightVisionManager extends SubsystemBase {
         Optional<Pose2d> sample = drivetrain.samplePoseAt(latencyAdjustedTimestamp);
         if (sample.isEmpty()) return;
         Rotation2d historicalRotation = sample.get().getRotation();
+        double pitch = drivetrain.getPigeon2().getPitch().getValueAsDouble();
+        double roll = drivetrain.getPigeon2().getRoll().getValueAsDouble();
 
         LimelightHelpers.SetRobotOrientation(
                 limelightName,
                 historicalRotation.getDegrees(),
                 // Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond),
                 0,
+                pitch,
                 0,
-                0,
-                0,
+                roll,
                 0);
 
         var llEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
@@ -96,7 +98,7 @@ public class LimelightVisionManager extends SubsystemBase {
                 state.Pose.getTranslation().getDistance(llPose.getTranslation());
         double omegaDegPerSec = Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond);
         if (Math.abs(omegaDegPerSec) > 360.0) return;
-        if (llEstimate.avgTagDist > 3.0 || llEstimate.avgTagDist < 0.5) return;
+        if (llEstimate.avgTagDist > 5.0 || llEstimate.avgTagDist < 0.5) return;
         if (distanceToOdometry > 0.5) return;
 
         // Build Covariance matrix
@@ -109,7 +111,9 @@ public class LimelightVisionManager extends SubsystemBase {
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
         drivetrain.addVisionMeasurement(
-                llPose, latencyAdjustedTimestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+                llPose,
+                llEstimate.timestampSeconds,
+                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
         limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);
