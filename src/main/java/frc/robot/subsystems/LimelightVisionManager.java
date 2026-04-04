@@ -111,7 +111,9 @@ public class LimelightVisionManager extends SubsystemBase {
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
         drivetrain.addVisionMeasurement(
-                llPose, latencyAdjustedTimestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+                llPose,
+                llEstimate.timestampSeconds,
+                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
         limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);
