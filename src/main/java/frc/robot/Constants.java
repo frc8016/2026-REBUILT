@@ -286,21 +286,10 @@ public final class Constants {
         public static final double VISION_MAX_DIST = 3;
         public static final double MAX_TAG_AMBIGUITY = 0.15;
 
-        public static final String LOWER_RIGHT_CAMERA_NAME = "ArducamOV2311Cam1";
-        public static final String LOWER_LEFT_CAMERA_NAME = "ArducamOV2311Cam2";
+        public static final String LOWER_RIGHT_CAMERA_NAME = "RightCamera";
+        public static final String LOWER_LEFT_CAMERA_NAME = "LeftCamera";
 
         public static final Transform3d LEFT_CAMERA_POSE =
-                new Transform3d(
-                        new Translation3d(
-                                Units.inchesToMeters(3), // x: forward positive
-                                Units.inchesToMeters(-11.25), // y: left positive
-                                Units.inchesToMeters(17)), // z: up positive
-                        new Rotation3d(
-                                Units.degreesToRadians(0),
-                                Units.degreesToRadians(-15),
-                                Units.degreesToRadians(-90)));
-
-        public static final Transform3d RIGHT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
                                 Units.inchesToMeters(3), // x: forward positive
@@ -308,8 +297,19 @@ public final class Constants {
                                 Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),
-                                Units.degreesToRadians(-32),
+                                Units.degreesToRadians(-15),
                                 Units.degreesToRadians(90)));
+
+        public static final Transform3d RIGHT_CAMERA_POSE =
+                new Transform3d(
+                        new Translation3d(
+                                Units.inchesToMeters(3), // x: forward positive
+                                Units.inchesToMeters(-11.25), // y: left positive
+                                Units.inchesToMeters(17)), // z: up positive
+                        new Rotation3d(
+                                Units.degreesToRadians(0),
+                                Units.degreesToRadians(-32),
+                                Units.degreesToRadians(-90)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout TAG_LAYOUT =
