@@ -35,7 +35,7 @@ import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed =
-            0.8 // TODO: reset to one
+            0.95 // TODO: reset to one
                     * TunerConstants.kSpeedAt12Volts.in(
                             MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate =

@@ -96,7 +96,7 @@ public class LimelightVisionManager extends SubsystemBase {
                 state.Pose.getTranslation().getDistance(llPose.getTranslation());
         double omegaDegPerSec = Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond);
         if (Math.abs(omegaDegPerSec) > 360.0) return;
-        if (llEstimate.avgTagDist > 3.0 || llEstimate.avgTagDist < 0.5) return;
+        if (llEstimate.avgTagDist > 5.0 || llEstimate.avgTagDist < 0.5) return;
         if (distanceToOdometry > 0.5) return;
 
         // Build Covariance matrix
