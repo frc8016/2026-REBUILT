@@ -26,6 +26,7 @@ import frc.robot.subsystems.Feed;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.IntakeArm;
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.LimelightVisionManager;
 import frc.robot.subsystems.PhotonVisionManager;
 import frc.robot.subsystems.Spindexer;
@@ -51,6 +52,7 @@ public class RobotContainer {
     private final Turret turret = new Turret();
     private final LimelightVisionManager limelightVision =
             new LimelightVisionManager(drivetrain, turret::getAngle, turret::getAngularVelocity);
+    private final Lights lights = new Lights();
 
     public final TargetSelector targetSelector =
             new TargetSelector(() -> drivetrain.getState().Pose);
@@ -99,6 +101,8 @@ public class RobotContainer {
         turret.setDefaultCommand(turret.idleTurret());
 
         configureBindings();
+
+        lights.initialize();
 
         // Warmup PathPlanner to avoid Java pauses
         FollowPathCommand.warmupCommand().schedule();
