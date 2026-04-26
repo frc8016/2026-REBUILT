@@ -88,7 +88,7 @@ public class LimelightVisionManager extends SubsystemBase {
                 roll,
                 0);
 
-        var llEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+        var llEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
         if (llEstimate == null || llEstimate.tagCount == 0) return;
 
         Pose2d llPose = llEstimate.pose;
