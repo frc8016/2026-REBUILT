@@ -64,8 +64,8 @@ public class LimelightVisionManager extends SubsystemBase {
                 Milliseconds.of(
                         LimelightHelpers.getLatency_Capture(limelightName)
                                 + LimelightHelpers.getLatency_Pipeline(limelightName));
-        Angle turretAngle = turretAngleSupplier.get().negate(); // CCW negative
-        AngularVelocity turretVel = turretAngularVelSupplier.get().negate();
+        Angle turretAngle = turretAngleSupplier.get();
+        AngularVelocity turretVel = turretAngularVelSupplier.get();
         Angle compensatedTurretAngle = compensateForLatency(turretAngle, turretVel, latency);
         Rotation2d turretRotation = Rotation2d.fromDegrees(compensatedTurretAngle.in(Degrees));
 
@@ -88,7 +88,7 @@ public class LimelightVisionManager extends SubsystemBase {
                 roll,
                 0);
 
-        var llEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+        var llEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
         if (llEstimate == null || llEstimate.tagCount == 0) return;
 
         Pose2d llPose = llEstimate.pose;

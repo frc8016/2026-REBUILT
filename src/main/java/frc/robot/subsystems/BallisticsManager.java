@@ -96,7 +96,7 @@ public class BallisticsManager extends SubsystemBase {
         return () -> {
             // Get fresh data inside the lambda
             Pose2d robotPose = robotPoseSupplier.get();
-            Rotation2d turretRot = new Rotation2d(-turretAngleSupplier.get().in(Radian));
+            Rotation2d turretRot = new Rotation2d(turretAngleSupplier.get().in(Radian));
 
             // Create the transform (Fixed Offset, Current Rotation)
             Transform2d robotToTurret = new Transform2d(TurretConstants.TURRET_OFFSET, turretRot);

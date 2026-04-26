@@ -56,7 +56,8 @@ public class Turret extends SubsystemBase {
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(TurretConstants.STATOR_CURRENT_LIMIT)
                     .withClosedLoopRampRate(TurretConstants.CLOSED_LOOP_RAMP_RATE)
-                    .withOpenLoopRampRate(TurretConstants.OPEN_LOOP_RAMP_RATE);
+                    .withOpenLoopRampRate(TurretConstants.OPEN_LOOP_RAMP_RATE)
+                    .withMotorInverted(true);
     private final SmartMotorController TurrerSMC =
             new SparkWrapper(m_turretmotor, DCMotor.getNeo550(1), m_turretmotorconfig);
 
@@ -85,7 +86,7 @@ public class Turret extends SubsystemBase {
                     .debounce(TurretConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
 
     public Command setAngle(Supplier<Angle> offset) {
-        return turret.setAngle(() -> turret.getAngle().minus(offset.get()));
+        return turret.setAngle(() -> turret.getAngle().plus(offset.get()));
     }
 
     public Command idleTurret() {
