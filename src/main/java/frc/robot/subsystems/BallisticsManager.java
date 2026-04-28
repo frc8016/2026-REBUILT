@@ -5,12 +5,11 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
@@ -21,12 +20,10 @@ public class BallisticsManager extends SubsystemBase {
 
     private final Supplier<Pose3d> targetPoseSupplier;
     private final Supplier<Pose2d> robotPoseSupplier;
-    private final Supplier<Angle> turretAngleSupplier; // CCW negative
 
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
     private Angle hoodAngle = Degree.of(0);
     private Angle targetHorizontalAngle = Degree.of(0);
-    private Field2d turretPoseField = new Field2d();
     private double targetDistanceMeters = 0;
     private double tempTargetHorizontalAngle = 0;
 
@@ -34,12 +31,9 @@ public class BallisticsManager extends SubsystemBase {
     // private static TunableNumber hoodDeg = new TunableNumber("hoodDeg", 40);
 
     public BallisticsManager(
-            Supplier<Pose3d> targetPoseSupplier,
-            Supplier<Pose2d> robotPoseSupplier,
-            Supplier<Angle> turretAngleSupplier) {
+            Supplier<Pose3d> targetPoseSupplier, Supplier<Pose2d> robotPoseSupplier) {
         this.targetPoseSupplier = targetPoseSupplier;
         this.robotPoseSupplier = robotPoseSupplier;
-        this.turretAngleSupplier = turretAngleSupplier;
     }
 
     @Override
@@ -98,7 +92,7 @@ public class BallisticsManager extends SubsystemBase {
 
             // Create the transform (Fixed Offset, Current Rotation)
             Transform2d robotToTurret =
-                    new Transform2d(TurretConstants.TURRET_OFFSET, robotPose.getRotation());
+                    new Transform2d(TurretConstants.TURRET_OFFSET, new Rotation2d());
 
             // Include turret offset
             Pose2d turretForwardPose = robotPose.transformBy(robotToTurret);
@@ -106,8 +100,6 @@ public class BallisticsManager extends SubsystemBase {
             // Compute vector from turret to target in 2D
             Translation2d targetTranslation =
                     targetPose2d.relativeTo(turretForwardPose).getTranslation();
-            SmartDashboard.putNumber(
-                    "targetHorizontalAngleFunctionCalledTimestamp", Timer.getFPGATimestamp());
 
             // Apply to the robot's global pose
             return targetTranslation;
