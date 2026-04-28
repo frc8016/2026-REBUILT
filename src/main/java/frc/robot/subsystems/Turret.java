@@ -119,6 +119,8 @@ public class Turret extends SubsystemBase {
             turretAngularVelocity = DegreesPerSecond.of(deltaDeg / deltaTime);
         }
 
+        SmartDashboard.putNumber("turretVelocity", turretAngularVelocity.in(DegreesPerSecond));
+
         lastAngle = currentAngle;
         lastTimestamp = now;
     }
