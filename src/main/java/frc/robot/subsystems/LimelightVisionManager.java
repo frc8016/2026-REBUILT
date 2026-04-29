@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Seconds;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -80,7 +79,7 @@ public class LimelightVisionManager extends SubsystemBase {
 
         LimelightHelpers.SetRobotOrientation(
                 limelightName,
-                historicalRotation.getDegrees(),
+                state.Pose.getRotation().getDegrees(),
                 // Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond),
                 0,
                 pitch,
@@ -97,7 +96,7 @@ public class LimelightVisionManager extends SubsystemBase {
         double distanceToOdometry =
                 state.Pose.getTranslation().getDistance(llPose.getTranslation());
         double omegaDegPerSec = Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond);
-        if (Math.abs(omegaDegPerSec) > 360.0) return;
+        if (Math.abs(omegaDegPerSec) > 180.0) return;
         if (llEstimate.avgTagDist > 5.0 || llEstimate.avgTagDist < 0.5) return;
         if (distanceToOdometry > 0.5) return;
 
@@ -110,10 +109,10 @@ public class LimelightVisionManager extends SubsystemBase {
         double xyStdDev = computeXYStdDev(llEstimate, poseDiff, highSpeed, highRotation);
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
-        drivetrain.addVisionMeasurement(
-                llPose,
-                llEstimate.timestampSeconds,
-                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+        // drivetrain.addVisionMeasurement(
+        //         llPose,
+        //         llEstimate.timestampSeconds,
+        //         VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
         limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);

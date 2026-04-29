@@ -85,8 +85,13 @@ public class Turret extends SubsystemBase {
             new Trigger(this::isReady)
                     .debounce(TurretConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
 
-    public Command setAngle(Supplier<Angle> offset) {
-        return turret.setAngle(() -> turret.getAngle().plus(offset.get()));
+    public Command setAngle(Supplier<Angle> robotRelativeAngle) {
+        return turret.setAngle(
+                () -> {
+                    double rawDegrees = robotRelativeAngle.get().in(Degrees);
+                    double wrappedDegrees = ((rawDegrees % 360) + 360) % 360;
+                    return Degrees.of(wrappedDegrees);
+                });
     }
 
     public Command idleTurret() {
@@ -118,6 +123,8 @@ public class Turret extends SubsystemBase {
             double deltaDeg = currentAngle.minus(lastAngle).in(Degrees);
             turretAngularVelocity = DegreesPerSecond.of(deltaDeg / deltaTime);
         }
+
+        SmartDashboard.putNumber("turretVelocity", turretAngularVelocity.in(DegreesPerSecond));
 
         lastAngle = currentAngle;
         lastTimestamp = now;

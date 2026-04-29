@@ -53,7 +53,7 @@ public final class Constants {
     }
 
     public static class TurretConstants {
-        public static final double P_VALUE = 60;
+        public static final double P_VALUE = 53;
         public static final double I_VALUE = 0.0;
         public static final double D_VALUE = 0.0;
         public static final double OUTPUTRANGE_MIN_VALUE = -1.0;

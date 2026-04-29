@@ -57,9 +57,7 @@ public class RobotContainer {
 
     private final BallisticsManager ballisticsManager =
             new BallisticsManager(
-                    targetSelector.getCurrentTarget(),
-                    () -> drivetrain.getState().Pose,
-                    turret::getAngle);
+                    targetSelector.getCurrentTarget(), () -> drivetrain.getState().Pose);
 
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
