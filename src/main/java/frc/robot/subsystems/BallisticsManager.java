@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,6 +52,8 @@ public class BallisticsManager extends SubsystemBase {
         targetDistanceMeters = targetTranslation.getNorm();
 
         if (targetDistanceMeters < 1E-6) return;
+
+        targetHorizontalAngle = Degrees.of(tempTargetHorizontalAngle);
 
         // Lookup ballistics tables using horizontal distance
         double flywheelMps =
