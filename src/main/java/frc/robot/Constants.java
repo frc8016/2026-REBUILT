@@ -204,9 +204,11 @@ public final class Constants {
         // Distance (meters) → flywheel surface speed (m/s)
         public static final InterpolatingDoubleTreeMap FLYWHEEL_SPEED_MAP =
                 new InterpolatingDoubleTreeMap();
+        // Distance (meters) → TOF (s)
+        public static final InterpolatingDoubleTreeMap TIME_OF_FLIGHT =
+                new InterpolatingDoubleTreeMap();
 
         static {
-            // Values derived from original physics model (z = 1.4478 m hub height)
             HOOD_ANGLE_MAP.put(1.72, 67.0);
             HOOD_ANGLE_MAP.put(2.0, 67.0);
             HOOD_ANGLE_MAP.put(2.5, 63.0);
@@ -220,7 +222,6 @@ public final class Constants {
             HOOD_ANGLE_MAP.put(7.0, 55.0);
             HOOD_ANGLE_MAP.put(8.0, 60.0);
 
-            // velocity = d * 0.5 + 7.5, clamped to [7.0, 13.0]
             FLYWHEEL_SPEED_MAP.put(1.72, 10.0);
             FLYWHEEL_SPEED_MAP.put(2.0, 10.5);
             FLYWHEEL_SPEED_MAP.put(2.5, 11.0);
@@ -233,6 +234,11 @@ public final class Constants {
             FLYWHEEL_SPEED_MAP.put(6.0, 16.0);
             FLYWHEEL_SPEED_MAP.put(7.0, 18.0);
             FLYWHEEL_SPEED_MAP.put(8.0, 20.0);
+
+            TIME_OF_FLIGHT.put(1.72, 0.87);
+            TIME_OF_FLIGHT.put(2.5, 1.07);
+            TIME_OF_FLIGHT.put(3.0, 1.15);
+            TIME_OF_FLIGHT.put(4.0, 1.22);
         }
     }
 
