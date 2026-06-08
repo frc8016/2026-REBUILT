@@ -6,15 +6,12 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BallisticsManagerConstants;
-import frc.robot.Constants.TurretConstants;
 import java.util.function.Supplier;
 
 public class BallisticsManager extends SubsystemBase {
@@ -90,19 +87,9 @@ public class BallisticsManager extends SubsystemBase {
                             targetPose3d.getY(),
                             targetPose3d.getRotation().toRotation2d());
 
-            // Get fresh data inside the lambda
-            Pose2d robotPose = robotPoseSupplier.get();
-
-            // Create the transform (Fixed Offset, Current Rotation)
-            Transform2d robotToTurret =
-                    new Transform2d(TurretConstants.TURRET_OFFSET, new Rotation2d());
-
-            // Include turret offset
-            Pose2d turretForwardPose = robotPose.transformBy(robotToTurret);
-
             // Compute vector from turret to target in 2D
             Translation2d targetTranslation =
-                    targetPose2d.relativeTo(turretForwardPose).getTranslation();
+                    targetPose2d.relativeTo(robotPoseSupplier.get()).getTranslation();
 
             // Apply to the robot's global pose
             return targetTranslation;

@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.Constants.TurretConstants;
 import frc.robot.LimelightHelpers;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -127,8 +126,7 @@ public class LimelightVisionManager extends SubsystemBase {
         // Calculate current camera position relative to robot center
         // Translation = RobotToTurretCenter + (TurretCenterToCamera rotated by turret angle)
         Translation2d camLocation =
-                TurretConstants.TURRET_OFFSET.plus(
-                        LimelightConstants.CAM_OFFSET_FROM_TURRET_CENTER.rotateBy(turretRotation));
+                LimelightConstants.CAM_OFFSET_FROM_TURRET_CENTER.rotateBy(turretRotation);
 
         LimelightHelpers.setCameraPose_RobotSpace(
                 limelightName,
