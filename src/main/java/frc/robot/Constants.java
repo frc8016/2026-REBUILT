@@ -292,8 +292,8 @@ public final class Constants {
         public static final Transform3d LEFT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
-                                Units.inchesToMeters(3), // x: forward positive
-                                Units.inchesToMeters(11.25), // y: left positive
+                                Units.inchesToMeters(10.75), // x: forward positive
+                                Units.inchesToMeters(3.25), // y: left positive
                                 Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),
@@ -303,8 +303,8 @@ public final class Constants {
         public static final Transform3d RIGHT_CAMERA_POSE =
                 new Transform3d(
                         new Translation3d(
-                                Units.inchesToMeters(3), // x: forward positive
-                                Units.inchesToMeters(-11.25), // y: left positive
+                                Units.inchesToMeters(10.75), // x: forward positive
+                                Units.inchesToMeters(-19.25), // y: left positive
                                 Units.inchesToMeters(17)), // z: up positive
                         new Rotation3d(
                                 Units.degreesToRadians(0),

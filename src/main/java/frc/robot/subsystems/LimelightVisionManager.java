@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -109,10 +110,10 @@ public class LimelightVisionManager extends SubsystemBase {
         double xyStdDev = computeXYStdDev(llEstimate, poseDiff, highSpeed, highRotation);
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
-        // drivetrain.addVisionMeasurement(
-        //         llPose,
-        //         llEstimate.timestampSeconds,
-        //         VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+        drivetrain.addVisionMeasurement(
+                llPose,
+                llEstimate.timestampSeconds,
+                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
         limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);
