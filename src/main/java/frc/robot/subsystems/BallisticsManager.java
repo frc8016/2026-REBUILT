@@ -1,37 +1,48 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degree;
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static frc.robot.Constants.BallisticsManagerConstants.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BallisticsManagerConstants;
+import frc.robot.Constants.TurretConstants;
 import java.util.function.Supplier;
 
 public class BallisticsManager extends SubsystemBase {
 
     private final Supplier<Pose3d> targetPoseSupplier;
     private final Supplier<Pose2d> robotPoseSupplier;
+    private final Supplier<Angle> turretAngleSupplier; // CCW negative
+    private final Supplier<ChassisSpeeds> chassisSpeedsSupplier;
 
     private LinearVelocity flywheelVelocity = MetersPerSecond.of(0);
     private Angle hoodAngle = Degree.of(0);
     private Angle targetHorizontalAngle = Degree.of(0);
     private double targetDistanceMeters = 0;
     private double tempTargetHorizontalAngle = 0;
+    private double compensatedTargetDistanceMeters = 0;
 
     // private static TunableNumber flywheelMps = new TunableNumber("flywheelMps", 10);
     // private static TunableNumber hoodDeg = new TunableNumber("hoodDeg", 40);
 
     public BallisticsManager(
-            Supplier<Pose3d> targetPoseSupplier, Supplier<Pose2d> robotPoseSupplier) {
+            Supplier<Pose3d> targetPoseSupplier,
+            Supplier<Pose2d> robotPoseSupplier,
+            Supplier<Angle> turretAngleSupplier,
+            Supplier<ChassisSpeeds> chassisSpeedsSupplier) {
         this.targetPoseSupplier = targetPoseSupplier;
         this.robotPoseSupplier = robotPoseSupplier;
+        this.turretAngleSupplier = turretAngleSupplier;
+        this.chassisSpeedsSupplier = chassisSpeedsSupplier;
     }
 
     @Override
@@ -50,15 +61,23 @@ public class BallisticsManager extends SubsystemBase {
 
         if (targetDistanceMeters < 1E-6) return;
 
-        targetHorizontalAngle = Degrees.of(tempTargetHorizontalAngle);
+        double tof = TIME_OF_FLIGHT.get(targetDistanceMeters);
 
-        // Lookup ballistics tables using horizontal distance
-        double flywheelMps =
-                BallisticsManagerConstants.FLYWHEEL_SPEED_MAP.get(targetDistanceMeters);
-        double hoodDeg = BallisticsManagerConstants.HOOD_ANGLE_MAP.get(targetDistanceMeters);
+        Translation2d turretFieldVelocity =
+                new Translation2d(
+                        chassisSpeedsSupplier.get().vxMetersPerSecond,
+                        chassisSpeedsSupplier.get().vyMetersPerSecond);
 
-        flywheelVelocity = MetersPerSecond.of(flywheelMps);
-        hoodAngle = Degree.of(hoodDeg);
+        Translation2d compensatedTargetTranslation =
+                targetTranslation.plus(turretFieldVelocity.times(tof));
+        compensatedTargetDistanceMeters = compensatedTargetTranslation.getNorm();
+
+        double compensatedFlywheelMps = FLYWHEEL_SPEED_MAP.get(compensatedTargetDistanceMeters);
+        double compensatedHoodDeg = HOOD_ANGLE_MAP.get(compensatedTargetDistanceMeters);
+
+        flywheelVelocity = MetersPerSecond.of(compensatedFlywheelMps);
+        hoodAngle = Degree.of(compensatedHoodDeg);
+        targetHorizontalAngle = compensatedTargetTranslation.getAngle().getMeasure();
 
         // targetHorizontalAngle = targetTranslation.getAngle().getMeasure();
 
@@ -87,9 +106,19 @@ public class BallisticsManager extends SubsystemBase {
                             targetPose3d.getY(),
                             targetPose3d.getRotation().toRotation2d());
 
+            // Get fresh data inside the lambda
+            Pose2d robotPose = robotPoseSupplier.get();
+
+            // Create the transform (Fixed Offset, Current Rotation)
+            Transform2d robotToTurret =
+                    new Transform2d(TurretConstants.TURRET_OFFSET, new Rotation2d());
+
+            // Include turret offset
+            Pose2d turretForwardPose = robotPose.transformBy(robotToTurret);
+
             // Compute vector from turret to target in 2D
             Translation2d targetTranslation =
-                    targetPose2d.relativeTo(robotPoseSupplier.get()).getTranslation();
+                    targetPose2d.relativeTo(turretForwardPose).getTranslation();
 
             // Apply to the robot's global pose
             return targetTranslation;
