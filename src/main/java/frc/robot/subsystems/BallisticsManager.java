@@ -69,7 +69,7 @@ public class BallisticsManager extends SubsystemBase {
                         chassisSpeedsSupplier.get().vyMetersPerSecond);
 
         Translation2d compensatedTargetTranslation =
-                targetTranslation.plus(turretFieldVelocity.times(tof));
+                targetTranslation.minus(turretFieldVelocity.times(tof));
         compensatedTargetDistanceMeters = compensatedTargetTranslation.getNorm();
 
         double compensatedFlywheelMps = FLYWHEEL_SPEED_MAP.get(compensatedTargetDistanceMeters);
