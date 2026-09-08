@@ -52,12 +52,60 @@
         "y": 3.5340645695364232
       },
       "prevControl": {
-        "x": 7.703725165562915,
-        "y": 2.0820778145695376
+        "x": 7.738043667746521,
+        "y": 2.083341895667946
+      },
+      "nextControl": {
+        "x": 7.6244483985765115,
+        "y": 4.4169513641755636
+      },
+      "isLocked": false,
+      "linkedName": "mid right"
+    },
+    {
+      "anchor": {
+        "x": 6.537769869513642,
+        "y": 3.9112692763938313
+      },
+      "prevControl": {
+        "x": 6.774472123368921,
+        "y": 4.3093594306049825
+      },
+      "nextControl": {
+        "x": 6.047212542427139,
+        "y": 3.0862410444756168
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.924495848161329,
+        "y": 0.6736506622516549
+      },
+      "prevControl": {
+        "x": 6.677639383155398,
+        "y": 0.6727520759193351
+      },
+      "nextControl": {
+        "x": 4.751686666165928,
+        "y": 0.67504995767463
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.616382450331126,
+        "y": 0.6736506622516549
+      },
+      "prevControl": {
+        "x": 4.633392645314355,
+        "y": 0.6619928825622776
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "mid right"
+      "linkedName": "RT through"
     }
   ],
   "rotationTargets": [
@@ -68,6 +116,18 @@
     {
       "waypointRelativePos": 2.3098982423681798,
       "rotationDegrees": 104.74625134472768
+    },
+    {
+      "waypointRelativePos": 3.063829787234029,
+      "rotationDegrees": 136.90918047312735
+    },
+    {
+      "waypointRelativePos": 4.180851063829788,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 4.75531914893619,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
@@ -109,7 +169,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 165.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "right trench",
