@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Meters;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -9,7 +10,9 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.TargetConstants;
+import frc.robot.Constants.TopFlyWheelConstants;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -50,8 +53,8 @@ public class TargetSelector extends SubsystemBase {
 
         if (alliance.isPresent()) { // safety to make sure there is an alliance
             if (x.lte(
-                    TargetConstants.DRIVERSTATION_TO_TRENCH.plus(
-                            TargetConstants.ROBOT_WIDTH_WITH_BUMPERS.div(
+                    TargetConstants.DRIVERSTATION_TO_ALLIANCE_SIDE.plus(
+                            TargetConstants.TURRET_TO_CLOSE_BUMPER.div(
                                     2)))) { // if robot is in home area
                 target = hubTarget;
             } else { // if robot is anywhere else
@@ -71,6 +74,30 @@ public class TargetSelector extends SubsystemBase {
             }
         }
     }
+
+    private boolean canShoot() {
+        Pose2d swervePose = swervePoseSupplier.get();
+        Distance x = Meters.of(swervePose.getX());
+
+        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+            x = TargetConstants.FIELD_LENGTH.minus(x);
+        }
+        if (x.lte(
+                TargetConstants.DRIVERSTATION_TO_TRENCH_CLOSE.plus(
+                        TargetConstants.TURRET_TO_CLOSE_BUMPER.div(2)))) {
+            if (x.gte(
+                    TargetConstants.DRIVERSTATION_TO_TRENCH_FAR.plus(
+                            TargetConstants.TURRET_TO_CLOSE_BUMPER.div(2)))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public final Trigger canShoot =
+            new Trigger(this::canShoot)
+                    // Stay ready for short time after to prevent flapping
+                    .debounce(TopFlyWheelConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
 
     public Supplier<Pose3d> getCurrentTarget() {
         return () -> target;

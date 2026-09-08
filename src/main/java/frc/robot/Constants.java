@@ -180,9 +180,13 @@ public final class Constants {
     public static class TargetConstants {
         public static final Distance FIELD_LENGTH = Meters.of(Units.inchesToMeters(651.22));
         public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
-        public static final Distance DRIVERSTATION_TO_TRENCH =
+        public static final Distance DRIVERSTATION_TO_ALLIANCE_SIDE =
                 Meters.of(Units.inchesToMeters(156.06));
-        public static final Distance ROBOT_WIDTH_WITH_BUMPERS = Meters.of(Units.inchesToMeters(33));
+        public static final Distance DRIVERSTATION_TO_TRENCH_CLOSE =
+                Meters.of(Units.inchesToMeters(172.11));
+        public static final Distance DRIVERSTATION_TO_TRENCH_FAR =
+                Meters.of(Units.inchesToMeters(192.11));
+        public static final Distance TURRET_TO_CLOSE_BUMPER = Meters.of(Units.inchesToMeters(8));
         public static final Pose3d HUB_TARGET_BLUE =
                 new Pose3d(
                         Units.inchesToMeters(182.11),
