@@ -11,6 +11,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -93,7 +95,21 @@ public class RobotContainer {
                 "StopShoot", Commands.runOnce(buildAutoShootCommand()::cancel));
         NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
         NamedCommands.registerCommand("ReverseFeed", spindexer.reverse().alongWith(feed.reverse()));
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        autoChooser =
+                AutoBuilder.buildAutoChooserWithOptionsModifier(
+                        "Tests",
+                        stream ->
+                                stream.filter(
+                                        auto -> {
+                                            Translation2d startingTrans =
+                                                    auto.getStartingPose().getTranslation();
+                                            Translation2d currentTrans =
+                                                    drivetrain.getState().Pose.getTranslation();
+                                            Double distance =
+                                                    startingTrans.getDistance(currentTrans);
+
+                                            return MathUtil.isNear(0, distance, 1.0);
+                                        }));
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
