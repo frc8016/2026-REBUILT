@@ -94,6 +94,8 @@ public class RobotContainer {
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         hood.setDefaultCommand(hood.lowerHood());
         turret.setDefaultCommand(turret.idleTurret());
+        feed.setDefaultCommand(feed.idle());
+        spindexer.setDefaultCommand(spindexer.idle());
 
         configureBindings();
 
@@ -170,7 +172,13 @@ public class RobotContainer {
                                                 .and(topFlywheel.isReady)
                                                 .and(hood.isReady)
                                                 .and(turret.isReady))
-                                .andThen(spindexer.run().alongWith(feed.run())));
+                                .andThen(
+                                        spindexer
+                                                .run(ballisticsManager.flywheelVelocitySupplier())
+                                                .alongWith(
+                                                        feed.run(
+                                                                ballisticsManager
+                                                                        .flywheelVelocitySupplier()))));
     }
 
     private Command buildAutoShootCommand() {
@@ -182,7 +190,14 @@ public class RobotContainer {
                                                 .and(hood.isReady)
                                                 .and(turret.isReady))
                                 .withTimeout(2.0)
-                                .andThen(spindexer.run().alongWith(feed.run()).withTimeout(1.5)),
+                                .andThen(
+                                        spindexer
+                                                .run(ballisticsManager.flywheelVelocitySupplier())
+                                                .alongWith(
+                                                        feed.run(
+                                                                ballisticsManager
+                                                                        .flywheelVelocitySupplier()))
+                                                .withTimeout(1.5)),
                         bottomFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
                         topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
                         hood.setAngle(ballisticsManager.hoodAngleSupplier()),
