@@ -34,6 +34,7 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.TopFlywheel;
 import frc.robot.subsystems.Turret;
+import java.util.function.Supplier;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -67,6 +68,8 @@ public class RobotContainer {
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
     private final Hood hood = new Hood();
+    private Translation2d lastPoseDisabled =
+            new Translation2d(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 
     private final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
@@ -84,7 +87,7 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
 
     /* Path follower */
-    private final SendableChooser<Command> autoChooser;
+    private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         // Named commands for autonomous
@@ -95,21 +98,7 @@ public class RobotContainer {
                 "StopShoot", Commands.runOnce(buildAutoShootCommand()::cancel));
         NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
         NamedCommands.registerCommand("ReverseFeed", spindexer.reverse().alongWith(feed.reverse()));
-        autoChooser =
-                AutoBuilder.buildAutoChooserWithOptionsModifier(
-                        "Tests",
-                        stream ->
-                                stream.filter(
-                                        auto -> {
-                                            Translation2d startingTrans =
-                                                    auto.getStartingPose().getTranslation();
-                                            Translation2d currentTrans =
-                                                    drivetrain.getState().Pose.getTranslation();
-                                            Double distance =
-                                                    startingTrans.getDistance(currentTrans);
-
-                                            return MathUtil.isNear(0, distance, 1.0);
-                                        }));
+        autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         bottomFlywheel.setDefaultCommand(bottomFlywheel.idleFlywheel());
@@ -218,9 +207,39 @@ public class RobotContainer {
                                 .withTimeout(0.5));
     }
 
+    public Translation2d updateAutoChooser(Supplier<Translation2d> lastPoseSupplier) {
+        Translation2d lastPose = lastPoseSupplier.get();
+        Translation2d currentTrans = drivetrain.getState().Pose.getTranslation();
+        Double distanceToLast = lastPose.getDistance(currentTrans);
+
+        if (!MathUtil.isNear(0, distanceToLast, 1)) {
+            autoChooser =
+                    AutoBuilder.buildAutoChooserWithOptionsModifier(
+                            "None",
+                            stream ->
+                                    stream.filter(
+                                            auto -> {
+                                                Translation2d startingTrans =
+                                                        auto.getStartingPose().getTranslation();
+                                                Double distance =
+                                                        startingTrans.getDistance(currentTrans);
+
+                                                return MathUtil.isNear(0, distance, 1.0);
+                                            }));
+            SmartDashboard.putData("Auto Mode", autoChooser);
+            return currentTrans;
+        } else {
+            return lastPose;
+        }
+    }
+
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
+    }
+
+    public void disabledUpdate() {
+        lastPoseDisabled = updateAutoChooser(() -> lastPoseDisabled);
     }
 
     public void updateSubsystems() {

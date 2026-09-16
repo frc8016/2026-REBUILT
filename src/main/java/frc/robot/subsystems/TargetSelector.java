@@ -50,8 +50,8 @@ public class TargetSelector extends SubsystemBase {
 
         if (alliance.isPresent()) { // safety to make sure there is an alliance
             if (x.lte(
-                    TargetConstants.DRIVERSTATION_TO_TRENCH.plus(
-                            TargetConstants.ROBOT_WIDTH_WITH_BUMPERS.div(
+                    TargetConstants.DRIVERSTATION_TO_ALLIANCE_SIDE.plus(
+                            TargetConstants.TURRET_TO_NEAREST_BUMPER.div(
                                     2)))) { // if robot is in home area
                 target = hubTarget;
             } else { // if robot is anywhere else
