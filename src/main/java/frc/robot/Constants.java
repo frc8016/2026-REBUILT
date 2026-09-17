@@ -76,7 +76,7 @@ public final class Constants {
         public static final double MAX_VEL_RPM = 950;
         public static final double TX_TOLERANCE = 1;
         public static final int MAX_CURRENT = 50;
-        public static final double READY_TOLERANCE = 1;
+        public static final double READY_TOLERANCE = 0.05;
         public static final double FEED_FORWARD_KS = 0.18683;
         public static final double FEED_FORWARD_KV = 4.8891;
         public static final double FEED_FORWARD_KA = 0.83048;
@@ -147,7 +147,7 @@ public final class Constants {
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 0.1;
+        public static final double READY_TOLERANCE = 0.05;
         public static final double FEED_FORWARD_KS = 0.32135;
         public static final double FEED_FORWARD_KV = 0.11339;
         public static final double FEED_FORWARD_KA = 0.040276;
@@ -173,7 +173,7 @@ public final class Constants {
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
         public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(1);
-        public static final double READY_TOLERANCE = 0.1;
+        public static final double READY_TOLERANCE = 0.05;
         public static final double FEED_FORWARD_KS = 0.15956;
         public static final double FEED_FORWARD_KV = 0.11947;
         public static final double FEED_FORWARD_KA = 0.013798;
@@ -262,7 +262,7 @@ public final class Constants {
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
-        public static final double READY_TOLERANCE = 0.1;
+        public static final double READY_TOLERANCE = 0.05;
         public static final double FEED_FORWARD_KS = 0.029184;
         public static final double FEED_FORWARD_KG = 0.30625;
         public static final double FEED_FORWARD_KV = 6.8929;

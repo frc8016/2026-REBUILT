@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -96,12 +95,10 @@ public class LimelightVisionManager extends SubsystemBase {
         // Hard rejects
         double distanceToOdometry =
                 state.Pose.getTranslation().getDistance(llPose.getTranslation());
-        double omegaDegPerSec =
-                Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond)
-                        + turretAngularVelSupplier.get().in(DegreesPerSecond);
+        double omegaDegPerSec = Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond);
         if (Math.abs(omegaDegPerSec) > 180.0) return;
         if (llEstimate.avgTagDist > 5.0 || llEstimate.avgTagDist < 0.5) return;
-        if (distanceToOdometry > 2) return;
+        if (distanceToOdometry > 0.5) return;
 
         // Build Covariance matrix
         double linearSpeed =

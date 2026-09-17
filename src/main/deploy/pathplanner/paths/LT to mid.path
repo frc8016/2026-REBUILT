@@ -39,57 +39,9 @@
         "x": 7.841663907284769,
         "y": 5.4797268211920525
       },
-      "nextControl": {
-        "x": 7.754544701986756,
-        "y": 3.563104304635761
-      },
-      "isLocked": false,
-      "linkedName": "mid"
-    },
-    {
-      "anchor": {
-        "x": 6.44093712930012,
-        "y": 5.030225385527876
-      },
-      "prevControl": {
-        "x": 6.825138253532443,
-        "y": 2.885102441897397
-      },
-      "nextControl": {
-        "x": 6.311826809015423,
-        "y": 5.751091340450772
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.301067615658363,
-        "y": 7.418129139072847
-      },
-      "prevControl": {
-        "x": 6.734591363740807,
-        "y": 7.431073350219691
-      },
-      "nextControl": {
-        "x": 5.601720047449585,
-        "y": 7.397247924080664
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.6018625827814574,
-        "y": 7.418129139072847
-      },
-      "prevControl": {
-        "x": 4.590355871886122,
-        "y": 7.397247924080664
-      },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LT"
+      "linkedName": "mid"
     }
   ],
   "rotationTargets": [
@@ -100,25 +52,13 @@
     {
       "waypointRelativePos": 1.3691026827012052,
       "rotationDegrees": -99.06356799860771
-    },
-    {
-      "waypointRelativePos": 2.1476063829787257,
-      "rotationDegrees": -136.8308259687323
-    },
-    {
-      "waypointRelativePos": 2.8124999999999982,
-      "rotationDegrees": 105.41368222498316
-    },
-    {
-      "waypointRelativePos": 3.5305851063829765,
-      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 1.0761276519878766,
-      "maxWaypointRelativePos": 3.433307024467239,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -134,7 +74,7 @@
     {
       "name": "IntakeRollers",
       "waypointRelativePos": 0.9786898184688249,
-      "endWaypointRelativePos": 3.875295974743491,
+      "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
         "data": {
@@ -153,7 +93,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 180.0
+    "rotation": -165.0
   },
   "reversed": false,
   "folder": "left trench",

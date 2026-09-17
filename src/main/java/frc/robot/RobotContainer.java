@@ -33,7 +33,6 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.TopFlywheel;
 import frc.robot.subsystems.Turret;
-import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
     private double MaxSpeed = SpeedConstants.FullSpeed;
@@ -85,9 +84,7 @@ public class RobotContainer {
         // Named commands for autonomous
         NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntakeAndFinish());
         NamedCommands.registerCommand("IntakeArmUp", intakeArm.raiseIntakeAndFinish());
-        NamedCommands.registerCommand("Shoot", Commands.runOnce(buildAutoShootCommand()::schedule));
-        NamedCommands.registerCommand(
-                "StopShoot", Commands.runOnce(buildAutoShootCommand()::cancel));
+        NamedCommands.registerCommand("Shoot", buildAutoShootCommand());
         NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
         NamedCommands.registerCommand("ReverseFeed", spindexer.reverse().alongWith(feed.reverse()));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -157,71 +154,44 @@ public class RobotContainer {
     }
 
     private Command buildShootCommand() {
-        BooleanSupplier ready =
-                () ->
-                        bottomFlywheel
-                                .isReady
-                                .and(topFlywheel.isReady)
-                                .and(hood.isReady)
-                                .and(turret.isReady)
-                                .getAsBoolean();
-
-        Command spinUp =
-                bottomFlywheel
-                        .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
-                        .alongWith(
-                                topFlywheel.spinFlywheel(
-                                        ballisticsManager.flywheelVelocitySupplier()))
-                        .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
-                        .alongWith(turret.setAngle(ballisticsManager.TX()));
-
-        Command feedCycle =
-                Commands.waitUntil(ready)
-                        .andThen(
-                                spindexer
-                                        .run()
-                                        .alongWith(feed.run())
-                                        .until(() -> !ready.getAsBoolean()));
-
-        return spinUp.alongWith(Commands.repeatingSequence(feedCycle)).beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
+        return bottomFlywheel
+                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
+                .alongWith(topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()))
+                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
+                .alongWith(turret.setAngle(ballisticsManager.TX()))
+                .beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
                 .beforeStarting(() -> MaxAngularRate = SpeedConstants.SlowAngularSpeed)
                 .finallyDo(() -> MaxSpeed = SpeedConstants.FullSpeed)
-                .finallyDo(() -> MaxAngularRate = SpeedConstants.FullAngularSpeed);
+                .finallyDo(() -> MaxAngularRate = SpeedConstants.FullAngularSpeed)
+                .alongWith(
+                        Commands.waitUntil(
+                                        bottomFlywheel
+                                                .isReady
+                                                .and(topFlywheel.isReady)
+                                                .and(hood.isReady)
+                                                .and(turret.isReady))
+                                .andThen(spindexer.run().alongWith(feed.run())));
     }
 
     private Command buildAutoShootCommand() {
-        BooleanSupplier ready =
-                () ->
-                        bottomFlywheel
-                                .isReady
-                                .and(topFlywheel.isReady)
-                                .and(hood.isReady)
-                                .and(turret.isReady)
-                                .getAsBoolean();
-
-        Command spinUp =
-                bottomFlywheel
-                        .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
-                        .alongWith(
-                                topFlywheel.spinFlywheel(
-                                        ballisticsManager.flywheelVelocitySupplier()))
-                        .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
-                        .alongWith(turret.setAngle(ballisticsManager.TX()));
-
-        Command feedCycle =
-                Commands.waitUntil(ready)
-                        .andThen(
-                                spindexer
-                                        .run()
-                                        .alongWith(feed.run())
-                                        .until(() -> !ready.getAsBoolean()));
-
-        return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
+        return Commands.deadline(
+                        Commands.waitUntil(
+                                        bottomFlywheel
+                                                .isReady
+                                                .and(topFlywheel.isReady)
+                                                .and(hood.isReady)
+                                                .and(turret.isReady))
+                                .withTimeout(2.0)
+                                .andThen(spindexer.run().alongWith(feed.run()).withTimeout(1.5)),
+                        bottomFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
+                        topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
+                        hood.setAngle(ballisticsManager.hoodAngleSupplier()),
+                        turret.setAngle(ballisticsManager.TX()))
                 .andThen(
                         bottomFlywheel
                                 .idleFlywheel()
                                 .alongWith(topFlywheel.idleFlywheel(), hood.lowerHood())
-                                .withTimeout(0.5));
+                                .withTimeout(0.02));
     }
 
     public Command getAutonomousCommand() {
