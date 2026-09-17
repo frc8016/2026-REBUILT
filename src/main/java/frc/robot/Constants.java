@@ -13,6 +13,8 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -36,6 +38,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
 import edu.wpi.first.units.measure.Time;
+import frc.robot.generated.TunerConstants;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +53,18 @@ import java.util.Map;
 public final class Constants {
     public static class SpindexerConstants {
         public static final double SPINDEXER_SPEED = -0.5;
+    }
+
+    public static class SpeedConstants {
+        public static final double FullSpeed =
+                1 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+        ;
+        public static final double SlowSpeed =
+                0.25 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+        ;
+        public static final double FullAngularSpeed = RotationsPerSecond.of(1).in(RadiansPerSecond);
+        public static final double SlowAngularSpeed =
+                RotationsPerSecond.of(0.25).in(RadiansPerSecond);
     }
 
     public static class TurretConstants {

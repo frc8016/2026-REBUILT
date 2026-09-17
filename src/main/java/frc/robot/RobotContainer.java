@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.Constants.SpeedConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
@@ -35,13 +36,8 @@ import frc.robot.subsystems.Turret;
 import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
-    private double MaxSpeed =
-            1 // TODO: reset to one
-                    * TunerConstants.kSpeedAt12Volts.in(
-                            MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate =
-            RotationsPerSecond.of(1)
-                    .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxSpeed = SpeedConstants.FullSpeed;
+    private double MaxAngularRate = SpeedConstants.FullAngularSpeed;
 
     // Create instances of subsystems
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -187,7 +183,10 @@ public class RobotContainer {
                                         .alongWith(feed.run())
                                         .until(() -> !ready.getAsBoolean()));
 
-        return spinUp.alongWith(Commands.repeatingSequence(feedCycle));
+        return spinUp.alongWith(Commands.repeatingSequence(feedCycle)).beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
+                .beforeStarting(() -> MaxAngularRate = SpeedConstants.SlowAngularSpeed)
+                .finallyDo(() -> MaxSpeed = SpeedConstants.FullSpeed)
+                .finallyDo(() -> MaxAngularRate = SpeedConstants.FullAngularSpeed);
     }
 
     private Command buildAutoShootCommand() {
