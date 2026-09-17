@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -77,21 +79,18 @@ public class TargetSelector extends SubsystemBase {
 
     private boolean canShoot() {
         Pose2d swervePose = swervePoseSupplier.get();
-        Distance x = Meters.of(swervePose.getX());
+        Double swervePoseInch = Meters.of(swervePose.getX()).in(Inches);
 
-        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            x = TargetConstants.FIELD_LENGTH.minus(x);
+        if (MathUtil.isNear(TargetConstants.DRIVERSTATION_TO_TRENCH.in(Inches), swervePoseInch, 20)
+                || MathUtil.isNear(
+                        TargetConstants.FIELD_LENGTH.in(Inches)
+                                - TargetConstants.DRIVERSTATION_TO_TRENCH.in(Inches),
+                        swervePoseInch,
+                        20)) {
+            return false;
+        } else {
+            return true;
         }
-        if (x.lte(
-                TargetConstants.DRIVERSTATION_TO_TRENCH_CLOSE.plus(
-                        TargetConstants.TURRET_TO_CLOSE_BUMPER.div(2)))) {
-            if (x.gte(
-                    TargetConstants.DRIVERSTATION_TO_TRENCH_FAR.plus(
-                            TargetConstants.TURRET_TO_CLOSE_BUMPER.div(2)))) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public final Trigger canShoot =
