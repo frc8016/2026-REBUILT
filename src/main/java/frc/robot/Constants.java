@@ -52,7 +52,29 @@ import java.util.Map;
  */
 public final class Constants {
     public static class SpindexerConstants {
-        public static final double SPINDEXER_SPEED = -0.5;
+        public static final LinearVelocity FEED_BUFFER = MetersPerSecond.of(0.5);
+        public static final Double SPINDEXER_REVERSE_SPEED = 0.5;
+        public static final double IS_READY_DELAY = 0.05;
+        public static final double PROPORTIONAL = 0;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+        public static final int MAX_CURRENT = 50;
+        public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(0);
+        public static final double FEED_FORWARD_KS = 0.32135; // constants need to be updated
+        public static final double FEED_FORWARD_KV = 0.11339;
+        public static final double FEED_FORWARD_KA = 0.040276;
+        public static final double SIM_FEED_FORWARD_KS = 0.0096372;
+        public static final double SIM_FEED_FORWARD_KV = 0.12421;
+        public static final double SIM_FEED_FORWARD_KA = 0.15227;
+        public static final Distance FLYWHEEL_DIAMETER = Inches.of(4);
+        public static final Mass FLYWHEEL_MASS = Kilograms.of(0.1);
+        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
+        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
+        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
+                RotationsPerSecondPerSecond.of(2500);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
     }
 
     public static class SpeedConstants {
@@ -102,7 +124,29 @@ public final class Constants {
     }
 
     public static class FeedConstants {
-        public static final double FEED_SPEED = 0.5;
+        public static final LinearVelocity FEED_BUFFER = MetersPerSecond.of(0.5);
+        public static final Double FEED_REVERSE_SPEED = -0.5;
+        public static final double IS_READY_DELAY = 0.05;
+        public static final double PROPORTIONAL = 0;
+        public static final double INTEGRAL = 0;
+        public static final double DERIVATIVE = 0;
+        public static final int MAX_CURRENT = 50;
+        public static final LinearVelocity IDLE_SETPOINT = MetersPerSecond.of(0);
+        public static final double FEED_FORWARD_KS = 0.32135; // constants need to be updated
+        public static final double FEED_FORWARD_KV = 0.11339;
+        public static final double FEED_FORWARD_KA = 0.040276;
+        public static final double SIM_FEED_FORWARD_KS = 0.0096372;
+        public static final double SIM_FEED_FORWARD_KV = 0.12421;
+        public static final double SIM_FEED_FORWARD_KA = 0.15227;
+        public static final Distance FLYWHEEL_DIAMETER = Inches.of(2);
+        public static final Mass FLYWHEEL_MASS = Kilograms.of(0.1);
+        public static final AngularVelocity SOFT_LIMIT = RPM.of(5000);
+        public static final AngularVelocity TRAPAZOIDAL_MAX_VELOCITY = RPM.of(5000);
+        public static final AngularAcceleration TRAPAZOIDAL_MAX_ACCELERATION =
+                RotationsPerSecondPerSecond.of(2500);
+        public static final Time CLOSED_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Time OPEN_LOOP_RAMP_RATE = Seconds.of(0.25);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(40);
     }
 
     public static class ArmConstants {
