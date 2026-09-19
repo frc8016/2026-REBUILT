@@ -183,7 +183,7 @@ public final class Constants {
         public static final Distance DRIVERSTATION_TO_ALLIANCE_SIDE =
                 Meters.of(Units.inchesToMeters(156.06));
         public static final Distance DRIVERSTATION_TO_TRENCH =
-                Meters.of(Units.inchesToMeters(192.11));
+                Meters.of(Units.inchesToMeters(182.11));
         public static final Distance TURRET_TO_CLOSE_BUMPER = Meters.of(Units.inchesToMeters(8));
         public static final Pose3d HUB_TARGET_BLUE =
                 new Pose3d(

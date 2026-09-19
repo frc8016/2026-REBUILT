@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -12,9 +11,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.TargetConstants;
-import frc.robot.Constants.TopFlyWheelConstants;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -77,26 +74,15 @@ public class TargetSelector extends SubsystemBase {
         }
     }
 
-    private boolean canShoot() {
-        Pose2d swervePose = swervePoseSupplier.get();
-        Double swervePoseInch = Meters.of(swervePose.getX()).in(Inches);
+    public boolean canShoot() {
+        double xInches = Meters.of(swervePoseSupplier.get().getX()).in(Inches);
 
-        if (MathUtil.isNear(TargetConstants.DRIVERSTATION_TO_TRENCH.in(Inches), swervePoseInch, 20)
-                || MathUtil.isNear(
-                        TargetConstants.FIELD_LENGTH.in(Inches)
-                                - TargetConstants.DRIVERSTATION_TO_TRENCH.in(Inches),
-                        swervePoseInch,
-                        20)) {
-            return false;
-        } else {
-            return true;
-        }
+        double blueTrench = TargetConstants.DRIVERSTATION_TO_TRENCH.in(Inches);
+        double redTrench = TargetConstants.FIELD_LENGTH.in(Inches) - blueTrench;
+
+        return !(MathUtil.isNear(xInches, blueTrench, 20)
+                || MathUtil.isNear(xInches, redTrench, 20));
     }
-
-    public final Trigger canShoot =
-            new Trigger(this::canShoot)
-                    // Stay ready for short time after to prevent flapping
-                    .debounce(TopFlyWheelConstants.IS_READY_DELAY, Debouncer.DebounceType.kFalling);
 
     public Supplier<Pose3d> getCurrentTarget() {
         return () -> target;

@@ -29,7 +29,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
 public class Hood extends SubsystemBase {
-    private boolean canShoot;
+    private Supplier<Boolean> canShoot;
     private final SparkMax hoodMotor = new SparkMax(9, MotorType.kBrushless);
 
     private final SmartMotorControllerConfig hoodMotorConfig =
@@ -79,7 +79,7 @@ public class Hood extends SubsystemBase {
     private final Arm hood = new Arm(hoodConfig);
 
     private boolean isReady() {
-        if (canShoot) {
+        if (canShoot.get()) {
             return hood.getAngle()
                     .isNear(
                             hood.getMechanismSetpoint().orElse(Degrees.of(0)),
@@ -88,8 +88,8 @@ public class Hood extends SubsystemBase {
         return false;
     }
 
-    public Hood(Trigger targetSelector) {
-        this.canShoot = targetSelector.getAsBoolean();
+    public Hood(Supplier<Boolean> targetSelector) {
+        this.canShoot = targetSelector;
     }
 
     public Command set(double dutycycle) {
@@ -103,11 +103,11 @@ public class Hood extends SubsystemBase {
     public void Update() {}
 
     public Command setAngle(Supplier<Angle> hoodAngle) {
-        if (canShoot) {
-            return hood.setAngle(() -> Degrees.of(90).minus(hoodAngle.get()));
-        } else {
-            return hood.setAngle(Degrees.of(0));
-        }
+        return hood.setAngle(
+                () ->
+                        canShoot.get()
+                                ? Degrees.of(90).minus(hoodAngle.get())
+                                : HoodConstants.BOTTOM_SOFT_LIMIT);
     }
 
     public Command lowerHood() {
