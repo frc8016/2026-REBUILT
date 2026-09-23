@@ -1,0 +1,38 @@
+{
+  "strictness": 3,
+  "commentTypes": ["logic", "syntax", "style"],
+  "triggerOnUpdates": true,
+  "ignorePatterns": "**/build/**\n**/.gradle/**\n**/deploy/**\n**/.wpilib/**\n**/vendordeps/**",
+  "customRules": [
+    {
+      "name": "Ensure Burns/Flushes are Out of Loops",
+      "rule": "Flag any calls to SparkMax/SparkFlex '.burnFlash()' or CTRE '.getConfigurator().apply()' inside periodic loops or command initializers. These write to non-volatile flash memory, blocking execution for up to hundreds of milliseconds. They must ONLY be called once during robot initialization or subsystem instantiation.",
+      "scope": "src/main/java/**/*.java"
+    },
+    {
+      "name": "Explicit Hardware Inversions",
+      "rule": "Ensure that every instantiated motor controller (e.g., SparkMax, TalonFX) explicitly calls its inversion method ('.setInverted()'). Do not rely on default hardware orientation assumptions.",
+      "scope": "src/main/java/**/subsystems/*.java"
+    },
+    {
+      "name": "Enforce WPILib Java Units Library",
+      "rule": "Enforce the use of the official edu.wpi.first.units library (e.g., Volts, Meters, Rotations) for specifying raw constants or return values. Flag magic numbers used for physical values or velocity transformations that lack explicit units.",
+      "scope": "src/main/java/**/*.java"
+    },
+    {
+      "name": "Prevent Command Scheduling Deadlocks",
+      "rule": "Every custom Command constructor must explicitly invoke 'addRequirements()' passing its relevant subsystem dependency parameters. Ensure no command tries to addRequirements() for multiple subsystems unless intentionally designed as a complex inline composition.",
+      "scope": "src/main/java/**/commands/*.java"
+    },
+    {
+      "name": "No Blocking Calls or Synchronous Logging",
+      "rule": "Flag any usage of Thread.sleep(), System.out.println(), or excessive native e.printStackTrace() loops. In periodic routines, force the developer to use Telemetry channels like SmartDashboard, Shuffleboard, or DataLogManager to prevent 20ms loop overruns.",
+      "scope": "src/main/java/**/*.java"
+    },
+    {
+      "name": "CTRE Phoenix 6 Status Frame Optimization Reminder",
+      "rule": "When a CTRE TalonFX or CANcoder is initialized, look to see if signal update frequencies (OptimizeBusUtilization or SetUpdateFrequency) are addressed if the device is a follower. Ensure we aren't choking the CAN bus with default high-rate telemetry on unread follower motors.",
+      "scope": "src/main/java/**/subsystems/*.java"
+    }
+  ]
+}
