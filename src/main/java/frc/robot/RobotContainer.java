@@ -64,7 +64,7 @@ public class RobotContainer {
 
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
-    private final Hood hood = new Hood();
+    private final Hood hood = new Hood(() -> targetSelector.canShoot());
     private Translation2d lastPoseDisabled =
             new Translation2d(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 
@@ -87,12 +87,12 @@ public class RobotContainer {
     private SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        // Named commands for autonomous
+        // Named commands for autonomous\
+        Command autoShoot = buildAutoShootCommand();
         NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntakeAndFinish());
         NamedCommands.registerCommand("IntakeArmUp", intakeArm.raiseIntakeAndFinish());
-        NamedCommands.registerCommand("Shoot", Commands.runOnce(buildAutoShootCommand()::schedule));
-        NamedCommands.registerCommand(
-                "StopShoot", Commands.runOnce(buildAutoShootCommand()::cancel));
+        NamedCommands.registerCommand("Shoot", Commands.runOnce(autoShoot::schedule));
+        NamedCommands.registerCommand("StopShoot", Commands.runOnce(autoShoot::cancel));
         NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
         NamedCommands.registerCommand("ReverseFeed", spindexer.reverse().alongWith(feed.reverse()));
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -188,7 +188,8 @@ public class RobotContainer {
                                         .alongWith(feed.run())
                                         .until(() -> !ready.getAsBoolean()));
 
-        return spinUp.alongWith(Commands.repeatingSequence(feedCycle)).beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
+        return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
+                .beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
                 .beforeStarting(() -> MaxAngularRate = SpeedConstants.SlowAngularSpeed)
                 .finallyDo(() -> MaxSpeed = SpeedConstants.FullSpeed)
                 .finallyDo(() -> MaxAngularRate = SpeedConstants.FullAngularSpeed);

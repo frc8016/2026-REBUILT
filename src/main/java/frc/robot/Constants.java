@@ -95,10 +95,6 @@ public final class Constants {
         public static final Distance TURRET_LENGTH = Inches.of(17.8);
         public static final Angle START_ANGLE = Degrees.of(0);
         public static final Mass TURRET_WEIGHT = Kilograms.of(10);
-        public static final Distance PIVOT_FORWARD = Inches.of(-7.25);
-        public static final Distance PIVOT_LEFT = Inches.of(8);
-        public static final Translation2d TURRET_OFFSET =
-                new Translation2d(PIVOT_FORWARD.in(Meters), PIVOT_LEFT.in(Meters));
     }
 
     public static class FeedConstants {
@@ -197,7 +193,9 @@ public final class Constants {
         public static final Distance FIELD_HEIGHT = Meters.of(Units.inchesToMeters(317.69));
         public static final Distance DRIVERSTATION_TO_ALLIANCE_SIDE =
                 Meters.of(Units.inchesToMeters(156.06));
-        public static final Distance TURRET_TO_NEAREST_BUMPER = Meters.of(Units.inchesToMeters(8));
+        public static final Distance DRIVERSTATION_TO_TRENCH =
+                Meters.of(Units.inchesToMeters(182.11));
+        public static final Distance TURRET_TO_CLOSE_BUMPER = Meters.of(Units.inchesToMeters(8));
         public static final Pose3d HUB_TARGET_BLUE =
                 new Pose3d(
                         Units.inchesToMeters(182.11),
