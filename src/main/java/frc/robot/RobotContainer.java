@@ -235,7 +235,7 @@ public class RobotContainer {
         Translation2d currentTrans = drivetrain.getState().Pose.getTranslation();
         Double distanceToLast = lastPose.getDistance(currentTrans);
 
-        if (!MathUtil.isNear(0, distanceToLast, 0.2)) {
+        if (!MathUtil.isNear(0, distanceToLast, 1)) {
             autoChooser =
                     AutoBuilder.buildAutoChooserWithOptionsModifier(
                             autoChooser.getSelected().getName(),
