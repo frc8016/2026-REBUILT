@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.Constants.SpeedConstants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.BallisticsManager;
 import frc.robot.subsystems.BottomFlywheel;
@@ -32,15 +33,11 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.TargetSelector;
 import frc.robot.subsystems.TopFlywheel;
 import frc.robot.subsystems.Turret;
+import java.util.function.BooleanSupplier;
 
 public class RobotContainer {
-    private double MaxSpeed =
-            0.95 // TODO: reset to one
-                    * TunerConstants.kSpeedAt12Volts.in(
-                            MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate =
-            RotationsPerSecond.of(1)
-                    .in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxSpeed = SpeedConstants.FullSpeed;
+    private double MaxAngularRate = SpeedConstants.FullAngularSpeed;
 
     // Create instances of subsystems
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -57,11 +54,14 @@ public class RobotContainer {
 
     private final BallisticsManager ballisticsManager =
             new BallisticsManager(
-                    targetSelector.getCurrentTarget(), () -> drivetrain.getState().Pose);
+                    targetSelector.getCurrentTarget(),
+                    () -> drivetrain.getState().Pose,
+                    turret::getAngle,
+                    () -> drivetrain.getState().Speeds);
 
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
-    private final Hood hood = new Hood();
+    private final Hood hood = new Hood(() -> targetSelector.canShoot());
 
     private final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
@@ -82,10 +82,12 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        // Named commands for autonomous
+        // Named commands for autonomous\
+        Command autoShoot = buildAutoShootCommand();
         NamedCommands.registerCommand("IntakeArmDown", intakeArm.lowerIntakeAndFinish());
         NamedCommands.registerCommand("IntakeArmUp", intakeArm.raiseIntakeAndFinish());
-        NamedCommands.registerCommand("Shoot", buildAutoShootCommand());
+        NamedCommands.registerCommand("Shoot", Commands.runOnce(autoShoot::schedule));
+        NamedCommands.registerCommand("StopShoot", Commands.runOnce(autoShoot::cancel));
         NamedCommands.registerCommand("IntakeRollers", intakeRoller.spinForwards());
         NamedCommands.registerCommand("ReverseFeed", spindexer.reverse().alongWith(feed.reverse()));
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -155,40 +157,72 @@ public class RobotContainer {
     }
 
     private Command buildShootCommand() {
-        return bottomFlywheel
-                .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
-                .alongWith(topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()))
-                .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
-                .alongWith(turret.setAngle(ballisticsManager.TX()))
-                .alongWith(
-                        Commands.waitUntil(
-                                        bottomFlywheel
-                                                .isReady
-                                                .and(topFlywheel.isReady)
-                                                .and(hood.isReady)
-                                                .and(turret.isReady))
-                                .andThen(spindexer.run().alongWith(feed.run())));
+        BooleanSupplier ready =
+                () ->
+                        bottomFlywheel
+                                .isReady
+                                .and(topFlywheel.isReady)
+                                .and(hood.isReady)
+                                .and(turret.isReady)
+                                .getAsBoolean();
+
+        Command spinUp =
+                bottomFlywheel
+                        .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
+                        .alongWith(
+                                topFlywheel.spinFlywheel(
+                                        ballisticsManager.flywheelVelocitySupplier()))
+                        .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
+                        .alongWith(turret.setAngle(ballisticsManager.TX()));
+
+        Command feedCycle =
+                Commands.waitUntil(ready)
+                        .andThen(
+                                spindexer
+                                        .run()
+                                        .alongWith(feed.run())
+                                        .until(() -> !ready.getAsBoolean()));
+
+        return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
+                .beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
+                .beforeStarting(() -> MaxAngularRate = SpeedConstants.SlowAngularSpeed)
+                .finallyDo(() -> MaxSpeed = SpeedConstants.FullSpeed)
+                .finallyDo(() -> MaxAngularRate = SpeedConstants.FullAngularSpeed);
     }
 
     private Command buildAutoShootCommand() {
-        return Commands.deadline(
-                        Commands.waitUntil(
-                                        bottomFlywheel
-                                                .isReady
-                                                .and(topFlywheel.isReady)
-                                                .and(hood.isReady)
-                                                .and(turret.isReady))
-                                .withTimeout(2.0)
-                                .andThen(spindexer.run().alongWith(feed.run()).withTimeout(1.5)),
-                        bottomFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
-                        topFlywheel.spinFlywheel(ballisticsManager.flywheelVelocitySupplier()),
-                        hood.setAngle(ballisticsManager.hoodAngleSupplier()),
-                        turret.setAngle(ballisticsManager.TX()))
+        BooleanSupplier ready =
+                () ->
+                        bottomFlywheel
+                                .isReady
+                                .and(topFlywheel.isReady)
+                                .and(hood.isReady)
+                                .and(turret.isReady)
+                                .getAsBoolean();
+
+        Command spinUp =
+                bottomFlywheel
+                        .spinFlywheel(ballisticsManager.flywheelVelocitySupplier())
+                        .alongWith(
+                                topFlywheel.spinFlywheel(
+                                        ballisticsManager.flywheelVelocitySupplier()))
+                        .alongWith(hood.setAngle(ballisticsManager.hoodAngleSupplier()))
+                        .alongWith(turret.setAngle(ballisticsManager.TX()));
+
+        Command feedCycle =
+                Commands.waitUntil(ready)
+                        .andThen(
+                                spindexer
+                                        .run()
+                                        .alongWith(feed.run())
+                                        .until(() -> !ready.getAsBoolean()));
+
+        return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
                 .andThen(
                         bottomFlywheel
                                 .idleFlywheel()
                                 .alongWith(topFlywheel.idleFlywheel(), hood.lowerHood())
-                                .withTimeout(0.02));
+                                .withTimeout(0.5));
     }
 
     public Command getAutonomousCommand() {

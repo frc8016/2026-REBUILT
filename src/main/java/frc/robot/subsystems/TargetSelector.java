@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -50,9 +52,8 @@ public class TargetSelector extends SubsystemBase {
 
         if (alliance.isPresent()) { // safety to make sure there is an alliance
             if (x.lte(
-                    TargetConstants.DRIVERSTATION_TO_TRENCH.plus(
-                            TargetConstants.ROBOT_WIDTH_WITH_BUMPERS.div(
-                                    2)))) { // if robot is in home area
+                    TargetConstants.DRIVERSTATION_TO_ALLIANCE_SIDE.plus(
+                            TargetConstants.TURRET_TO_CLOSE_BUMPER))) { // if robot is in home area
                 target = hubTarget;
             } else { // if robot is anywhere else
                 if (y.lte(TargetConstants.FIELD_HEIGHT.div(2))) { // if robot is on bottom of field
@@ -70,6 +71,16 @@ public class TargetSelector extends SubsystemBase {
                 }
             }
         }
+    }
+
+    public boolean canShoot() {
+        double xInches = Meters.of(swervePoseSupplier.get().getX()).in(Inches);
+
+        double blueTrench = TargetConstants.DRIVERSTATION_TO_TRENCH.in(Inches);
+        double redTrench = TargetConstants.FIELD_LENGTH.in(Inches) - blueTrench;
+
+        return !(MathUtil.isNear(xInches, blueTrench, 20)
+                || MathUtil.isNear(xInches, redTrench, 20));
     }
 
     public Supplier<Pose3d> getCurrentTarget() {
