@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         TunableNumber.updateAll();
-        m_robotContainer.disabledUpdate();
+        m_robotContainer.updateAutoChooser();
     }
 
     @Override
