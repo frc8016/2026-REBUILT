@@ -61,7 +61,7 @@ public class RobotContainer {
 
     private final BottomFlywheel bottomFlywheel = new BottomFlywheel();
     private final TopFlywheel topFlywheel = new TopFlywheel();
-    private final Hood hood = new Hood();
+    private final Hood hood = new Hood(() -> targetSelector.canShoot());
 
     private final PhotonVisionManager photonVision = new PhotonVisionManager(drivetrain);
 
