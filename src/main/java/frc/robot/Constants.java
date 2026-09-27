@@ -58,13 +58,13 @@ public final class Constants {
     public static class SpeedConstants {
         public static final double FullSpeed =
                 1 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-        ;
+
         public static final double SlowSpeed =
                 0.25 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-        ;
+
         public static final double FullAngularSpeed = RotationsPerSecond.of(1).in(RadiansPerSecond);
         public static final double SlowAngularSpeed =
-                RotationsPerSecond.of(0.25).in(RadiansPerSecond);
+                RotationsPerSecond.of(0.5).in(RadiansPerSecond);
     }
 
     public static class TurretConstants {
