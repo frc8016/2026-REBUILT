@@ -53,9 +53,9 @@ import java.util.Map;
 public final class Constants {
     public static class SpindexerConstants {
         public static final LinearVelocity FEED_BUFFER = MetersPerSecond.of(0.5);
-        public static final Double SPINDEXER_REVERSE_SPEED = 0.5;
+        public static final Double SPINDEXER_REVERSE_SPEED = -0.5;
         public static final double IS_READY_DELAY = 0.05;
-        public static final double PROPORTIONAL = 1;
+        public static final double PROPORTIONAL = 0;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
@@ -127,7 +127,7 @@ public final class Constants {
         public static final LinearVelocity FEED_BUFFER = MetersPerSecond.of(0.5);
         public static final Double FEED_REVERSE_SPEED = -0.5;
         public static final double IS_READY_DELAY = 0.05;
-        public static final double PROPORTIONAL = 1;
+        public static final double PROPORTIONAL = 0;
         public static final double INTEGRAL = 0;
         public static final double DERIVATIVE = 0;
         public static final int MAX_CURRENT = 50;
@@ -270,12 +270,12 @@ public final class Constants {
         static {
             HOOD_ANGLE_MAP.put(1.72, 67.0);
             HOOD_ANGLE_MAP.put(2.0, 67.0);
-            HOOD_ANGLE_MAP.put(2.5, 63.0);
-            HOOD_ANGLE_MAP.put(3.0, 63.0);
-            HOOD_ANGLE_MAP.put(3.5, 61.0);
-            HOOD_ANGLE_MAP.put(4.0, 60.0);
-            HOOD_ANGLE_MAP.put(4.5, 55.0);
-            HOOD_ANGLE_MAP.put(5.0, 57.0);
+            HOOD_ANGLE_MAP.put(2.5, 67.0); //
+            HOOD_ANGLE_MAP.put(3.0, 65.0); //
+            HOOD_ANGLE_MAP.put(3.5, 63.0); //
+            HOOD_ANGLE_MAP.put(4.0, 62.0); //
+            HOOD_ANGLE_MAP.put(4.5, 62.0); //
+            HOOD_ANGLE_MAP.put(5.0, 62.0);
             HOOD_ANGLE_MAP.put(5.5, 57.0);
             HOOD_ANGLE_MAP.put(6.0, 40.0);
             HOOD_ANGLE_MAP.put(7.0, 55.0);
@@ -283,21 +283,21 @@ public final class Constants {
 
             FLYWHEEL_SPEED_MAP.put(1.72, 10.0);
             FLYWHEEL_SPEED_MAP.put(2.0, 10.5);
-            FLYWHEEL_SPEED_MAP.put(2.5, 11.0);
-            FLYWHEEL_SPEED_MAP.put(3.0, 12.0);
-            FLYWHEEL_SPEED_MAP.put(3.5, 12.1);
-            FLYWHEEL_SPEED_MAP.put(4.0, 12.9);
-            FLYWHEEL_SPEED_MAP.put(4.5, 13.0);
-            FLYWHEEL_SPEED_MAP.put(5.0, 14.0);
+            FLYWHEEL_SPEED_MAP.put(2.5, 11.5); //
+            FLYWHEEL_SPEED_MAP.put(3.0, 12.0); //
+            FLYWHEEL_SPEED_MAP.put(3.5, 12.0); //
+            FLYWHEEL_SPEED_MAP.put(4.0, 12.5); //
+            FLYWHEEL_SPEED_MAP.put(4.5, 13.25); //
+            FLYWHEEL_SPEED_MAP.put(5.0, 13.75); //
             FLYWHEEL_SPEED_MAP.put(5.5, 14.2);
             FLYWHEEL_SPEED_MAP.put(6.0, 16.0);
             FLYWHEEL_SPEED_MAP.put(7.0, 18.0);
             FLYWHEEL_SPEED_MAP.put(8.0, 20.0);
 
-            TIME_OF_FLIGHT.put(1.72, 0.87);
-            TIME_OF_FLIGHT.put(2.5, 1.07);
-            TIME_OF_FLIGHT.put(3.0, 1.15);
-            TIME_OF_FLIGHT.put(4.0, 1.22);
+            TIME_OF_FLIGHT.put(1.72, 0.9);
+            TIME_OF_FLIGHT.put(2.5, 1.1);
+            TIME_OF_FLIGHT.put(3.0, 1.2);
+            TIME_OF_FLIGHT.put(4.0, 1.25);
         }
     }
 

@@ -41,7 +41,7 @@ public class Feed extends SubsystemBase {
                     .withIdleMode(MotorMode.COAST)
                     .withTelemetry("FeedMotor", TelemetryVerbosity.HIGH)
                     .withStatorCurrentLimit(FeedConstants.STATOR_CURRENT_LIMIT)
-                    .withMotorInverted(false)
+                    .withMotorInverted(true)
                     .withClosedLoopRampRate(FeedConstants.CLOSED_LOOP_RAMP_RATE)
                     .withOpenLoopRampRate(FeedConstants.OPEN_LOOP_RAMP_RATE)
                     .withFeedforward(

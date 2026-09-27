@@ -31,8 +31,8 @@ public class BallisticsManager extends SubsystemBase {
     private double tempTargetHorizontalAngle = 0;
     private double compensatedTargetDistanceMeters = 0;
 
-    // private static TunableNumber flywheelMps = new TunableNumber("flywheelMps", 10);
-    // private static TunableNumber hoodDeg = new TunableNumber("hoodDeg", 40);
+    // private static TunableNumber compensatedFlywheelMps = new TunableNumber("flywheelMps", 10);
+    // private static TunableNumber compensatedHoodDeg = new TunableNumber("hoodDeg", 40);
 
     public BallisticsManager(
             Supplier<Pose3d> targetPoseSupplier,
