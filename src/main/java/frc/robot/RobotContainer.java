@@ -97,8 +97,8 @@ public class RobotContainer {
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         hood.setDefaultCommand(hood.lowerHood());
         turret.setDefaultCommand(turret.idleTurret());
-        feed.setDefaultCommand(feed.idle());
-        spindexer.setDefaultCommand(spindexer.idle());
+        feed.setDefaultCommand(feed.idleFlywheel());
+        spindexer.setDefaultCommand(spindexer.idleFlywheel());
 
         configureBindings();
 
@@ -140,6 +140,7 @@ public class RobotContainer {
         joystick.rightBumper()
                 .whileTrue(intakeRoller.spinBackwards().alongWith(intakeArm.lowerIntake()));
         joystick.b().whileTrue(spindexer.reverse().alongWith(feed.reverse()));
+        joystick.a().whileTrue(spindexer.sysId());
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -182,10 +183,14 @@ public class RobotContainer {
                         .andThen(
                                 spindexer
                                         .run(ballisticsManager.flywheelVelocitySupplier())
-                                        .alongWith(feed.run(ballisticsManager.flywheelVelocitySupplier()))
+                                        .alongWith(
+                                                feed.run(
+                                                        ballisticsManager
+                                                                .flywheelVelocitySupplier()))
                                         .until(() -> !ready.getAsBoolean()));
 
-        return spinUp.alongWith(Commands.repeatingSequence(feedCycle)).beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
+        return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
+                .beforeStarting(() -> MaxSpeed = SpeedConstants.SlowSpeed)
                 .beforeStarting(() -> MaxAngularRate = SpeedConstants.SlowAngularSpeed)
                 .finallyDo(() -> MaxSpeed = SpeedConstants.FullSpeed)
                 .finallyDo(() -> MaxAngularRate = SpeedConstants.FullAngularSpeed);
@@ -215,7 +220,10 @@ public class RobotContainer {
                         .andThen(
                                 spindexer
                                         .run(ballisticsManager.flywheelVelocitySupplier())
-                                        .alongWith(feed.run(ballisticsManager.flywheelVelocitySupplier()))
+                                        .alongWith(
+                                                feed.run(
+                                                        ballisticsManager
+                                                                .flywheelVelocitySupplier()))
                                         .until(() -> !ready.getAsBoolean()));
 
         return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
