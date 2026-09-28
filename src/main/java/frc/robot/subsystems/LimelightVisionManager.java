@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.Constants.TurretConstants;
 import frc.robot.LimelightHelpers;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -95,10 +96,12 @@ public class LimelightVisionManager extends SubsystemBase {
         // Hard rejects
         double distanceToOdometry =
                 state.Pose.getTranslation().getDistance(llPose.getTranslation());
-        double omegaDegPerSec = Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond);
+        double omegaDegPerSec =
+                Units.radiansToDegrees(state.Speeds.omegaRadiansPerSecond)
+                        + turretAngularVelSupplier.get().in(DegreesPerSecond);
         if (Math.abs(omegaDegPerSec) > 180.0) return;
         if (llEstimate.avgTagDist > 5.0 || llEstimate.avgTagDist < 0.5) return;
-        if (distanceToOdometry > 0.5) return;
+        if (distanceToOdometry > 2) return;
 
         // Build Covariance matrix
         double linearSpeed =
@@ -109,10 +112,10 @@ public class LimelightVisionManager extends SubsystemBase {
         double xyStdDev = computeXYStdDev(llEstimate, poseDiff, highSpeed, highRotation);
         double thetaStdDev = computeThetaStdDev(llEstimate);
 
-        // drivetrain.addVisionMeasurement(
-        //         llPose,
-        //         llEstimate.timestampSeconds,
-        //         VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
+        drivetrain.addVisionMeasurement(
+                llPose,
+                llEstimate.timestampSeconds,
+                VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
 
         limelightPose.setRobotPose(llPose);
         SmartDashboard.putData("limelightPose", limelightPose);
@@ -126,8 +129,7 @@ public class LimelightVisionManager extends SubsystemBase {
         // Calculate current camera position relative to robot center
         // Translation = RobotToTurretCenter + (TurretCenterToCamera rotated by turret angle)
         Translation2d camLocation =
-                TurretConstants.TURRET_OFFSET.plus(
-                        LimelightConstants.CAM_OFFSET_FROM_TURRET_CENTER.rotateBy(turretRotation));
+                LimelightConstants.CAM_OFFSET_FROM_TURRET_CENTER.rotateBy(turretRotation);
 
         LimelightHelpers.setCameraPose_RobotSpace(
                 limelightName,
