@@ -97,6 +97,8 @@ public class RobotContainer {
         topFlywheel.setDefaultCommand(topFlywheel.idleFlywheel());
         hood.setDefaultCommand(hood.lowerHood());
         turret.setDefaultCommand(turret.idleTurret());
+        feed.setDefaultCommand(feed.idleFlywheel());
+        spindexer.setDefaultCommand(spindexer.idleFlywheel());
 
         configureBindings();
 
@@ -179,8 +181,11 @@ public class RobotContainer {
                 Commands.waitUntil(ready)
                         .andThen(
                                 spindexer
-                                        .run()
-                                        .alongWith(feed.run())
+                                        .run(ballisticsManager.flywheelVelocitySupplier())
+                                        .alongWith(
+                                                feed.run(
+                                                        ballisticsManager
+                                                                .flywheelVelocitySupplier()))
                                         .until(() -> !ready.getAsBoolean()));
 
         return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
@@ -213,8 +218,11 @@ public class RobotContainer {
                 Commands.waitUntil(ready)
                         .andThen(
                                 spindexer
-                                        .run()
-                                        .alongWith(feed.run())
+                                        .run(ballisticsManager.flywheelVelocitySupplier())
+                                        .alongWith(
+                                                feed.run(
+                                                        ballisticsManager
+                                                                .flywheelVelocitySupplier()))
                                         .until(() -> !ready.getAsBoolean()));
 
         return spinUp.alongWith(Commands.repeatingSequence(feedCycle))
