@@ -1,0 +1,35 @@
+{
+  "name": "FRC 8016 - 2026 REBUILT",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "password": "vscode",
+      "webPort": "6080"
+    }
+  },
+  "containerEnv": {
+    "LIBGL_ALWAYS_SOFTWARE": "1",
+    "VNC_RESOLUTION": "1440x900x24"
+  },
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "Robot simulation desktop (noVNC)",
+      "protocol": "http",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "/opt/wpilib/vscode-wpilib.vsix",
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-gradle",
+        "richardwillis.vscode-spotless-gradle"
+      ]
+    }
+  },
+  "postCreateCommand": "./gradlew --no-daemon compileJava"
+}
